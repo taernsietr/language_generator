@@ -1,0 +1,78 @@
+## TODO
+'''
+- stuff to check
+python
+	beautifulsoup
+	requests
+	lxml
+
+cryptography
+hosting a local net webpage
+handling language files
+creating icons
+using git / github
+requests / handling web through code in general
+http5 / css
+
+- bugs
+fix apply_rules
+read_rules regex is not parsing correctly
+
+- improvements
+redo error checking stuff where it's more relevant
+improve weight handling (visually and functionally)
+try to avoid using global variables? (currently using with words_all_fixedlength and syl_all_frompattern)
+add default (None) value to read_cats and read_pats, and make all weights 1 if wgt == None
+
+- features
+random weights (button)
+random inventories (button)
+random patterns (button)
+unique word generators
+separate syllable and word (sandhi) rules
+ruleSets (as an argument passed into apply_rules)
+pseudotranslation wordlists
+other output display methods
+another way to generate words where a list of category-based word patterns are generated
+add weights to word sizes
+
+single-word functions
+	anagrams	-> all, n-, rule-based
+	analyze		-> size, letters, apparent pattern
+	apply paradigm
+'''
+
+# generate pseudotext of text_size length
+def generate_pseudo(text_size):
+
+	pass
+	
+# generate a random syllabic pattern
+def generate_pattern():
+
+	pass
+
+# generate a random phonetic inventory
+def generate_phone_inv():
+
+	pass
+
+# attempt to extract a phonetic inventory from sample text
+# this could work as a system that separates letters and 
+# digraphs that appear in text, then shows a selection of 
+# common sounds associated with those in romanizations, 
+# with an option to alter them
+def ext_inventory(text):
+
+	pass
+	
+# attempt to extract a syllabic pattern from sample text
+def ext_pattern(text):
+	
+	pass
+	
+# attempt to extract phonotactical rules from sample text
+def ext_rules(text):
+	
+	pass
+	

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<controls>
+	<syllables>0</syllables>
+	<words>100</words>
+	<min_wordsize>1</min_wordsize>
+	<max_wordsize>4</max_wordsize>
+</controls>
