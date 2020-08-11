@@ -65,23 +65,26 @@ def pattern_max(categories, indices, pattern):
 	
 ## GENERATOR FUNCTIONS
 
-def pseudotext(inp, size = 32):
-# generates pseudotext of {size} length, with pseudonaturalistic patterns
+def pseudotext(inp, size = 16):
+# generates pseudotext of {size} length
+# repeats words, may not include all words in input
 
 	text = []
 	wgts = []
 	punct = ',.?!:;'
 	
-	words = sorted(inp, key = str.len)
-	maxlen = max(words)
+	words = sorted(inp, key = len)
+	maxlen = max(map(len, words))
 	
+    # define the max chance of a given word appearing in reverse proportion to the max word size in the list
+	w = 0
 	for word in words:
-		wgts.append(random.random(0.1, (word.len)/maxlen))
-	
-	for _ in range(size):
-		text.append(random.choices(words, weights = reversed(wgts)))
-		if 
-		
+		w = w + random.uniform(0.1, maxlen/len(word))
+		wgts.append(w)
+
+	for i in range(size):
+		this_word = random.choices(words, cum_weights = wgts)
+		text.append(this_word[0])
 	
 	return text
 
