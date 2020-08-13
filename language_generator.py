@@ -302,8 +302,6 @@ def summon_win_setup():
 		
 		window_setup.protocol('WM_DELETE_WINDOW', on_close)
 
-
-
 syllable_count = IntVar()
 word_count = IntVar()
 word_min_s = IntVar()

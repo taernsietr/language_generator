@@ -65,6 +65,29 @@ def pattern_max(categories, indices, pattern):
 	
 ## GENERATOR FUNCTIONS
 
+def pseudotext(inp, size = 16):
+# generates pseudotext of {size} length
+# repeats words, may not include all words in input
+
+	text = []
+	wgts = []
+	punct = ',.?!:;'
+	
+	words = sorted(inp, key = len)
+	maxlen = max(map(len, words))
+	
+    # define the max chance of a given word appearing in reverse proportion to the max word size in the list
+	w = 0
+	for word in words:
+		w = w + random.uniform(0.1, maxlen/len(word))
+		wgts.append(w)
+
+	for i in range(size):
+		this_word = random.choices(words, cum_weights = wgts)
+		text.append(this_word[0])
+	
+	return text
+
 def words_n(syllables, min_len, max_len, words = 1):
 # generate {words} random words of length between min_len and max_len using output_syllables
 	
@@ -177,7 +200,7 @@ def apply_rules(categories, indices, text, ruleset):
 
 	return output
 
-def parse_categories(input, wgt):
+def parse_categories(input, wgt = None):
 # reads inp containing text in the format of 'C = p t tsh j'
 # and parses categories where C is an index and other groupings 
 # after the equal sign are members.
@@ -192,7 +215,7 @@ def parse_categories(input, wgt):
 	wgts_found = re.findall('([A-Z]{1}) = ([^A-Za-z\n]+)', wgt, re.MULTILINE)
 	
 	if len(cats_found) != len(wgts_found):
-		print(f'Error: numbers of categories and weights are not matched. (cats = {str(len(cats_found))}), wgts = {str(len(wgts_found))}).')
+		print(f'Warning: numbers of categories and weights are not matched. (cats = {str(len(cats_found))}), wgts = {str(len(wgts_found))}).')
 	
 	for cat in range(len(cats_found)):
 		this_members = re.findall('\w+', cats_found[cat][1])
