@@ -2,22 +2,15 @@
 
 from tkinter import *
 from tkinter.ttk import *
+from max_ import *
 
 import os
 import xml.etree.ElementTree as ET
 import tlib as tlib
 
-MAX_PATTERN_SIZE = 7
-MAX_WORD_SIZE = 5
-MAX_SYLLABLE_COUNT = 100
-MAX_WORD_COUNT = 100
-
-INSTALL_FOLDER = 'D:\Run\Python\Language Generator\\'
-DEFAULT_SETTINGS = INSTALL_FOLDER + 'default.xml'
-DEFAULT_CONFIG = INSTALL_FOLDER + 'config.xml'
-
 root = Tk()
 root.title = 'Language Generator'
+print('Main window created successfully.')
 
 class Settings:
 	
@@ -308,8 +301,13 @@ word_min_s = IntVar()
 word_max_s = IntVar()
 
 # load default starting configuration from config.xml and starting settings from default.xml
-settings = load_settings()
-config = load_config()
+try:
+	settings = load_settings()
+	config = load_config()
+	print('Settings file loaded sucessfully.')
+except:
+	print('Could not load settings file.')
+
 syllable_count.set(config.get('syllables'))
 word_count.set(config.get('words'))
 word_min_s.set(config.get('min_wordsize'))
