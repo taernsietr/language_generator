@@ -1,10 +1,4 @@
-## IMPORTS
-
-import string
-import random
-import re
-
-## CLASSES
+import string, random, re
 
 class Category:
 
@@ -214,14 +208,20 @@ def parse_categories(input, wgt = None):
 	cats_found = re.findall('([A-Z]{1}) = ([^A-Z0-9\n]+)', input, re.MULTILINE)
 	wgts_found = re.findall('([A-Z]{1}) = ([^A-Za-z\n]+)', wgt, re.MULTILINE)
 	
-	if len(cats_found) != len(wgts_found):
-		print(f'Warning: numbers of categories and weights are not matched. (cats = {str(len(cats_found))}), wgts = {str(len(wgts_found))}).')
-	
+	# error checking
+	if len(cats_found) == 0:
+		print('Warning: no categories found.')
+		return ''
+	elif len(cats_found) != len(wgts_found):
+		print(f'Warning: number of categories and weights found do not match ({len(cats_found)} categories and {len(wgts_found)} weights).')
+	else:
+		print(f'{len(cats_found)} categories found.')
+
 	for cat in range(len(cats_found)):
 		this_members = re.findall('\w+', cats_found[cat][1])
 		this_weights = re.findall('\w+', wgts_found[cat][1])
 		this_weights = list(map(int, this_weights))
-		
+
 		categories.append(Category(cats_found[cat][0], this_members, this_weights))
 		indices.append(categories[cat].index)
 		
@@ -240,8 +240,13 @@ def parse_patterns(input, weight):
 	wgts_found = re.findall('(\d{1,3})', weight, re.MULTILINE)
 
 	# error checking
-	if len(pats_found) != len(wgts_found):
-		print(f'Error: numbers of patterns and weights are not matched. (cats = {len(pats_found)}, wgts = {len(wgts_found)}).')
+	if len(pats_found) == 0:
+		print('Warning: no patterns found.')
+		return ''
+	elif len(pats_found) != len(wgts_found):
+		print(f'Warning: number of patterns and weights found do not match ({len(pats_found)} categories and {len(wgts_found)} weights).')
+	else:
+		print(f'{len(pats_found)} patterns found.')
 
 	for pat in range(len(pats_found)):
 		patterns.append(Pattern(pats_found[pat], int(wgts_found[pat])))
@@ -260,6 +265,7 @@ def parse_rules(input):
 	
 	if len(rules_found) == 0:
 		print('Warning: no rules found.')
+		return ''
 	else:
 		for rule in rules_found:
 			if '_' in rule[2] or rule[3]:
@@ -267,5 +273,6 @@ def parse_rules(input):
 				rules_found.remove(rule)
 			else:
 				rules.append(Rule(rule[0], rule[1], (rule[2], rule[3])))
+		print(f'{len(rules_found)} rules found.')
 		
 	return rules

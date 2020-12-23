@@ -5,4 +5,5 @@
 	<words>100</words>
 	<min_wordsize>1</min_wordsize>
 	<max_wordsize>4</max_wordsize>
+	<pseudotext_size>16</pseudotext_size>
 </controls>
