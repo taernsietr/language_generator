@@ -1,2 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<settings><categories><category id="0"><index>C</index><members>p t k b d g s h m n y w</members><weights>1 1 1 1 1 1 1 1 1 1 1 1</weights></category><category id="1"><index>V</index><members>a i u</members><weights>1 1 1</weights></category><category id="2"><index>N</index><members>n</members><weights>1</weights></category></categories><patterns><pattern id="0"><format>CV</format><weight>100</weight></pattern><pattern id="1"><format>CVN</format><weight>10</weight></pattern></patterns></settings>

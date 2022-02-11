@@ -1,44 +1,44 @@
-# language_generator
+# Language Generator
+<sub>*placeholder name*</sub>
 
-(*language generator* is a placeholder name)
+A small project/application/library intended for generating [conlang](https://en.wikipedia.org/wiki/Constructed_language) - artificial language - resources, such as basic phonologies and word lists, however one may wish to use it.
 
-a small library/application intended for generating [conlang](https://en.wikipedia.org/wiki/Constructed_language) - artificial language - resources, such as basic phonologies and word lists.
+This started primarily as a Python study project, but gradually extended to include studies in other topics and languages. As a note, I badly borked some work I had done both in Python and Rust on 10/02/2022, because of not adequately commiting stuff and then profoundly messing up git commands.  
 
-started primarily as a Python study project, but gradually extended to include studies in other topics.
+I took this oportunity to redo most of what I had done, in a more thoughtful manner. This is still a super ambitious project, and I don't know when it's going to be usable, but it remains as it began - a study project.
 
-## milestones
+| Feature                               | Python | Java | Rust | Ruby |
+| :------------------------------------ | :----: | :--: | :--: | :--: |
+| Core: Include IPA symbols             |        |      |      |      |
+| Core: Parse X-SAMPA                   |        |      |      |      |
+| Core: Show available languages        |        |      |      |      |
+| Core: Save to JSON                    |        |      |      |      |
+| Core: Load from JSON                  |        |      |      |      |
+| Interface: Graphical                  |        |      |      |      |
+| Interface: Command Line               |        |      |      |      | 
+| Interface: Web                        |        |      |      |      |
+| Syllables: All possible               |        |      |      |      |
+| Syllables: Filtered                   |        |      |      |      |
+| Syllables: Weighted                   |        |      |      |      |
+| Syllables: Random set                 |        |      |      |      |
+| Words: All possible                   |        |      |      |      | 
+| Words: Filtered                       |        |      |      |      |
+| Words: Weighted                       |        |      |      |      |
+| Words: Random set                     |        |      |      |      |
+| Words: Analyze (pattern, size)        |        |      |      |      |
+| Pseudotext                            |        |      |      |      |
+| Anagrams: All                         |        |      |      |      |
+| Anagrams: Filtered                    |        |      |      |      |
+| Phonology: Fully random generation    |        |      |      |      |
+| Phonology: Filtered random generation |        |      |      |      |
+| Phonology: Sample-based generation    |        |      |      |      |
+| Phonology: Apply rules                |        |      |      |      |
+| Phonology: Phonetic layer             |        |      |      |      |
+| Phonology: Phonemic layer             |        |      |      |      |
+| Morphosyntax: Noun declension         |        |      |      |      |
+| Morphosyntax: Verb declension         |        |      |      |      |
 
-- [x] basic library functionality (Python)
-- [ ] phonology generation
-- [ ] standalone app (currently: Python, tkinter)
-- [ ] web version (currently: React.js)
-
-## bugs
-- [ ] fix apply_rules
-- [ ] read_rules regex is not parsing correctly
-- [ ] currently, the tkinter GUI is broken
-
-## pending improvements
-- [ ] redo error checking stuff where it's more relevant
-- [ ] improve weight handling (visually and functionally)
-- [ ] remove code using global variables (currently using with words_all_fixedlength and syl_all_frompattern)
-- [ ] default weights to equiprobable if none are given
-- [ ] separate syllable and word (sandhi) rules
-- [ ] add weights to word sizes
-- [ ] ruleSets (as an argument passed into apply_rules); extend into class in order to add conditions?
-- [ ] another way to generate words where a list of category-based word patterns are generated
-- [ ] rework program to work based on multiple layers? (phonetic, phonemic, syntactic etc)
-- [ ] pretty formatted saved program settings
-- [ ] change saved program settings from xml to json 
-
-### functions
-* single-word functions
-  * anagrams [all, n-, rule-based]
-    * analyze [size, letters, apparent pattern]
-    * apply paradigm
-  * extractor functions
-    * inventory
-    * pattern
-    * rules
-* other
-  * pseudotranslation wordlists (near 1:1 assignment, for visualization only)
+## Notes
+- Weights should default to equiprobable if none are provided
+- Separate syllable and word (sandhi) rules
+- Add weights to word sizes
