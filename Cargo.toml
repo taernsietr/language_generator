@@ -7,5 +7,6 @@ edition = "2021"
 
 [dependencies]
 rand = "0.8.5"
+regex = "1.6.0"
 serde = { version = "1.0.145", features = ["derive"] }
 serde_yaml = "0.9.13"

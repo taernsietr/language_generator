@@ -1,5 +1,6 @@
 use serde::Deserialize;
 
+#[allow(dead_code)]
 #[derive(Deserialize)]
 pub enum Features {
     Stop,
@@ -21,6 +22,7 @@ pub enum Features {
     Unrounded,
 }
 
+#[allow(dead_code)]
 #[derive(Deserialize)]
 pub struct Phonology {
     name: String,
@@ -28,12 +30,14 @@ pub struct Phonology {
     syllabic_pattern: String,
 }
 
+#[allow(dead_code)]
 #[derive(Deserialize)]
 struct Phoneme {
     symbol: String,
     realizations: Vec<(String, String, String)>,
 }
 
+#[allow(dead_code)]
 #[derive(Deserialize)]
 struct Phone {
     symbol: String,

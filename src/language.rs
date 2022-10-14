@@ -4,6 +4,7 @@ use serde::Deserialize;
 use crate::phonology::Phonology;
 use crate::grammar::Grammar;
 
+#[allow(dead_code)]
 #[derive(Deserialize)]
 pub struct Language {
     phonology: Phonology,
@@ -16,15 +17,4 @@ impl Language {
         let language: Language = serde_yaml::from_str(&data).expect("Failed to read YAML data");
         language
     }
-/*
-    pub fn random_word(&self, length: u8) -> String {
-        let mut word: String = String::new();
-
-        for _ in 0..length {
-            for phoneme in &self.phonology.syllabic_pattern.unwrap().chars() {
-                
-            }
-        }
-    }
-*/
 }

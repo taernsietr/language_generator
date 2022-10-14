@@ -27,4 +27,14 @@ impl SimpleGenerator {
         }
         word
     }
+
+    pub fn random_text(&self, text_size: u8) -> String {
+        let mut text = "".to_string();
+
+        for _ in 1..=text_size {
+            text.push_str(&self.random_word(5, false));
+            text.push_str(" ");
+        }
+        text
+    }
 }
