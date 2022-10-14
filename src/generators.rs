@@ -1,5 +1,7 @@
+use serde::{Deserialize, Serialize};
 use rand::{Rng, prelude::SliceRandom};
 
+#[derive(Deserialize, Serialize)]
 pub struct SimpleGenerator {
     categories: Vec<Vec<String>>, 
     symbols: Vec<String>,
@@ -7,10 +9,28 @@ pub struct SimpleGenerator {
 }
 
 impl SimpleGenerator {
+    #[allow(dead_code)]
     pub fn new(categories: Vec<Vec<String>>, symbols: Vec<String>, patterns: Vec<String>) -> SimpleGenerator {
         SimpleGenerator {categories, symbols, patterns}
     }
 
+    #[allow(dead_code)]
+    pub fn load(file: &str) -> SimpleGenerator {
+        let data = std::fs::read_to_string(file).expect("Failed to load generator settings file");
+        let generator: SimpleGenerator = serde_yaml::from_str(&data).expect("Failed to read YAML data");
+        generator
+    }
+   
+    #[allow(dead_code)]
+    pub fn save(&self, name: &str) {
+        std::fs::write(
+            format!("/home/tsrodr/Run/language_generator/src/{}.yaml", name),
+            serde_yaml::to_string(&self).unwrap(),
+        )
+        .unwrap();
+    }
+
+    #[allow(dead_code)]
     pub fn random_word(&self, max_syllables: u8, exactly: bool) -> String {
         let mut rng = rand::thread_rng();
         let mut word = "".to_string();
@@ -28,6 +48,7 @@ impl SimpleGenerator {
         word
     }
 
+    #[allow(dead_code)]
     pub fn random_text(&self, text_size: u8) -> String {
         let mut text = "".to_string();
 
