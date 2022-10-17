@@ -1,23 +1,39 @@
-use std::fs;
+use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
 
 mod language;
 mod phonology;
 mod grammar;
-mod generators;
+mod simple_generator;
 // mod utilities;
 
-use crate::language::Language;
-use crate::generators::SimpleGenerator;
+// use crate::language::Language;
+use crate::simple_generator::SimpleGenerator;
 
-fn main() {
-    let _language = Language::load("./example.yaml");  
-    let defaults = SimpleGenerator::load("default.yaml");
-
-    // let cats: Vec<Vec<String>> = vec!(["p", "t", "k", "s", "m", "n", "h", "w"].map(String::from).to_vec(), ["i", "a", "u"].map(String::from).to_vec());
-    // let syms: Vec<String> = ["C", "V"].map(String::from).to_vec();
-    // let pats: Vec<String> = ["CV"].map(String::from).to_vec();
-    // let generator = SimpleGenerator::new(cats, syms, pats);
-    // println!("{}", generator.random_text(30));
-    
-    println!("{}", defaults.random_text(30));
+async fn random_word() -> impl Responder {
+    HttpResponse::Ok().body("word")
 }
+
+async fn random_text() -> impl Responder {
+    HttpResponse::Ok().body("text")
+}
+
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
+    HttpServer::new(|| {
+        App::new()
+            .route("/word", web::get().to(random_word))
+            .route("/text", web::get().to(random_text))
+    })
+    .bind(("0.0.0.0", 8080))?
+    .run()
+    .await
+    // let defaults = SimpleGenerator::load("default.yaml");
+
+    // let word = warp::path("word").map(|| SimpleGenerator::load("default.yaml").random_word(5, false));
+    // let text = warp::path("text").map(|| SimpleGenerator::load("default.yaml").random_text(50));
+    // let root = warp::get()
+    //     .and(warp::path::end())
+    //     .and(warp::fs::file("index.html"));
+   
+}
+

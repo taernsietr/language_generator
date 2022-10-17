@@ -10,8 +10,14 @@ categories:
 - - i
   - a
   - u
+  - ii
+  - aa
+  - uu
+- - n
+  - r
 symbols:
 - C
 - V
+- F
 patterns:
-- CV
+- CVF

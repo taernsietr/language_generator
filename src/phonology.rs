@@ -34,7 +34,7 @@ pub struct Phonology {
 #[derive(Deserialize)]
 struct Phoneme {
     symbol: String,
-    realizations: Vec<(String, String, String)>,
+    realizations: Vec<(Phone, String, String)>, // realization, symbol, environment
 }
 
 #[allow(dead_code)]
@@ -43,3 +43,23 @@ struct Phone {
     symbol: String,
     features: Vec<Features>,
 }
+
+#[allow(dead_code)]
+#[derive(Deserialize)]
+struct Word {
+    phonemes: Vec<Phoneme>,
+}
+
+/*
+impl Word {
+    fn parse(&self) {
+        let mut output = "".to_string();
+
+        for index in 0..self.phonemes.len() {
+            for realization in self.phonemes[index] {
+                
+            }
+        }
+    }
+}
+*/
