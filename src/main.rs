@@ -1,4 +1,5 @@
-use actix_web::{web, App, HttpResponse, HttpServer, Responder};
+use actix_files::NamedFile;
+use actix_web::{web, Error, App, Responder, HttpResponse, HttpRequest, HttpServer};
 use std::sync::Mutex;
 
 mod language;
@@ -13,12 +14,20 @@ use crate::simple_generator::SimpleGenerator;
 struct AppState {
     generator: Mutex<SimpleGenerator>,
 }
-   
+
+async fn index() -> Result<NamedFile, Error> {
+    Ok(NamedFile::open("static/index.html")?)
+}
+
+// TODO: parse max word size and exact syllable number
 async fn random_word(state: web::Data<AppState>) -> impl Responder {
+    println!("[API] Generating word");
     HttpResponse::Ok().body(format!("{}", state.generator.lock().unwrap().random_word(6, false)))
 }
 
+// TODO: parse text size
 async fn random_text(state: web::Data<AppState>) -> impl Responder {
+    println!("[API] Generating text");
     HttpResponse::Ok().body(format!("{}", state.generator.lock().unwrap().random_text(50)))
 }
 
@@ -31,6 +40,7 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .app_data(state.clone())
+            .route("/", web::get().to(index))
             .service(
                 web::scope("/api")
                     .route("/word", web::get().to(random_word))

@@ -1,73 +1,112 @@
 <!DOCTYPE html>
 <html>
-    <head>
+
+    <head> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Language Generator</title>
-    <style>
+        <style>
 
-        body {
-            display: flex;
-            justify-content: center;
-            flex-direction: column;
-            background-color: black;
-            color: #d50;
-        }
+            * {
+                font-family: "monospace";
+            }
 
-        .bordered {
-            border: 1px solid #d50;
-            margin: 5px;
-        }
+            body {
+                display: flex;
+                justify-content: center;
+                flex-direction: column;
+                background-color: black;
+                color: #d50;
+            }
 
-        .menu {
-            display: flex;
-            justify-content: space-around;
-            flex-direction: row;
-        }
+            .bordered {
+                border: 1px solid #d50;
+                margin: 5px;
+            }
 
-        .menu-item {
-            border-color: #d50;
-            border-style: solid;
-            border-width: 0px;
-        }
+            .centered-container {
+                display: flex;
+                justify-content: center;
+                flex-direction: row;
+            }
 
-        .menu-button {
-            background-color: black;
-            color: #d50;
-        }
+            .space-around-container {
+                display: flex;
+                justify-content: space-around;
+                flex-direction: row;
+            }
 
-        .selected {
-            background-color: #aa05;
-        }
+            .menu-item {
+                display: flex;
+                flex-direction: column;
+                border-color: #d50;
+                border-style: solid;
+                border-width: 0px;
+            }
 
-    </style>
+            .menu-button {
+                background-color: black;
+                color: #d50;
+            }
+
+            .menu-button:hover {
+                background-color: #d50;
+                color: black;
+            }
+
+            .hidden {
+                display: none;
+            }
+
+            #results {
+                text-align: center;
+            }
+
+        </style>
     </head>
-    <body>
-        <div id="menu" class="bordered menu">
-            <div class="menu-item"><button class="menu-button bordered" type="submit" onclick="select()">Item 1</button></div>
-            <div class="menu-item"><button class="menu-button bordered" type="submit" onclick="select()">Item 2</button></div>
-            <div class="menu-item"><button class="menu-button bordered" type="submit" onclick="select()">Item 3</button></div>
-            <div class="menu-item"><button class="menu-button bordered" type="submit" onclick="select()">Item 4</button></div>
-            <div class="menu-item"><button class="menu-button bordered" type="submit" onclick="select()">Item 5</button></div>
-        </div>
-        <div id="container" class="bordered">
-            <p>TEST</p>
-        </div>
-        <script>
-        		function select() {
-                    alert("oi");
-                    /*
-                    let request = new XMLHttpRequest();
-                    let targetElement = document.getElementById("hora_servidor");
 
-                    request.onload = function() { 
-                        if (request.readyState === request.DONE && request.status === 200) {
-                            targetElement.innerHTML = request.responseText;
-                            document.getElementById("nova_hora").innerHTML = new Date();
-                        }
-                    }
-                    request.open("GET", "thalles.do", false);
-                    request.send();
-                    */
-                };
+    <body>
+        <div id="menu" class="bordered space-around-container">
+            <div class="menu-item">
+                <button class="menu-button bordered" type="submit" onclick="getRandom('word')">Random Word</button>
+                <input type="range" min="1" max="10" value="4" id="wordLengthSlider" class="menu-button bordered"></button>
+            </div>
+            <div class="menu-item"><button class="menu-button bordered" type="submit" onclick="getRandom('text')">Random Text</button></div>
+            <div class="menu-item"><button class="menu-button bordered" type="submit" onclick="saveSetup()">Save Setup</button></div>
+            <div class="menu-item"><button class="menu-button bordered" type="submit" onclick="loadSetup()">Load Setup</button></div>
+            <div class="menu-item"><button class="menu-button bordered" type="submit" onclick="toggleSetupDisplay()">Toggle Show Setup</button></div>
+        </div>
+        <div id="setupDisplay" class="centered-container bordered hidden">
+            <h3>Setup</h3>
+        </div>
+        <div id="resultsDisplay" class="centered-container bordered">
+            <p id="results">Please select one of the options above!</p>
+        </div>
+
+        <script>
+            let setupDisplayState = false;
+
+            function toggleSetupDisplay() {
+                setupDisplayState = (setupDisplayState) ? false : true;
+                document.getElementById("setupDisplay").className = (setupDisplayState) ? "centered-container bordered" : "centered-container bordered hidden";
+                console.log("setupDisplayState: " + setupDisplayState);
+                console.log("setupDisplay class:" + document.getElementById("setupDisplay").className);
+
+            }
+
+            function getRandom(type) {
+                let request = new XMLHttpRequest(); 
+                request.onreadystatechange = displayResponse;
+                request.open("GET", "/api/" + type);
+                request.send();
+
+                function displayResponse() {
+                    if (request.readyState != 4) return;
+                    document.getElementById("results").innerText = request.responseText;
+                }
+            };
+
+            
         </script>
     </body>
+
 </html>

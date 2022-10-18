@@ -3,6 +3,7 @@ use rand::{Rng, prelude::SliceRandom};
 
 #[derive(Deserialize, Serialize)]
 pub struct SimpleGenerator {
+    name: String,
     categories: Vec<Vec<String>>, 
     symbols: Vec<String>,
     patterns: Vec<String>,
@@ -10,8 +11,8 @@ pub struct SimpleGenerator {
 
 impl SimpleGenerator {
     #[allow(dead_code)]
-    pub fn new(categories: Vec<Vec<String>>, symbols: Vec<String>, patterns: Vec<String>) -> SimpleGenerator {
-        SimpleGenerator {categories, symbols, patterns}
+    pub fn new(name: String, categories: Vec<Vec<String>>, symbols: Vec<String>, patterns: Vec<String>) -> SimpleGenerator {
+        SimpleGenerator {name, categories, symbols, patterns}
     }
 
     #[allow(dead_code)]
