@@ -16,7 +16,7 @@ impl SimpleGenerator {
 
     #[allow(dead_code)]
     pub fn load(file: &str) -> SimpleGenerator {
-        let data = std::fs::read_to_string(file).expect("Failed to load generator settings file");
+        let data = std::fs::read_to_string(format!("/home/tsrodr/Run/language_generator/src/settings/{}", file)).expect("Failed to load generator settings file");
         let generator: SimpleGenerator = serde_yaml::from_str(&data).expect("Failed to read YAML data");
         generator
     }
@@ -24,7 +24,7 @@ impl SimpleGenerator {
     #[allow(dead_code)]
     pub fn save(&self, name: &str) {
         std::fs::write(
-            format!("/home/tsrodr/Run/language_generator/src/{}.yaml", name),
+            format!("/home/tsrodr/Run/language_generator/src/settings/{}.yaml", name),
             serde_yaml::to_string(&self).unwrap(),
         )
         .unwrap();

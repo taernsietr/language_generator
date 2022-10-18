@@ -1,4 +1,5 @@
-use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{web, App, HttpResponse, HttpServer, Responder};
+use std::sync::Mutex;
 
 mod language;
 mod phonology;
@@ -9,31 +10,35 @@ mod simple_generator;
 // use crate::language::Language;
 use crate::simple_generator::SimpleGenerator;
 
-async fn random_word() -> impl Responder {
-    HttpResponse::Ok().body("word")
+struct AppState {
+    generator: Mutex<SimpleGenerator>,
+}
+   
+async fn random_word(state: web::Data<AppState>) -> impl Responder {
+    HttpResponse::Ok().body(format!("{}", state.generator.lock().unwrap().random_word(6, false)))
 }
 
-async fn random_text() -> impl Responder {
-    HttpResponse::Ok().body("text")
+async fn random_text(state: web::Data<AppState>) -> impl Responder {
+    HttpResponse::Ok().body(format!("{}", state.generator.lock().unwrap().random_text(50)))
 }
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    HttpServer::new(|| {
+    let state = web::Data::new(AppState {
+        generator: Mutex::new(SimpleGenerator::load("default.yaml")),
+    });
+
+    HttpServer::new(move || {
         App::new()
-            .route("/word", web::get().to(random_word))
-            .route("/text", web::get().to(random_text))
+            .app_data(state.clone())
+            .service(
+                web::scope("/api")
+                    .route("/word", web::get().to(random_word))
+                    .route("/text", web::get().to(random_text))
+            )
     })
     .bind(("0.0.0.0", 8080))?
     .run()
     .await
-    // let defaults = SimpleGenerator::load("default.yaml");
-
-    // let word = warp::path("word").map(|| SimpleGenerator::load("default.yaml").random_word(5, false));
-    // let text = warp::path("text").map(|| SimpleGenerator::load("default.yaml").random_text(50));
-    // let root = warp::get()
-    //     .and(warp::path::end())
-    //     .and(warp::fs::file("index.html"));
-   
 }
 
