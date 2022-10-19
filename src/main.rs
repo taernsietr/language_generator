@@ -13,7 +13,7 @@ use crate::routes::*;
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let state = web::Data::new(AppState {
-        generator: Mutex::new(SimpleGenerator::load("default.yaml")),
+        generator: Mutex::new(SimpleGenerator::load("generator-setup.json")),
     });
 
     HttpServer::new(move || {

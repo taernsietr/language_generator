@@ -17,7 +17,7 @@ impl SimpleGenerator {
 
     pub fn load(file: &str) -> SimpleGenerator {
         let data = std::fs::read_to_string(format!("/home/tsrodr/Run/language_generator/src/settings/{}", file)).expect("Failed to load generator settings file");
-        let generator: SimpleGenerator = serde_yaml::from_str(&data).expect("Failed to read YAML data");
+        let generator: SimpleGenerator = serde_json::from_str(&data).expect("Failed to read JSON data");
         generator
     }
    
@@ -25,7 +25,7 @@ impl SimpleGenerator {
     pub fn save(&self, name: &str) {
         std::fs::write(
             format!("/home/tsrodr/Run/language_generator/src/settings/{}.yaml", name),
-            serde_yaml::to_string(&self).unwrap(),
+            serde_json::to_string(&self).unwrap(),
         )
         .unwrap();
     }
@@ -35,7 +35,7 @@ impl SimpleGenerator {
     }
 
     pub fn get_generator_setup(&self) -> String {
-        serde_yaml::to_string(&self).unwrap()
+        serde_json::to_string(&self).unwrap()
     }
 
     pub fn random_word(&self, max_syllables: u8, exactly: bool) -> String {

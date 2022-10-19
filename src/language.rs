@@ -12,7 +12,7 @@ impl Language {
     #[allow(dead_code)]
     pub fn load(file: &str) -> Language {
         let data = fs::read_to_string(file).expect("Failed to load language file");
-        let language: Language = serde_yaml::from_str(&data).expect("Failed to read YAML data");
+        let language: Language = serde_json::from_str(&data).expect("Failed to read JSON data");
         language
     }
 }
