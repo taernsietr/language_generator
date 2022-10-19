@@ -231,26 +231,22 @@
                     let categoryRows = "";
                     data["symbols"].forEach((symbol, index) => {
                     categoryRows += "<div class='flex-row'>" +
-                                    "<input type='text' class='basis-half small-padding center-self menu-button bordered no-min-width' value='" + 
+                                    "<input type='text' class='basis-1-4 small-padding center-self menu-button bordered no-min-width' maxlength='1' value='" + 
                                     symbol + 
-                                    "'> <span>=</span>" + 
-                                    "<input type='text' class='basis-half small-padding center-self menu-button bordered no-min-width' value='" +
+                                    "'> <span class='center-self'>=</span>" + 
+                                    "<input type='text' class='basis-3-4 small-padding center-self menu-button bordered no-min-width' value='" +
                                     data["categories"][index] + 
                                     "'></div>";
                     });
 
-                    let patternRows = "";
-                    data["patterns"].forEach((pattern) => {
-                    patternRows += "<div class='flex-row'><input type='text' class='basis-half small-padding center-self menu-button bordered no-min-width' value='" +
-                                   pattern +
-                                   "'></div>";
-                    });
 
                     document.getElementById("settingsContents").innerHTML = 
                     "<div class='flex-col'>" +
                     categoryRows.replace(/,/g, " ") +
                     "<br>" +
-                    patternRows.replace(/,/g, "") +
+                    "<div class='flex-row'><input type='text' class='basis-half small-padding center-self menu-button bordered no-min-width' value='" +
+                    data["patterns"].join().replace(/,/g, " ") +
+                    "'></div>"
                     "</div>";
                 }
             }
