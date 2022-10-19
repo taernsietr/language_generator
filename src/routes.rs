@@ -16,13 +16,13 @@ pub async fn index() -> Result<NamedFile, Error> {
 // TODO: parse max word size and exact syllable number
 pub async fn random_word(state: web::Data<AppState>) -> impl Responder {
     println!("[API] Generating word with generator: {}", state.generator.lock().unwrap().get_name());
-    HttpResponse::Ok().body(format!("{}", state.generator.lock().unwrap().random_word(6, false)))
+    HttpResponse::Ok().body(format!("{}", state.generator.lock().unwrap().random_word(3, 6, false)))
 }
 
 // TODO: parse text size
 pub async fn random_text(state: web::Data<AppState>) -> impl Responder {
     println!("[API] Generating text with generator: {}", state.generator.lock().unwrap().get_name());
-    HttpResponse::Ok().body(format!("{}", state.generator.lock().unwrap().random_text(50)))
+    HttpResponse::Ok().body(format!("{}", state.generator.lock().unwrap().random_text(3, 6, 50)))
 }
 
 pub async fn get_settings(state: web::Data<AppState>) -> impl Responder {

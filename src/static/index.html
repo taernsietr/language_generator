@@ -75,6 +75,10 @@
             .centered-text {
                 text-align: center;
             }
+            
+            .left-align-text {
+                text-align: left;
+            }
 
             .center-self {
                 align-self: center;
@@ -90,8 +94,13 @@
         <!-- Left menu column, generation -->
             <div id="menu-column-left" class="flex-col space-around small-padding">
                 <div class="flex-col">
+                    <form>
                     <button class="menu-button bordered" type="submit" onclick="getRandom('word')">Random Word</button>
-                    <input type="range" min="1" max="10" value="4" id="wordLengthSlider" class="menu-button bordered"></button>
+                    <input type="range" min="1" max="10" value="5" id="wordLengthSlider" name="wordLengthSlider"></button>
+                    <label for="wordLengthSlider">Syllables</label>
+                    <input type="checkbox" id="wordLengthExactCheckbox" name="wordLengthExactCheckbox"></button>
+                    <label for="WordLengthExactCheckbox">Exact Syllable Count</label>
+                    </form>
                 </div>
                 <div class="flex-col"><button class="menu-button bordered" type="submit" onclick="getRandom('text')">Random Text</button></div>
             </div>
@@ -121,7 +130,14 @@
         <div id="infoDisplay" class="flex-col space-around bordered small-padding">
             <div class="flex-row wrap centered">
                 <h3 class="centered-text basis-full">Information</h3>
-                <div id="infoContents" class="flex-col space-around basis-full"></div>
+                <div id="infoContents" class="flex-col space-around basis-full">
+                    <p class="bordered left-align-text center-self">
+                    This (at the moment, at least) is a simple word and text generator. It is based on <i>categories</i>, which are just sets of unicode characters without any deeper meaning, and <i>patterns</i>, which represent syllable patterns - but similarly to the categories, they are treated here as simple character patterns. As such, you can create as many categories as you want, with whichever characters or groups thereof, and set up patterns so that they appear in word generation.
+                    </p>
+                    <p class="bordered left-align-text center-self">
+                        <b>TL;DR:</b> words are generated according to the patterns, which in turn correspond to the elements in each category. You can have several categories or patterns. 
+                    </p>
+                </div>
             </div>
         </div>
 
@@ -186,6 +202,12 @@
                     "</table>";
                 }
             }
+
+            /* 
+                Add an input field for each symbol and category, along with a button for removing it;;
+                Add a button for adding a new pattern and another for adding a new category;
+                Add listener for updating client-side settings; backend should only be updated when the form is submitted to the endpoint;
+            */
             
         </script>
     </body>

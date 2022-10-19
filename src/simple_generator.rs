@@ -17,8 +17,7 @@ impl SimpleGenerator {
 
     pub fn load(file: &str) -> SimpleGenerator {
         let data = std::fs::read_to_string(format!("/home/tsrodr/Run/language_generator/src/settings/{}", file)).expect("Failed to load generator settings file");
-        let generator: SimpleGenerator = serde_json::from_str(&data).expect("Failed to read JSON data");
-        generator
+        serde_json::from_str::<SimpleGenerator>(&data).expect("Failed to read JSON data")
     }
    
     #[allow(dead_code)]
@@ -38,11 +37,13 @@ impl SimpleGenerator {
         serde_json::to_string(&self).unwrap()
     }
 
-    pub fn random_word(&self, max_syllables: u8, exactly: bool) -> String {
+    pub fn random_word(&self, min_syllables: u8, max_syllables: u8, exactly: bool) -> String {
+        if min_syllables > max_syllables { return "[Error] Minimum syllables has to be equal to or less than maximum syllables".to_string() };
+        
         let mut rng = rand::thread_rng();
         let mut word = "".to_string();
         
-        let word_length = if exactly { max_syllables } else { rng.gen_range(1..=max_syllables) };
+        let word_length = if exactly { max_syllables } else { rng.gen_range(min_syllables..=max_syllables) };
 
         for _ in 1..=word_length {
             let current = self.patterns.choose(&mut rng);
@@ -55,11 +56,11 @@ impl SimpleGenerator {
         word
     }
 
-    pub fn random_text(&self, text_size: u8) -> String {
+    pub fn random_text(&self, min_syllables: u8, max_syllables: u8, text_size: u8) -> String {
         let mut text = "".to_string();
 
         for _ in 1..=text_size {
-            text.push_str(&self.random_word(5, false));
+            text.push_str(&self.random_word(min_syllables, max_syllables, false));
             text.push_str(" ");
         }
         text

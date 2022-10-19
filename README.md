@@ -42,3 +42,9 @@ I took this oportunity to redo most of what I had done, in a more thoughtful man
 - Weights should default to equiprobable if none are provided
 - Separate syllable and word (sandhi) rules
 - Add weights to word sizes
+
+## TO-DO
+- Simple word generation: 
+  - allow static affixes, e.g. "baCCV"
+  - generate specific number of words
+  - generate word of syllable length MIN to MAX
