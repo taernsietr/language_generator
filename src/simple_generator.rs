@@ -31,6 +31,10 @@ impl SimpleGenerator {
         .unwrap();
     }
 
+    pub fn get_name(&self) -> String {
+        self.name.clone()
+    }
+
     #[allow(dead_code)]
     pub fn random_word(&self, max_syllables: u8, exactly: bool) -> String {
         let mut rng = rand::thread_rng();

@@ -65,6 +65,7 @@
     </head>
 
     <body>
+        <!-- Menu, currently shows the options -->
         <div id="menu" class="bordered space-around-container">
             <div class="menu-item">
                 <button class="menu-button bordered" type="submit" onclick="getRandom('word')">Random Word</button>
@@ -75,9 +76,14 @@
             <div class="menu-item"><button class="menu-button bordered" type="submit" onclick="loadSetup()">Load Setup</button></div>
             <div class="menu-item"><button class="menu-button bordered" type="submit" onclick="toggleSetupDisplay()">Toggle Show Setup</button></div>
         </div>
+
+        <!-- Displays information about the generation settings -->
         <div id="setupDisplay" class="centered-container bordered hidden">
             <h3>Setup</h3>
+            <p id="setupContents"></p>
         </div>
+
+        <!-- Displays the results of generating words or text -->
         <div id="resultsDisplay" class="centered-container bordered">
             <p id="results">Please select one of the options above!</p>
         </div>
