@@ -88,7 +88,7 @@
         <div id="settingsDisplay" class="flex-col space-around bordered">
         <div class="flex-row wrap centered">
             <h3 class="centered-text">Settings</h3>
-            <p id="settingsContents"></p>
+            <div id="settingsContents"></div>
         </div>
         </div>
 
@@ -128,8 +128,16 @@
 
                 function displayResponse() {
                     if (request.readyState != 4) return;
-                        let data = JSON.parse(request.responseText);
-                        document.getElementById("settingsContents").innerHTML = "Categories: " + data["symbols"] + "<div>coe galera</div>";
+                    let data = JSON.parse(request.responseText);
+
+                    let rows = "";
+                    data["symbols"].forEach((symbol, index) => {
+                        rows += "<tr><td>" + symbol + "</td><td>" + data["categories"][index] + "</td></tr>";
+                    });
+
+                    document.getElementById("settingsContents").innerHTML = 
+                    "<table>" +
+                    "<tr><th>Categories</th><th>Elements</th></tr>" + rows.replace(/,/g, " ");
                 }
             }
             
