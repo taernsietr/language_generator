@@ -22,9 +22,9 @@ impl SimpleGenerator {
     }
    
     #[allow(dead_code)]
-    pub fn save(&self, name: &str) {
+    pub fn save(&self) {
         std::fs::write(
-            format!("/home/tsrodr/Run/language_generator/src/settings/{}.yaml", name),
+            format!("/home/tsrodr/Run/language_generator/src/settings/{}.json", &self.name),
             serde_json::to_string(&self).unwrap(),
         )
         .unwrap();

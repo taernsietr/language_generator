@@ -24,6 +24,7 @@ async fn main() -> std::io::Result<()> {
                 web::scope("/api")
                     .route("/word", web::get().to(random_word))
                     .route("/text", web::get().to(random_text))
+                    .route("/current", web::get().to(get_settings))
             )
     })
     .bind(("0.0.0.0", 8080))?

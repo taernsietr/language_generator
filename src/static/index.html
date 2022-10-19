@@ -23,29 +23,36 @@
                 margin: 5px;
             }
 
-            .centered-container {
+            .flex-row {
                 display: flex;
-                justify-content: center;
                 flex-direction: row;
             }
 
-            .space-around-container {
-                display: flex;
-                justify-content: space-around;
-                flex-direction: row;
-            }
-
-            .menu-item {
+            .flex-col {
                 display: flex;
                 flex-direction: column;
-                border-color: #d50;
-                border-style: solid;
-                border-width: 0px;
+            }
+
+            .wrap {
+                flex-wrap: wrap
+            }
+
+            h3 {
+                flex-basis: 100%;
+            }
+
+            .centered {
+                justify-content: center;
+            }
+
+            .space-around {
+                justify-content: space-around;
             }
 
             .menu-button {
                 background-color: black;
                 color: #d50;
+                transition: 0.5s;
             }
 
             .menu-button:hover {
@@ -57,7 +64,7 @@
                 display: none;
             }
 
-            #results {
+            .centered-text {
                 text-align: center;
             }
 
@@ -66,37 +73,39 @@
 
     <body>
         <!-- Menu, currently shows the options -->
-        <div id="menu" class="bordered space-around-container">
-            <div class="menu-item">
+        <div id="menu" class="bordered flex-row space-around">
+            <div class="flex-col">
                 <button class="menu-button bordered" type="submit" onclick="getRandom('word')">Random Word</button>
                 <input type="range" min="1" max="10" value="4" id="wordLengthSlider" class="menu-button bordered"></button>
             </div>
-            <div class="menu-item"><button class="menu-button bordered" type="submit" onclick="getRandom('text')">Random Text</button></div>
-            <div class="menu-item"><button class="menu-button bordered" type="submit" onclick="saveSetup()">Save Setup</button></div>
-            <div class="menu-item"><button class="menu-button bordered" type="submit" onclick="loadSetup()">Load Setup</button></div>
-            <div class="menu-item"><button class="menu-button bordered" type="submit" onclick="toggleSetupDisplay()">Toggle Show Setup</button></div>
+            <div class="flex-col"><button class="menu-button bordered" type="submit" onclick="getRandom('text')">Random Text</button></div>
+            <div class="flex-col"><button class="menu-button bordered" type="submit" onclick="saveSettings()">Save Settings</button></div>
+            <div class="flex-col"><button class="menu-button bordered" type="submit" onclick="loadSettings()">Load Settings</button></div>
+            <div class="flex-col"><button class="menu-button bordered" type="submit" onclick="toggleSettingsDisplay()">Toggle Settings</button></div>
         </div>
 
         <!-- Displays information about the generation settings -->
-        <div id="setupDisplay" class="centered-container bordered hidden">
-            <h3>Setup</h3>
-            <p id="setupContents"></p>
+        <div id="settingsDisplay" class="flex-col space-around bordered">
+        <div class="flex-row wrap centered">
+            <h3 class="centered-text">Settings</h3>
+            <p id="settingsContents"></p>
+        </div>
         </div>
 
         <!-- Displays the results of generating words or text -->
-        <div id="resultsDisplay" class="centered-container bordered">
-            <p id="results">Please select one of the options above!</p>
+        <div id="resultsDisplay" class="flex-row centered bordered">
+            <p id="results" class="centered-text">Please select one of the options above!</p>
         </div>
 
         <script>
 
-            let setupDisplayState = false;
+            let settingsDisplayState = false;
 
-            function toggleSetupDisplay() {
-                setupDisplayState = (setupDisplayState) ? false : true;
-                document.getElementById("setupDisplay").className = (setupDisplayState) ? "centered-container bordered" : "centered-container bordered hidden";
-                console.log("setupDisplayState: " + setupDisplayState);
-                console.log("setupDisplay class:" + document.getElementById("setupDisplay").className);
+            function toggleSettingsDisplay() {
+                settingsDisplayState = (settingsDisplayState) ? false : true;
+                document.getElementById("settingsDisplay").className = (settingsDisplayState) ? "flex-row centered bordered" : "centered-container bordered hidden";
+                console.log("settingsDisplayState: " + settingsDisplayState);
+                console.log("settingsDisplay class:" + document.getElementById("settingsDisplay").className);
             }
 
             function getRandom(type) {
@@ -110,6 +119,19 @@
                     document.getElementById("results").innerText = request.responseText;
                 }
             };
+
+            function loadSettings() {
+                let request = new XMLHttpRequest();
+                request.onreadystatechange = displayResponse;
+                request.open("GET", "/api/current");
+                request.send();
+
+                function displayResponse() {
+                    if (request.readyState != 4) return;
+                        let data = JSON.parse(request.responseText);
+                        document.getElementById("settingsContents").innerHTML = "Categories: " + data["symbols"] + "<div>coe galera</div>";
+                }
+            }
             
         </script>
     </body>
