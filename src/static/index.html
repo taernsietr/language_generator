@@ -8,6 +8,7 @@
 
             * {
                 font-family: "monospace";
+                font-size: 12px;
             }
 
             body {
@@ -24,6 +25,22 @@
 
             .basis-full {
                 flex-basis: 100%;
+            }
+
+            .basis-half {
+                flex-basis: 50%;
+            }
+
+            .basis-1-4 {
+                flex-basis: 25%;
+            }
+
+            .basis-3-4 {
+                flex-basis: 75%;
+            }
+
+            .basis-1-3 {
+                flex-basis: 33%;
             }
 
             .bordered {
@@ -84,6 +101,10 @@
                 align-self: center;
             }
 
+            .no-min-width {
+                min-width: 0px;
+            }
+
         </style>
     </head>
 
@@ -92,29 +113,41 @@
         <div id="menu" class="flex-row space-around bordered small-padding">
 
         <!-- Left menu column, generation -->
-            <div id="menu-column-left" class="flex-col space-around small-padding">
+            <div id="menu-column-left" class="basis-1-3 flex-col space-around small-padding">
                 <div class="flex-col">
-                    <form>
                     <button class="menu-button bordered" type="submit" onclick="getRandom('word')">Random Word</button>
-                    <input type="range" min="1" max="10" value="5" id="wordLengthSlider" name="wordLengthSlider"></button>
-                    <label for="wordLengthSlider">Syllables</label>
-                    <input type="checkbox" id="wordLengthExactCheckbox" name="wordLengthExactCheckbox"></button>
-                    <label for="WordLengthExactCheckbox">Exact Syllable Count</label>
-                    </form>
+                    <div class="flex-col">
+                        <div class="flex-row">
+                            <label class="basis-3-4 small-padding center-self no-min-width" for="WordLengthExactCheckbox">Exact number of syllables?</label>
+                            <input class="basis-1-4 small-padding center-self menu-button bordered centered-text no-min-width" type="checkbox" id="wordLengthExactCheckbox" name="wordLengthExactCheckbox">
+                        </div>
+                        <div class="flex-row">
+                            <label class="basis-3-4 small-padding center-self no-min-width" for="minSyllables">Min syllables:</label>
+                            <input class="basis-1-4 small-padding center-self menu-button bordered centered-text no-min-width" type="number" value="1" id="minSyllables" name="minSyllables">
+                            <label class="basis-3-4 small-padding center-self no-min-width" for="maxSyllables">Max syllables:</label>
+                            <input class="basis-1-4 small-padding center-self menu-button bordered centered-text no-min-width" type="number" value="5" id="maxSyllables" name="maxSyllables">
+                        </div>
+                    </div>
                 </div>
-                <div class="flex-col"><button class="menu-button bordered" type="submit" onclick="getRandom('text')">Random Text</button></div>
+                <div class="flex-col">
+                    <button class="menu-button bordered" type="submit" onclick="getRandom('text')">Random Text</button>
+                    <div class="flex-row">
+                        <label class="basis-3-4 small-padding center-self no-min-width" for="textLength">Text length:</label>
+                        <input class="basis-1-4 small-padding center-self menu-button bordered centered-text no-min-width" type="number" value="50" id="textLength" name="textLength">
+                    </div>
+                </div>
             </div>
 
         <!-- Center menu column, general stuff -->
-            <div id="menu-column-center" class="flex-col space-around small-padding">
-                <div class="flex-col"><button class="menu-button bordered" type="submit" onclick="toggleDisplay('infoDisplay')">Toggle Info</button></div>
+            <div id="menu-column-center" class="basis-1-3 flex-col space-around small-padding">
+                <div class="flex-col"><button class="menu-button bordered" type="submit" onclick="toggleInfo()">Toggle Info</button></div>
             </div>
 
         <!-- Right menu column, generator settings -->
-            <div id="menu-column-right" class="flex-col space-around small-padding">
+            <div id="menu-column-right" class="basis-1-3 flex-col space-around small-padding">
                 <div class="flex-col"><button class="menu-button bordered" type="submit" onclick="saveSettings()">Save Settings</button></div>
                 <div class="flex-col"><button class="menu-button bordered" type="submit" onclick="loadSettings()">Load Settings</button></div>
-                <div class="flex-col"><button class="menu-button bordered" type="submit" onclick="toggleDisplay('settingsDisplay')">Toggle Settings</button></div>
+                <div class="flex-col"><button class="menu-button bordered" type="submit" onclick="toggleSettings()">Toggle Settings</button></div>
             </div>
         </div>
 
@@ -131,11 +164,17 @@
             <div class="flex-row wrap centered">
                 <h3 class="centered-text basis-full">Information</h3>
                 <div id="infoContents" class="flex-col space-around basis-full">
-                    <p class="bordered left-align-text center-self">
+                    <p class="left-align-text">
                     This (at the moment, at least) is a simple word and text generator. It is based on <i>categories</i>, which are just sets of unicode characters without any deeper meaning, and <i>patterns</i>, which represent syllable patterns - but similarly to the categories, they are treated here as simple character patterns. As such, you can create as many categories as you want, with whichever characters or groups thereof, and set up patterns so that they appear in word generation.
                     </p>
-                    <p class="bordered left-align-text center-self">
-                        <b>TL;DR:</b> words are generated according to the patterns, which in turn correspond to the elements in each category. You can have several categories or patterns. 
+                    <p class="left-align-text">
+                        TL;DR:
+                        <ul>
+                            <li>words are generated according to the syllable patterns;</li>
+                            <li>patterns are composed of the symbols for each category;</li>
+                            <li>each category is made of up groups of characters;</li>
+                            <li>You can have several categories or patterns.</li>
+                        </ul>
                     </p>
                 </div>
             </div>
@@ -155,10 +194,16 @@
 
             loadSettings();
 
-            function toggleDisplay(element) {
-                state.element = (state.element) ? false : true;
-                document.getElementById(element).className = (state.element) ? "flex-col space-around bordered small-padding hidden" : "flex-col space-around bordered small-padding";
-                console.log("settingsDisplay: " + state.element);
+            function toggleInfo() {
+                state.infoDisplay = (state.infoDisplay) ? false : true;
+                document.getElementById("infoDisplay").className = (!state.infoDisplay) ? "flex-col space-around bordered small-padding hidden" : "flex-col space-around bordered small-padding";
+                console.log("infoDisplay: " + state.infoDisplay);
+            }
+
+            function toggleSettings() {
+                state.settingsDisplay = (state.settingsDisplay) ? false : true;
+                document.getElementById("settingsDisplay").className = (!state.settingsDisplay) ? "flex-col space-around bordered small-padding hidden" : "flex-col space-around bordered small-padding";
+                console.log("settingsDisplay: " + state.settingsDisplay);
             }
 
             function getRandom(type) {
