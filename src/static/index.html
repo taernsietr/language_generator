@@ -89,6 +89,7 @@
         </div>
 
         <script>
+
             let setupDisplayState = false;
 
             function toggleSetupDisplay() {
@@ -96,7 +97,6 @@
                 document.getElementById("setupDisplay").className = (setupDisplayState) ? "centered-container bordered" : "centered-container bordered hidden";
                 console.log("setupDisplayState: " + setupDisplayState);
                 console.log("setupDisplay class:" + document.getElementById("setupDisplay").className);
-
             }
 
             function getRandom(type) {
@@ -110,7 +110,6 @@
                     document.getElementById("results").innerText = request.responseText;
                 }
             };
-
             
         </script>
     </body>

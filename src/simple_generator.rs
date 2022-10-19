@@ -15,7 +15,6 @@ impl SimpleGenerator {
         SimpleGenerator {name, categories, symbols, patterns}
     }
 
-    #[allow(dead_code)]
     pub fn load(file: &str) -> SimpleGenerator {
         let data = std::fs::read_to_string(format!("/home/tsrodr/Run/language_generator/src/settings/{}", file)).expect("Failed to load generator settings file");
         let generator: SimpleGenerator = serde_yaml::from_str(&data).expect("Failed to read YAML data");
@@ -35,7 +34,10 @@ impl SimpleGenerator {
         self.name.clone()
     }
 
-    #[allow(dead_code)]
+    pub fn get_generator_setup(&self) -> String {
+        serde_yaml::to_string(&self).unwrap()
+    }
+
     pub fn random_word(&self, max_syllables: u8, exactly: bool) -> String {
         let mut rng = rand::thread_rng();
         let mut word = "".to_string();
@@ -53,7 +55,6 @@ impl SimpleGenerator {
         word
     }
 
-    #[allow(dead_code)]
     pub fn random_text(&self, text_size: u8) -> String {
         let mut text = "".to_string();
 
