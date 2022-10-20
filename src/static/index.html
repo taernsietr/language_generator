@@ -198,13 +198,13 @@
             function toggleInfo() {
                 state.infoDisplay = (state.infoDisplay) ? false : true;
                 document.getElementById("infoDisplay").className = (!state.infoDisplay) ? "flex-col space-around bordered small-padding hidden" : "flex-col space-around bordered small-padding";
-                console.log("infoDisplay: " + state.infoDisplay);
+                console.log("[Frontend] infoDisplay set to " + state.infoDisplay);
             }
 
             function toggleSettings() {
                 state.settingsDisplay = (state.settingsDisplay) ? false : true;
                 document.getElementById("settingsDisplay").className = (!state.settingsDisplay) ? "flex-col space-around bordered small-padding hidden" : "flex-col space-around bordered small-padding";
-                console.log("settingsDisplay: " + state.settingsDisplay);
+                console.log("[Frontend] settingsDisplay set to " + state.settingsDisplay);
             }
 
             function getRandom(type) {
@@ -217,6 +217,7 @@
                     if (request.readyState != 4) return;
                     document.getElementById("results").innerText = request.responseText;
                 }
+                console.log("[Frontend] Random text generated");
             };
 
             function loadSettings() {
@@ -251,6 +252,7 @@
                         "<div class='flex-col'>" +
                         "<div id='categories' class='flex-col'>" +
                         "<h3>Categories</h3>" +
+                        "<button class='menu-button bordered' type='submit' onclick='addCategory()'>Add new category</button>" +
                         categoryRows.replace(/,/g, " ") +
                         "</div>" +
                         "<div id='patterns' class='flex-col'>" +
@@ -261,25 +263,32 @@
                         "</div>" +
                         "</div>";
                 }
+                console.log("[Frontend] Settings loaded");
             }
 
-            function addNewCategory() {
+            function addCategory() {
                 document.getElementById("categories").innerHTML += 
                     "<div class='flex-row' id='category-" +
                     state.categories + 
                     "'>" +
                     "<input type='text' class='basis-1-4 small-padding center-self menu-button bordered no-min-width' maxlength='1' value=''> <span class='center-self'>=</span>" + 
-                    "<input type='text' class='basis-3-4 small-padding center-self menu-button bordered no-min-width' value=''></div>";
+                    "<input type='text' class='basis-3-4 small-padding center-self menu-button bordered no-min-width' value=''>" +
+                    "<button class='menu-button bordered' type='submit' onclick=" +
+                    "\"removeCategory(" + "'category-" + state.categories + "')\">Remove</button>" +
+                    "</div>";
                 state.categories += 1;
+                console.log("[Frontend] Category added");
             }
 
             function removeCategory(id) {
                 document.getElementById(id).remove();
+                state.categories -= 1;
+                console.log("[Frontend] Category removed");
             }
             
-           // function saveSettings() {
-           //     return
-           // }
+            function saveSettings() {
+                return
+            }
             /* 
                 Add an input field for each symbol and category, along with a button for removing it;;
                 Add a button for adding a new category;
