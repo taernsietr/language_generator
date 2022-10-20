@@ -29,3 +29,10 @@ pub async fn get_settings(state: web::Data<AppState>) -> impl Responder {
     println!("[API] Returning settings for generator: {}", state.generator.lock().unwrap().get_name());
     web::Json(serde_json::from_str::<SimpleGenerator>(&state.generator.lock().unwrap().get_generator_setup()).expect("Failed to read JSON data"))
 }
+
+pub async fn new_settings(req_body: String, state: web::Data<AppState>) -> impl Responder {
+    println!("{}", req_body);
+    *state.generator.lock().unwrap() = serde_json::from_str::<SimpleGenerator>(&req_body).expect("Failed to read JSON data");
+    println!("[API] Received settings for generator: {}", state.generator.lock().unwrap().get_name());
+    HttpResponse::Ok().body("[API] New settings received")
+}

@@ -25,6 +25,7 @@ async fn main() -> std::io::Result<()> {
                     .route("/word", web::get().to(random_word))
                     .route("/text", web::get().to(random_text))
                     .route("/current", web::get().to(get_settings))
+                    .route("/new", web::post().to(new_settings))
             )
     })
     .bind(("0.0.0.0", 8080))?

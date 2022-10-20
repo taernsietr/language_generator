@@ -286,7 +286,37 @@
             }
             
             function saveSettings() {
-                console.log(document.getElementById("categories").contents());
+                let newSettings = 
+                {
+                    name: "new",
+                    categories: [],
+                    symbols: [],
+                    patterns: []
+                };
+
+                let symbols = document.getElementsByClassName("symbol");
+                let categories = document.getElementsByClassName("category");
+                let patterns = document.getElementsByClassName("patterns");
+
+                for (let i = 0; i < categories.length; i += 1) {
+                    let sym = symbols[i].value;
+                    let arr = categories[i].value.split(" ");
+                    newSettings.categories.push(arr);
+                    newSettings.symbols.push(sym);
+                };
+                newSettings.patterns = patterns[0].value.split(" ");
+
+                let request = new XMLHttpRequest(); 
+                request.onreadystatechange = displayResponse;
+                request.open("POST", "/api/new");
+                request.setRequestHeader("Content-Type", "application/json");
+                request.send(JSON.stringify(newSettings));
+
+                function displayResponse() {
+                    if (request.readyState != 4) return;
+                    document.getElementById("results").innerText = request.responseText;
+                }
+                console.log("[Frontend] Settings saved");
             }
             
         </script>
