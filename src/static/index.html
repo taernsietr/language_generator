@@ -235,10 +235,10 @@
                         categoryRows += "<div class='flex-row' id='category-" +
                                         state.categories + 
                                         "'>" +
-                                        "<input 'type='text' class='basis-1-4 small-padding center-self menu-button bordered no-min-width' maxlength='1' value='" + 
+                                        "<input 'type='text' class='symbol basis-1-4 small-padding center-self menu-button bordered no-min-width' maxlength='1' value='" + 
                                         symbol + 
                                         "'> <span class='center-self'>=</span>" + 
-                                        "<input type='text' class='basis-3-4 small-padding center-self menu-button bordered no-min-width' value='" +
+                                        "<input type='text' class='category basis-3-4 small-padding center-self menu-button bordered no-min-width' value='" +
                                         data["categories"][index] + 
                                         "'>" +
                                         "<button class='menu-button bordered' type='submit' onclick=" +
@@ -246,7 +246,6 @@
                                         "</div>";
                         state.categories += 1;
                     });
-
 
                     document.getElementById("settingsContents").innerHTML = 
                         "<div class='flex-col'>" +
@@ -257,7 +256,7 @@
                         "</div>" +
                         "<div id='patterns' class='flex-col'>" +
                         "<h3>Patterns</h3>" +
-                        "<div class='flex-row center-self'><input type='text' class='basis-half small-padding center-self centered-text menu-button bordered no-min-width' value='" +
+                        "<div class='flex-row center-self'><input type='text' class='patterns basis-half small-padding center-self centered-text menu-button bordered no-min-width' value='" +
                         data["patterns"].join().replace(/,/g, " ") +
                         "'></div>"
                         "</div>" +
@@ -271,8 +270,8 @@
                     "<div class='flex-row' id='category-" +
                     state.categories + 
                     "'>" +
-                    "<input type='text' class='basis-1-4 small-padding center-self menu-button bordered no-min-width' maxlength='1' value=''> <span class='center-self'>=</span>" + 
-                    "<input type='text' class='basis-3-4 small-padding center-self menu-button bordered no-min-width' value=''>" +
+                    "<input type='text' class='symbol basis-1-4 small-padding center-self menu-button bordered no-min-width' maxlength='1' value=''> <span class='center-self'>=</span>" + 
+                    "<input type='text' class='category basis-3-4 small-padding center-self menu-button bordered no-min-width' value=''>" +
                     "<button class='menu-button bordered' type='submit' onclick=" +
                     "\"removeCategory(" + "'category-" + state.categories + "')\">Remove</button>" +
                     "</div>";
@@ -287,13 +286,8 @@
             }
             
             function saveSettings() {
-                return
+                console.log(document.getElementById("categories").contents());
             }
-            /* 
-                Add an input field for each symbol and category, along with a button for removing it;;
-                Add a button for adding a new category;
-                Add listener for updating client-side settings; backend should only be updated when the form is submitted to the endpoint;
-            */
             
         </script>
     </body>
