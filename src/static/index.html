@@ -189,7 +189,8 @@
 
             let state = {
                 settingsDisplay: true,
-                infoDisplay: true
+                infoDisplay: true,
+                categories: 0
             }
 
             loadSettings();
@@ -230,29 +231,58 @@
 
                     let categoryRows = "";
                     data["symbols"].forEach((symbol, index) => {
-                    categoryRows += "<div class='flex-row'>" +
-                                    "<input type='text' class='basis-1-4 small-padding center-self menu-button bordered no-min-width' maxlength='1' value='" + 
-                                    symbol + 
-                                    "'> <span class='center-self'>=</span>" + 
-                                    "<input type='text' class='basis-3-4 small-padding center-self menu-button bordered no-min-width' value='" +
-                                    data["categories"][index] + 
-                                    "'></div>";
+                        categoryRows += "<div class='flex-row' id='category-" +
+                                        state.categories + 
+                                        "'>" +
+                                        "<input 'type='text' class='basis-1-4 small-padding center-self menu-button bordered no-min-width' maxlength='1' value='" + 
+                                        symbol + 
+                                        "'> <span class='center-self'>=</span>" + 
+                                        "<input type='text' class='basis-3-4 small-padding center-self menu-button bordered no-min-width' value='" +
+                                        data["categories"][index] + 
+                                        "'>" +
+                                        "<button class='menu-button bordered' type='submit' onclick=" +
+                                        "\"removeCategory(" + "'category-" + state.categories + "')\">Remove</button>" +
+                                        "</div>";
+                        state.categories += 1;
                     });
 
 
                     document.getElementById("settingsContents").innerHTML = 
-                    "<div class='flex-col'>" +
-                    categoryRows.replace(/,/g, " ") +
-                    "<br>" +
-                    "<div class='flex-row'><input type='text' class='basis-half small-padding center-self menu-button bordered no-min-width' value='" +
-                    data["patterns"].join().replace(/,/g, " ") +
-                    "'></div>"
-                    "</div>";
+                        "<div class='flex-col'>" +
+                        "<div id='categories' class='flex-col'>" +
+                        "<h3>Categories</h3>" +
+                        categoryRows.replace(/,/g, " ") +
+                        "</div>" +
+                        "<div id='patterns' class='flex-col'>" +
+                        "<h3>Patterns</h3>" +
+                        "<div class='flex-row center-self'><input type='text' class='basis-half small-padding center-self centered-text menu-button bordered no-min-width' value='" +
+                        data["patterns"].join().replace(/,/g, " ") +
+                        "'></div>"
+                        "</div>" +
+                        "</div>";
                 }
             }
+
+            function addNewCategory() {
+                document.getElementById("categories").innerHTML += 
+                    "<div class='flex-row' id='category-" +
+                    state.categories + 
+                    "'>" +
+                    "<input type='text' class='basis-1-4 small-padding center-self menu-button bordered no-min-width' maxlength='1' value=''> <span class='center-self'>=</span>" + 
+                    "<input type='text' class='basis-3-4 small-padding center-self menu-button bordered no-min-width' value=''></div>";
+                state.categories += 1;
+            }
+
+            function removeCategory(id) {
+                document.getElementById(id).remove();
+            }
+            
+           // function saveSettings() {
+           //     return
+           // }
             /* 
                 Add an input field for each symbol and category, along with a button for removing it;;
-                Add a button for adding a new pattern and another for adding a new category;
+                Add a button for adding a new category;
                 Add listener for updating client-side settings; backend should only be updated when the form is submitted to the endpoint;
             */
             
