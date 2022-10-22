@@ -1,7 +1,9 @@
 use actix_web::{web, App, HttpServer};
 use std::sync::Mutex;
+use std::fs::read_dir;
+use std::path::Path;
 
-mod language;
+// mod language;
 mod simple_generator;
 mod routes;
 // mod utilities;
@@ -13,8 +15,13 @@ use crate::routes::*;
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let state = web::Data::new(AppState {
-        generator: Mutex::new(SimpleGenerator::load("generator-setup.json")),
+        generator: Mutex::new(SimpleGenerator::load("default-settings.json")),
     });
+
+    let mut setting_files = Vec::new();
+    for file in read_dir("/home/tsrodr/Run/language_generator/src/settings/").unwrap() {
+        setting_files.push(file.unwrap().file_name());
+    }
 
     HttpServer::new(move || {
         App::new()

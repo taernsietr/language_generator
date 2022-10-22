@@ -1,5 +1,6 @@
 use serde::{Deserialize, Serialize};
 use rand::{Rng, prelude::SliceRandom};
+use std::cmp::Ordering;
 
 #[derive(Deserialize, Serialize)]
 pub struct SimpleGenerator {
@@ -37,14 +38,16 @@ impl SimpleGenerator {
         serde_json::to_string(&self).unwrap()
     }
 
-    pub fn random_word(&self, min_syllables: u8, max_syllables: u8, exactly: bool) -> String {
-        if min_syllables > max_syllables { return "[Error] Minimum syllables has to be equal to or less than maximum syllables".to_string() };
-        
+    pub fn random_word(&self, min_syllables: u8, max_syllables: u8) -> String {
         let mut rng = rand::thread_rng();
         let mut word = "".to_string();
-        
-        let word_length = if exactly { max_syllables } else { rng.gen_range(min_syllables..=max_syllables) };
 
+        let word_length: u8 = match min_syllables.cmp(&max_syllables) {
+            Ordering::Less => { rng.gen_range(min_syllables..=max_syllables) },
+            Ordering::Equal => { min_syllables },
+            Ordering::Greater => { panic!("[SimpleGenerator] Error: Minimum syllables has to be equal to or less than maximum syllables"); },
+        };
+        
         for _ in 1..=word_length {
             let current = self.patterns.choose(&mut rng);
             for letter in current.unwrap().chars() {
@@ -60,7 +63,7 @@ impl SimpleGenerator {
         let mut text = "".to_string();
 
         for _ in 1..=text_size {
-            text.push_str(&self.random_word(min_syllables, max_syllables, false));
+            text.push_str(&self.random_word(min_syllables, max_syllables));
             text.push_str(" ");
         }
         text

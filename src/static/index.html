@@ -7,16 +7,16 @@
         <style>
 
             * {
-                font-family: "monospace";
-                font-size: 12px;
+                font-family: "sans-serif";
+                font-size: 14px;
             }
 
             body {
                 display: flex;
                 justify-content: center;
                 flex-direction: column;
-                background-color: black;
-                color: #d50;
+                background-color: #282828;
+                color: #98971a;
             }
 
             table {
@@ -44,7 +44,7 @@
             }
 
             .bordered {
-                border: 1px solid #d50;
+                border: 2px solid #928374;
                 margin: 5px;
             }
 
@@ -75,14 +75,14 @@
             }
 
             .menu-button {
-                background-color: black;
-                color: #d50;
+                background-color: #282828;
+                color: #98971a;
                 transition: 0.5s;
             }
 
             .menu-button:hover {
-                background-color: #d50;
-                color: black;
+                background-color: #928374;
+                color: #eddbb2;
             }
 
             .hidden {
@@ -118,14 +118,10 @@
                     <button class="menu-button bordered" type="submit" onclick="getRandom('word')">Random Word</button>
                     <div class="flex-col">
                         <div class="flex-row">
-                            <label class="basis-3-4 small-padding center-self no-min-width" for="WordLengthExactCheckbox">Exact number of syllables?</label>
-                            <input class="basis-1-4 small-padding center-self menu-button bordered centered-text no-min-width" type="checkbox" id="wordLengthExactCheckbox" name="wordLengthExactCheckbox">
-                        </div>
-                        <div class="flex-row">
                             <label class="basis-3-4 small-padding center-self no-min-width" for="minSyllables">Min syllables:</label>
-                            <input class="basis-1-4 small-padding center-self menu-button bordered centered-text no-min-width" type="number" value="1" id="minSyllables" name="minSyllables">
+                            <input class="basis-1-4 small-padding center-self menu-button bordered centered-text no-min-width" type="number" value="1" min="1" max="255" id="minSyllables" name="minSyllables">
                             <label class="basis-3-4 small-padding center-self no-min-width" for="maxSyllables">Max syllables:</label>
-                            <input class="basis-1-4 small-padding center-self menu-button bordered centered-text no-min-width" type="number" value="5" id="maxSyllables" name="maxSyllables">
+                            <input class="basis-1-4 small-padding center-self menu-button bordered centered-text no-min-width" type="number" value="5" min="1" max="255" id="maxSyllables" name="maxSyllables">
                         </div>
                     </div>
                 </div>
@@ -194,6 +190,7 @@
             }
 
             loadSettings();
+            toggleInfo();
 
             function toggleInfo() {
                 state.infoDisplay = (state.infoDisplay) ? false : true;

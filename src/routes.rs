@@ -25,7 +25,7 @@ pub async fn random_word(request: HttpRequest, state: web::Data<AppState>) -> im
         request.peer_addr().unwrap(),
         "3",
         state.generator.lock().unwrap().get_name());
-    HttpResponse::Ok().body(format!("{}", state.generator.lock().unwrap().random_word(3, 6, false)))
+    HttpResponse::Ok().body(format!("{}", state.generator.lock().unwrap().random_word(2, 4)))
 }
 
 // TODO: parse text size
@@ -35,7 +35,7 @@ pub async fn random_text(request: HttpRequest, state: web::Data<AppState>) -> im
         request.peer_addr().unwrap(),
         "50",
         state.generator.lock().unwrap().get_name());
-    HttpResponse::Ok().body(format!("{}", state.generator.lock().unwrap().random_text(3, 6, 50)))
+    HttpResponse::Ok().body(format!("{}", state.generator.lock().unwrap().random_text(1, 5, 50)))
 }
 
 pub async fn get_settings(request: HttpRequest, state: web::Data<AppState>) -> impl Responder {
