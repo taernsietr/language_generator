@@ -207,7 +207,11 @@
             function getRandom(type) {
                 let request = new XMLHttpRequest(); 
                 request.onreadystatechange = displayResponse;
-                request.open("GET", "/api/" + type);
+                request.open("GET",
+                    "/api/" + type + 
+                    "?min=" + document.getElementById("minSyllables").value + 
+                    "&max=" + document.getElementById("maxSyllables").value +
+                    "&text_length=" + document.getElementById("textLength").value);
                 request.send();
 
                 function displayResponse() {

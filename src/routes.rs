@@ -2,6 +2,7 @@ use actix_files::NamedFile;
 use actix_web::{web, Responder, Error, HttpRequest, HttpResponse};
 use chrono::Local;
 use std::sync::Mutex;
+use serde::Deserialize;
 
 use crate::simple_generator::SimpleGenerator;
 
@@ -9,6 +10,14 @@ const DF: &str = "%H:%M:%S";
 
 pub struct AppState {
     pub generator: Mutex<SimpleGenerator>,
+    pub generators: Mutex<Vec<SimpleGenerator>>,
+}
+
+#[derive(Deserialize)]
+pub struct WordParams {
+    min: u8,
+    max: u8,
+    text_length: u8,
 }
 
 pub async fn index(request: HttpRequest) -> Result<NamedFile, Error> {
@@ -18,24 +27,21 @@ pub async fn index(request: HttpRequest) -> Result<NamedFile, Error> {
     Ok(NamedFile::open("static/index.html")?)
 }
 
-// TODO: parse max word size and exact syllable number
-pub async fn random_word(request: HttpRequest, state: web::Data<AppState>) -> impl Responder {
-    println!("[API]: {} [{:?}] Generating {} word(s) with generator [{}]",
+pub async fn random_word(request: HttpRequest, info: web::Query<WordParams>, state: web::Data<AppState>) -> impl Responder {
+    println!("[API]: {} [{:?}] Generating word with generator [{}]",
         Local::now().format(DF),
         request.peer_addr().unwrap(),
-        "3",
         state.generator.lock().unwrap().get_name());
-    HttpResponse::Ok().body(format!("{}", state.generator.lock().unwrap().random_word(2, 4)))
+    HttpResponse::Ok().body(format!("{}", state.generator.lock().unwrap().random_word(info.min, info.max)))
 }
 
-// TODO: parse text size
-pub async fn random_text(request: HttpRequest, state: web::Data<AppState>) -> impl Responder {
+pub async fn random_text(request: HttpRequest, info: web::Query<WordParams>, state: web::Data<AppState>) -> impl Responder {
     println!("[API]: {} [{:?}] Generating text ({}) with generator [{}]",
         Local::now().format(DF),
         request.peer_addr().unwrap(),
-        "50",
+        info.text_length,
         state.generator.lock().unwrap().get_name());
-    HttpResponse::Ok().body(format!("{}", state.generator.lock().unwrap().random_text(1, 5, 50)))
+    HttpResponse::Ok().body(format!("{}", state.generator.lock().unwrap().random_text(info.min, info.max, info.text_length)))
 }
 
 pub async fn get_settings(request: HttpRequest, state: web::Data<AppState>) -> impl Responder {
