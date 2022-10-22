@@ -137,22 +137,19 @@
         <!-- Center menu column, general stuff -->
             <div id="menu-column-center" class="basis-1-3 flex-col space-around small-padding">
                 <div class="flex-col"><button class="menu-button bordered" type="submit" onclick="toggleInfo()">Toggle Info</button></div>
+                <div class="flex-col"><button class="menu-button bordered" type="submit" onclick="toggleSettings()">Toggle Settings</button></div>
             </div>
 
         <!-- Right menu column, generator settings -->
             <div id="menu-column-right" class="basis-1-3 flex-col space-around small-padding">
                 <div class="flex-col"><button class="menu-button bordered" type="submit" onclick="saveSettings()">Save Settings</button></div>
                 <div class="flex-col"><button class="menu-button bordered" type="submit" onclick="loadSettings()">Load Settings</button></div>
-                <div class="flex-col"><button class="menu-button bordered" type="submit" onclick="toggleSettings()">Toggle Settings</button></div>
             </div>
         </div>
 
-        <!-- Displays information about the generation settings -->
-        <div id="settingsDisplay" class="flex-col space-around bordered small-padding">
-            <div class="flex-row wrap centered">
-                <h3 class="centered-text basis-full">Settings</h3>
-                <div id="settingsContents" class="flex-col space-around basis-full"></div>
-            </div>
+        <!-- Displays the results of generating words or text -->
+        <div id="resultsDisplay" class="flex-row centered bordered small-padding">
+            <p id="results" class="centered-text">Please select one of the options above!</p>
         </div>
 
         <!-- Displays information about the application -->
@@ -164,21 +161,29 @@
                     This (at the moment, at least) is a simple word and text generator. It is based on <i>categories</i>, which are just sets of unicode characters without any deeper meaning, and <i>patterns</i>, which represent syllable patterns - but similarly to the categories, they are treated here as simple character patterns. As such, you can create as many categories as you want, with whichever characters or groups thereof, and set up patterns so that they appear in word generation.
                     </p>
                     <p class="left-align-text">
-                        TL;DR:
-                        <ul>
-                            <li>words are generated according to the syllable patterns;</li>
-                            <li>patterns are composed of the symbols for each category;</li>
-                            <li>each category is made of up groups of characters;</li>
-                            <li>You can have several categories or patterns.</li>
-                        </ul>
+                    TL;DR:
+                    <ul>
+                        <li>words are generated according to the syllable patterns;</li>
+                        <li>patterns are composed of the symbols for each category;</li>
+                        <li>each category is made of up groups of characters;</li>
+                        <li>You can have several categories or patterns.</li>
+                    </ul>
+                    </p>
+                    <p class="left-align-text">
+                    This page is a temporary front-end, a better version will be provided shortly. There are two issues to be aware of:
+                    1. Changes you make to categories and/or patterns won't apply to generated word and text until you click [Save Settings], since the text generation is performed on the backend code;
+                    2. Due to a bug in the spaghetti mess that is this makeshift frontend, adding a category <strong>will erase any unsaved changes to the categories</strong>, so currently, please try to create as many categories you intend to use <i>before</i> actually editing them to your liking.
                     </p>
                 </div>
             </div>
         </div>
 
-        <!-- Displays the results of generating words or text -->
-        <div id="resultsDisplay" class="flex-row centered bordered small-padding">
-            <p id="results" class="centered-text">Please select one of the options above!</p>
+        <!-- Displays information about the generation settings -->
+        <div id="settingsDisplay" class="flex-col space-around bordered small-padding">
+            <div class="flex-row wrap centered">
+                <h3 class="centered-text basis-full">Settings</h3>
+                <div id="settingsContents" class="flex-col space-around basis-full"></div>
+            </div>
         </div>
 
         <script>
