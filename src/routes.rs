@@ -32,7 +32,7 @@ pub async fn random_word(request: HttpRequest, info: web::Query<WordParams>, sta
         Local::now().format(DF),
         request.peer_addr().unwrap(),
         state.generator.lock().unwrap().get_name());
-    HttpResponse::Ok().body(format!("{}", state.generator.lock().unwrap().random_word(info.min, info.max)))
+    HttpResponse::Ok().body(state.generator.lock().unwrap().random_word(info.min, info.max))
 }
 
 pub async fn random_text(request: HttpRequest, info: web::Query<WordParams>, state: web::Data<AppState>) -> impl Responder {
@@ -41,7 +41,7 @@ pub async fn random_text(request: HttpRequest, info: web::Query<WordParams>, sta
         request.peer_addr().unwrap(),
         info.text_length,
         state.generator.lock().unwrap().get_name());
-    HttpResponse::Ok().body(format!("{}", state.generator.lock().unwrap().random_text(info.min, info.max, info.text_length)))
+    HttpResponse::Ok().body(state.generator.lock().unwrap().random_text(info.min, info.max, info.text_length))
 }
 
 pub async fn get_settings(request: HttpRequest, state: web::Data<AppState>) -> impl Responder {

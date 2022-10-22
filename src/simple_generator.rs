@@ -29,7 +29,7 @@ impl SimpleGenerator {
     }
    
     #[allow(dead_code)]
-    pub fn save(&self) -> () {
+    pub fn save(&self) {
         std::fs::write(
             format!("{}/settings/{}.json", env::current_dir().unwrap().display(), &self.name),
             serde_json::to_string(&self).unwrap(),
@@ -67,7 +67,7 @@ impl SimpleGenerator {
     }
 
     pub fn random_text(&self, min_syllables: u8, max_syllables: u8, text_size: u8) -> String {
-        let mut text = "".to_string();
+        let mut text = String::new();
 
         for _ in 1..=text_size {
             text.push_str(&self.random_word(min_syllables, max_syllables));
