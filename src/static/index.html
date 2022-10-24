@@ -214,7 +214,8 @@
                 request.onreadystatechange = displayResponse;
                 request.open("GET",
                     "/api/" + type + 
-                    "?min=" + document.getElementById("minSyllables").value + 
+                    "?generator=" + "default" + 
+                    "&min=" + document.getElementById("minSyllables").value + 
                     "&max=" + document.getElementById("maxSyllables").value +
                     "&text_length=" + document.getElementById("textLength").value);
                 request.send();
