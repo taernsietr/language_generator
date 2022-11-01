@@ -38,10 +38,10 @@ impl SimpleGenerator {
     }
 
     pub fn get_name(&self) -> String {
-        self.name.clone()
+        self.name
     }
 
-    pub fn get_generator_setup(&self) -> String {
+    pub fn get(&self) -> String {
         serde_json::to_string(&self).unwrap()
     }
 
