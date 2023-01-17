@@ -10,7 +10,6 @@ use crate::simple_generator::SimpleGenerator;
 const DF: &str = "%H:%M:%S";
 
 pub struct AppState {
-    pub temp: Mutex<SimpleGenerator>,
     pub generators: Mutex<HashMap<String, SimpleGenerator>>,
 }
 
@@ -21,100 +20,64 @@ pub struct WordParams {
     max: u8,
     text_length: u8,
 }
+    
+fn log_hdr(fmt: &str, req: HttpRequest, text: String) {
+    println!("[{}] [SERVER: {:?}]: {}",
+        Local::now().format(fmt),
+        req.peer_addr().unwrap(),
+        text
+    );
+}
 
 pub async fn index(request: HttpRequest) -> Result<NamedFile, Error> {
-    println!("[API]: {} [{:?}] Attempting to serve index.html",
-        Local::now().format(DF), 
-        request.peer_addr().unwrap());
+    log_hdr(DF, request, format!("Attempting to serve index.html"));
     Ok(NamedFile::open("static/index.html")?)
 }
 
 pub async fn random_word(request: HttpRequest, query: web::Query<WordParams>, state: web::Data<AppState>) -> impl Responder {
-    println!("[API]: {} [{:?}] Generating word with generator [{}]",
-        Local::now().format(DF),
-        request.peer_addr().unwrap(),
-        state.generators
-            .lock()
-            .unwrap()
-            .get(&query.generator)
-            .expect("[API] Failed to find generator")
-            .get_name()
-    );
-    
+    log_hdr(DF, request, format!("Generating word with generator [{}]", &query.generator));
+
     HttpResponse::Ok().body(
         state.generators
             .lock()
             .unwrap()
             .get(&query.generator)
-            .expect("[API] Failed to find generator")
+            .unwrap()
             .random_word(query.min, query.max)
     )
 }
 
 pub async fn random_text(request: HttpRequest, query: web::Query<WordParams>, state: web::Data<AppState>) -> impl Responder {
-    println!("[API]: {} [{:?}] Generating text ({}) with generator [{}]",
-        Local::now().format(DF),
-        request.peer_addr().unwrap(),
-        query.text_length,
-        state.generators
-            .lock()
-            .unwrap()
-            .get(&query.generator)
-            .get_name()
-    );
+    log_hdr(DF, request, format!("Generating text (length: {}) with generator [{}]", query.text_length, &query.generator));
     
     HttpResponse::Ok().body(
         state.generators
             .lock()
             .unwrap()
             .get(&query.generator)
+            .expect("[API] Failed to find generator")
             .random_text(query.min, query.max, query.text_length)
     )
 }
 
-pub async fn current_settings(request: HttpRequest, state: web::Data<AppState>) -> impl Responder {
-    println!("[API]: {} [{:?}] Returning settings for generator [{}]",
-        Local::now().format(DF),
-        request.peer_addr().unwrap(),
-        state.generators
-            .lock()
-            .unwrap()
-            .get(&query.generator)
-            .get_name()
-    );
+pub async fn get_available_generators(request: HttpRequest, state: web::Data<AppState>) -> impl Responder {
+    log_hdr(DF, request, format!("Returning available generators"));
     
-    web::Json(
-        serde_json::from_str::<SimpleGenerator>(
-            &state.generators
-                .lock()
-                .unwrap()
-                .get(&query.generator)
-                .get()
-        )
-        .expect("Failed to read JSON data")
+    HttpResponse::Ok().body(
+        format!("{}", state.generators.lock().unwrap().values().map(|x| x.get_name() + "\n").collect::<String>())
     )
 }
 
-pub async fn save_settings(request: HttpRequest, req_body: String, state: web::Data<AppState>) -> impl Responder {
+// TODO: if generator exists, update, otherwise, create new generator file
+pub async fn save_settings(request: HttpRequest, query: web::Query<WordParams>, req_body: String, state: web::Data<AppState>) -> impl Responder {
     let new_generator = serde_json::from_str::<SimpleGenerator>(&req_body).expect("Failed to read JSON data");
+
     state.generators
         .lock()
         .unwrap()
         .insert(new_generator.get_name(), new_generator);
     
-    println!("[API]: {} [{:?}] Received settings for generator [{}]",
-        Local::now().format(DF),
-        request.peer_addr().unwrap(),
-        state.generators
-            .lock()
-            .unwrap()
-            .get(&query.generator)
-            .get_name());
+    log_hdr(DF, request, format!("Received settings for generator [{}]", &query.generator));
     
-    HttpResponse::Ok().body(
-        format!("[API]: {} [{}] New settings received",
-            Local::now() .format(DF), 
-            request.peer_addr().unwrap()
-        )
-    )
+    HttpResponse::Ok().body(format!("Settings saved!"))
 }

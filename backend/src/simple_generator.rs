@@ -18,6 +18,7 @@ impl SimpleGenerator {
         SimpleGenerator {name, categories, symbols, patterns}
     }
 
+    #[allow(dead_code)]
     pub fn load_str(file: &str) -> SimpleGenerator {
         let data = std::fs::read_to_string(format!("{}/settings/{}", env::current_dir().unwrap().display(), file)).expect("Failed to load generator settings file");
         serde_json::from_str::<SimpleGenerator>(&data).expect("Failed to read JSON data")
@@ -38,9 +39,10 @@ impl SimpleGenerator {
     }
 
     pub fn get_name(&self) -> String {
-        self.name
+        self.name.clone()
     }
 
+    #[allow(dead_code)]
     pub fn get(&self) -> String {
         serde_json::to_string(&self).unwrap()
     }

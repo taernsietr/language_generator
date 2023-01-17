@@ -144,6 +144,7 @@
             <div id="menu-column-right" class="basis-1-3 flex-col space-around small-padding">
                 <div class="flex-col"><button class="menu-button bordered" type="submit" onclick="saveSettings()">Save Settings</button></div>
                 <div class="flex-col"><button class="menu-button bordered" type="submit" onclick="loadSettings()">Load Settings</button></div>
+                <div class="flex-col"><button class="menu-button bordered" type="submit" onclick="debugStuff()">DEBUG</button></div>
             </div>
         </div>
 
@@ -197,6 +198,18 @@
             loadSettings();
             toggleInfo();
 
+            function debugStuff() {
+                let request = new XMLHttpRequest();
+                request.onreadystatechange = displayResponse;
+                request.open("GET", "/api/generators");
+                request.send();
+                
+                function displayResponse() {
+                    if (request.readyState != 4) return;
+                    document.getElementById("results").innerText = request.responseText;
+                }
+            }
+
             function toggleInfo() {
                 state.infoDisplay = (state.infoDisplay) ? false : true;
                 document.getElementById("infoDisplay").className = (!state.infoDisplay) ? "flex-col space-around bordered small-padding hidden" : "flex-col space-around bordered small-padding";
@@ -214,7 +227,7 @@
                 request.onreadystatechange = displayResponse;
                 request.open("GET",
                     "/api/" + type + 
-                    "?generator=" + "default" + 
+                    "?generator=" + "default-settings" + 
                     "&min=" + document.getElementById("minSyllables").value + 
                     "&max=" + document.getElementById("maxSyllables").value +
                     "&text_length=" + document.getElementById("textLength").value);
@@ -230,7 +243,9 @@
             function loadSettings() {
                 let request = new XMLHttpRequest();
                 request.onreadystatechange = displayResponse;
-                request.open("GET", "/api/current");
+                request.open("GET", 
+                    "/api/current" +
+                "?generator=" + "default");
                 request.send();
 
                 function displayResponse() {
