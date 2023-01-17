@@ -21,7 +21,7 @@ pub struct WordParams {
     text_length: u8,
 }
     
-fn log_hdr(fmt: &str, req: HttpRequest, text: String) {
+fn log(fmt: &str, req: HttpRequest, text: String) {
     println!("[{}] [SERVER: {:?}]: {}",
         Local::now().format(fmt),
         req.peer_addr().unwrap(),
@@ -30,12 +30,12 @@ fn log_hdr(fmt: &str, req: HttpRequest, text: String) {
 }
 
 pub async fn index(request: HttpRequest) -> Result<NamedFile, Error> {
-    log_hdr(DF, request, format!("Attempting to serve index.html"));
+    log(DF, request, format!("Attempting to serve index.html"));
     Ok(NamedFile::open("static/index.html")?)
 }
 
 pub async fn random_word(request: HttpRequest, query: web::Query<WordParams>, state: web::Data<AppState>) -> impl Responder {
-    log_hdr(DF, request, format!("Generating word with generator [{}]", &query.generator));
+    log(DF, request, format!("Generating word with generator [{}]", &query.generator));
 
     HttpResponse::Ok().body(
         state.generators
@@ -48,20 +48,20 @@ pub async fn random_word(request: HttpRequest, query: web::Query<WordParams>, st
 }
 
 pub async fn random_text(request: HttpRequest, query: web::Query<WordParams>, state: web::Data<AppState>) -> impl Responder {
-    log_hdr(DF, request, format!("Generating text (length: {}) with generator [{}]", query.text_length, &query.generator));
+    log(DF, request, format!("Generating text with generator [{}], length {}", &query.generator, query.text_length));
     
     HttpResponse::Ok().body(
         state.generators
             .lock()
             .unwrap()
             .get(&query.generator)
-            .expect("[API] Failed to find generator")
+            .unwrap()
             .random_text(query.min, query.max, query.text_length)
     )
 }
 
 pub async fn get_available_generators(request: HttpRequest, state: web::Data<AppState>) -> impl Responder {
-    log_hdr(DF, request, format!("Returning available generators"));
+    log(DF, request, format!("Returning available generators"));
     
     HttpResponse::Ok().body(
         format!("{}", state.generators.lock().unwrap().values().map(|x| x.get_name() + "\n").collect::<String>())
@@ -77,7 +77,7 @@ pub async fn save_settings(request: HttpRequest, query: web::Query<WordParams>, 
         .unwrap()
         .insert(new_generator.get_name(), new_generator);
     
-    log_hdr(DF, request, format!("Received settings for generator [{}]", &query.generator));
+    log(DF, request, format!("Received settings for generator [{}]", &query.generator));
     
     HttpResponse::Ok().body(format!("Settings saved!"))
 }
