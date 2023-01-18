@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+
+    <head> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Language Generator</title>
+        <style>
+
+            * {
+                font-family: "sans-serif";
+                font-size: 14px;
+            }
+
+            body {
+                display: flex;
+                justify-content: center;
+                flex-direction: column;
+                background-color: #282828;
+                color: #98971a;
+            }
+
+            table {
+                width: 85%;
+            }
+
+            .basis-full {
+                flex-basis: 100%;
+            }
+
+            .basis-half {
+                flex-basis: 50%;
+            }
+
+            .basis-1-4 {
+                flex-basis: 25%;
+            }
+
+            .basis-3-4 {
+                flex-basis: 75%;
+            }
+
+            .basis-1-3 {
+                flex-basis: 33%;
+            }
+
+            .bordered {
+                border: 2px solid #928374;
+                margin: 5px;
+            }
+
+            .small-padding {
+                padding: 10px;
+            }
+
+            .flex-row {
+                display: flex;
+                flex-direction: row;
+            }
+
+            .flex-col {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .wrap {
+                flex-wrap: wrap
+            }
+
+            .centered {
+                justify-content: center;
+            }
+
+            .space-around {
+                justify-content: space-around;
+            }
+
+            .menu-button {
+                background-color: #282828;
+                color: #98971a;
+                transition: 0.5s;
+            }
+
+            .menu-button:hover {
+                background-color: #928374;
+                color: #eddbb2;
+            }
+
+            .hidden {
+                display: none;
+            }
+
+            .centered-text {
+                text-align: center;
+            }
+            
+            .left-align-text {
+                text-align: left;
+            }
+
+            .center-self {
+                align-self: center;
+            }
+
+            .no-min-width {
+                min-width: 0px;
+            }
+
+        </style>
+    </head>
+
+    <body>
+        <script>
+
+            let state = {
+                settingsDisplay: true,
+                infoDisplay: true,
+                categories: 0
+            }
+
+            function toggleInfo() {
+                state.infoDisplay = (state.infoDisplay) ? false : true;
+                document.getElementById("infoDisplay").className = (!state.infoDisplay) ? "flex-col space-around bordered small-padding hidden" : "flex-col space-around bordered small-padding";
+                console.log("[Frontend] infoDisplay set to " + state.infoDisplay);
+            }
+
+            function toggleSettings() {
+                state.settingsDisplay = (state.settingsDisplay) ? false : true;
+                document.getElementById("settingsDisplay").className = (!state.settingsDisplay) ? "flex-col space-around bordered small-padding hidden" : "flex-col space-around bordered small-padding";
+                console.log("[Frontend] settingsDisplay set to " + state.settingsDisplay);
+            }
+
+            function getRandom(type) {
+                let request = new XMLHttpRequest(); 
+                request.onreadystatechange = displayResponse;
+                request.open("GET",
+                    "/api/" + type + 
+                    "?generator=" + "default-settings" + 
+                    "&min=" + document.getElementById("minSyllables").value + 
+                    "&max=" + document.getElementById("maxSyllables").value +
+                    "&text_length=" + document.getElementById("textLength").value);
+                request.send();
+
+                function displayResponse() {
+                    if (request.readyState != 4) return;
+                    document.getElementById("results").innerText = request.responseText;
+                }
+                console.log("[Frontend] Random text generated");
+            };
+
+            function loadSettings() {
+                let request = new XMLHttpRequest();
+                request.onreadystatechange = displayResponse;
+                request.open("GET", 
+                    "/api/current" +
+                "?generator=" + "default-settings");
+                request.send();
+
+                function displayResponse() {
+                    if (request.readyState != 4) return;
+                    let data = JSON.parse(request.responseText);
+
+                console.log("[Frontend] Settings loaded");
+            }
+
+            function addCategory() {
+                document.getElementById("categories").innerHTML += 
+                    "<div id='category-" + state.categories + "'>" + "<input type='text' maxlength='1' value=''> <span>=</span>" + "<input type='text' value=''>" +
+                    "<button class='menu-button bordered' type='submit' onclick=" + "\"removeCategory(" + "'category-" + state.categories + "')\">Remove</button>" + "</div>";
+                state.categories += 1;
+                console.log("[Frontend] Category added");
+            }
+
+            function removeCategory(id) {
+                document.getElementById(id).remove();
+                state.categories -= 1;
+                console.log("[Frontend] Category removed");
+            }
+            
+            function saveSettings() {
+                let newSettings = 
+                {
+                    name: "new",
+                    categories: [],
+                    symbols: [],
+                    patterns: []
+                };
+
+                let symbols = document.getElementsByClassName("symbol");
+                let categories = document.getElementsByClassName("category");
+                let patterns = document.getElementsByClassName("patterns");
+
+                for (let i = 0; i < categories.length; i += 1) {
+                    let sym = symbols[i].value;
+                    let arr = categories[i].value.split(" ");
+                    newSettings.categories.push(arr);
+                    newSettings.symbols.push(sym);
+                };
+                newSettings.patterns = patterns[0].value.split(" ");
+
+                let request = new XMLHttpRequest(); 
+                request.onreadystatechange = displayResponse;
+                request.open("POST", "/api/new");
+                request.setRequestHeader("Content-Type", "application/json");
+                request.send(JSON.stringify(newSettings));
+
+                function displayResponse() {
+                    if (request.readyState != 4) return;
+                    document.getElementById("results").innerText = request.responseText;
+                }
+                console.log("[Frontend] Settings saved");
+            }
+            
+        </script>
+    </body>
+
+</html>

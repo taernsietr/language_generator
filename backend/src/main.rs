@@ -11,8 +11,6 @@ mod helpers;
 use crate::helpers::*;
 use crate::routes::*;
 
-const DF: &str = "%H:%M:%S";
-
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
 
@@ -20,7 +18,7 @@ async fn main() -> std::io::Result<()> {
         generators: Mutex::new(load_generators())
     });
 
-    println!("[SERVER]: {} Server up! Open your preferred browser and access 「http://127.0.0.1:8080」!", Local::now().format(DF));
+    println!("[{}] [SERVER]: Server up! Open your preferred browser and access 「http://127.0.0.1:8080」!", Local::now().format(DF));
 
     HttpServer::new(move || {
         App::new()
