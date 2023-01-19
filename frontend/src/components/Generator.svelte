@@ -1,0 +1,33 @@
+<script>
+    export let minSyllables;
+    export let maxSyllables;
+    export let textLength;
+
+    function getRandomWord() { console.log("debug") }
+    function getRandomText() { console.log("debug") }
+</script>
+
+<div class="bg-bg1 col-span-3 flex-1 flex m-4 p-4 place-content-center shadow-xl">
+    <div class="flex-1 flex flex-col flex-nowrap place-content-center">
+        <div class="flex flex-nowrap m-4 p-4 place-content-center">
+            <label class="place-content-center m-auto text-fg" for="minSyllables">Min syllables:</label>
+            <input class="bg-bg1 text-fg text-center  ml-2 no-spinner p-2" type="number" bind:value={minSyllables} min="1" max="255" id="minSyllables" name="minSyllables">
+        </div>
+
+        <div class="flex flex-nowrap m-4 p-4 place-content-center">
+            <label class="place-content-center m-auto text-fg" for="maxSyllables">Max syllables:</label>
+            <input class="bg-bg1 text-fg text-center ml-2 no-spinner p-2" type="number" bind:value={maxSyllables} min="1" max="255" id="maxSyllables" name="maxSyllables">
+        </div>
+
+        <div class="flex flex-nowrap m-4 p-4 place-content-center">
+            <label class="place-content-center m-auto text-fg" for="textLength">Text length:</label>
+            <input class="bg-bg1 text-fg text-center ml-2 no-spinner p-2" type="number" bind:value={textLength} min="1" max="128" id="textLength" name="textLength">
+        </div>
+    </div>
+
+    <div class="flex-1 flex flex-col flex-nowrap place-content-center">
+        <button class="bg-bg2 basis-1/4 bg-bg1 m-4 p-4 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={getRandomText}>Random Text</button>
+        <button class="bg-bg2 basis-1/4 bg-bg1 m-4 p-4 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={getRandomWord}>Random Word</button>
+    </div>
+</div>
+

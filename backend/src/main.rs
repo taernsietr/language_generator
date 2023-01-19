@@ -29,6 +29,7 @@ async fn main() -> std::io::Result<()> {
                     .route("/word", web::get().to(random_word))
                     .route("/text", web::get().to(random_text))
                     .route("/generators", web::get().to(get_available_generators))
+                    .route("/settings", web::get().to(get_generator_settings))
                     .route("/new", web::post().to(save_settings))
             )
     })

@@ -18,6 +18,11 @@ pub struct WordParams {
     max: u8,
     text_length: u8,
 }
+
+#[derive(Deserialize)]
+pub struct GenParams {
+    generator: String,
+}
     
 pub async fn index(request: HttpRequest) -> Result<NamedFile, Error> {
     log(request, format!("Attempting to serve index.html"));
@@ -55,6 +60,19 @@ pub async fn get_available_generators(request: HttpRequest, state: web::Data<App
     
     HttpResponse::Ok().body(
         format!("{}", state.generators.lock().unwrap().values().map(|x| x.get_name() + "\n").collect::<String>())
+    )
+}
+
+pub async fn get_generator_settings(request: HttpRequest, query: web::Query<GenParams>, state: web::Data<AppState>) -> impl Responder {
+    log(request, format!("Returning settings for generator [{}]", query.generator));
+
+    HttpResponse::Ok().body(
+        state.generators
+            .lock()
+            .unwrap()
+            .get(&query.generator)
+            .unwrap()
+            .get()
     )
 }
 

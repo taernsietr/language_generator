@@ -1,3 +1,33 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .no-spinner {
+        -moz-appearance: textfield;
+    }
+
+    .no-spinner::-webkit-outer-spin-button,
+    .no-spinner::-webkit-inner-spin-button {
+        margin: 0;
+        -webkit-appearance: none;
+    }
+}
+
+html, body, div {
+    background-color: #282828;
+}
+
+h1, h2, h3 {
+    font-size: inherit;
+    font-weight: inherit;
+}
+
+li {
+    list-style-type: disc;
+    list-style-position: inside;
+}
+
+h1 {
+    color: "blue";
+}
