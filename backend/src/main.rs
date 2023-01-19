@@ -1,4 +1,5 @@
 use actix_web::{web, App, HttpServer};
+use actix_cors::Cors;
 use chrono::Local;
 use std::sync::Mutex;
 
@@ -22,6 +23,7 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(move || {
         App::new()
+            .wrap(Cors::permissive())
             .app_data(state.clone())
             .route("/", web::get().to(index))
             .service(

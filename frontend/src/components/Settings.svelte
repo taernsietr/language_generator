@@ -1,7 +1,13 @@
 <script>  
+    import { onMount } from 'svelte';
     import { displaySettings } from '../store.js';
     import Category from './Category.svelte';
 
+    onMount(async function () {
+        await fetch("http://127.0.0.1:8080/api/generators")
+            .then((response) => response.body())
+            .then((data) => console.log(data));
+    }
 </script>
 
 {#if $displaySettings}

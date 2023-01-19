@@ -25,7 +25,7 @@ pub struct GenParams {
 }
     
 pub async fn index(request: HttpRequest) -> Result<NamedFile, Error> {
-    log(request, format!("Attempting to serve index.html"));
+    log(request, "Attempting to serve index.html".to_string());
     Ok(NamedFile::open("static/index.html")?)
 }
 
@@ -56,10 +56,10 @@ pub async fn random_text(request: HttpRequest, query: web::Query<WordParams>, st
 }
 
 pub async fn get_available_generators(request: HttpRequest, state: web::Data<AppState>) -> impl Responder {
-    log(request, format!("Returning available generators"));
+    log(request, "Returning available generators".to_string());
     
     HttpResponse::Ok().body(
-        format!("{}", state.generators.lock().unwrap().values().map(|x| x.get_name() + "\n").collect::<String>())
+        state.generators.lock().unwrap().values().map(|x| x.get_name() + "\n").collect::<String>()
     )
 }
 
@@ -87,5 +87,5 @@ pub async fn save_settings(request: HttpRequest, query: web::Query<WordParams>, 
     
     log(request, format!("Received settings for generator [{}]", &query.generator));
     
-    HttpResponse::Ok().body(format!("Settings saved!"))
+    HttpResponse::Ok().body("Settings saved!")
 }
