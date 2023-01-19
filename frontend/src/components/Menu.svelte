@@ -1,6 +1,13 @@
 <script lang="typescript">
-    function toggleInfo() { console.log("debug") }
-    function toggleSettings() { console.log("debug") }
+    import { displayInfo, displaySettings } from '../store.js';
+
+    function toggleInfo() { 
+        displayInfo.update((current) => !current); 
+    }
+
+    function toggleSettings() {
+        displaySettings.update((current) => !current); 
+    }
 </script>
 
 <div class="bg-bg1 flex flex-1 flex-col m-4 p-4 place-content-center shadow-xl text-fg">

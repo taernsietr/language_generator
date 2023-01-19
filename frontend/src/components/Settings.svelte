@@ -1,9 +1,10 @@
-<script>
+<script>  
+    import { displaySettings } from '../store.js';
     import Category from './Category.svelte';
-    export let display;
+
 </script>
 
-{#if display}
+{#if $displaySettings}
 <div class="bg-bg1 col-span-5 flex-1 flex-col m-4 p-4 shadow-xl">
     <h2 class="text-center text-green">Settings</h2>
             
