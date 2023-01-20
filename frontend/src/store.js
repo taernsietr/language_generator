@@ -12,5 +12,6 @@ export const currentSettings = writable({
     categories: {},
     patterns: []
 });
+export const currentGenerator = writable("default-settings");
 export const results = writable("Please select one of the options above!");
 
