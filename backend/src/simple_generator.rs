@@ -61,9 +61,7 @@ impl SimpleGenerator {
         for _ in 1..=word_length {
             let current = self.patterns.choose(&mut rng);
             for letter in current.unwrap().chars() {
-                
                 let chosen = self.categories.get(&letter.to_string()).unwrap().choose(&mut rng).unwrap();
-
                 word.push_str(chosen);
             }
         }

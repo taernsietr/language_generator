@@ -9,9 +9,8 @@ export const textLength = writable(25);
 export const generators = writable(["loading generators..."]);
 export const currentSettings = writable({
     name: "",
-    categories: [""],
-    symbols: [""],
-    patterns: [""]
+    categories: {},
+    patterns: []
 });
 export const results = writable("Please select one of the options above!");
 

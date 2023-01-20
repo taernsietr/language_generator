@@ -1,17 +1,31 @@
-<script>  
+<script lang="ts">  
     import { onMount } from 'svelte';
     import { displaySettings, generators, currentSettings } from '../store.js';
     import Category from './Category.svelte';
 
+    let categories: any;
+
+    currentSettings.subscribe(settings => {
+        let symbols = Object.keys(settings.categories);
+        let cats = Object.values(settings.categories);
+        categories = symbols.map((sym, i) => {
+            return [sym, cats[i]];
+        });
+    });
+
+    function addCategory() { console.log("addCategory") }
+    function saveSettings() { console.log("saveSettings") }
+    function loadSettings() { console.log("loadSettings") }
+    function clearSettings() { console.log("clearSettings") }
+
     onMount(async () => {
-        let data = await fetch("http://127.0.0.1:8080/api/generators", { credentials: "same-origin" });
+        let data = await fetch("http://127.0.0.1:8080/api/generators");
         data = await data.json();
         generators.set(data.generators);
-        console.log($generators);
     });
 
     onMount(async () => {
-        let data = await fetch("http://127.0.0.1:8080/api/settings?generator=default-settings", { credentials: "same-origin" });
+        let data = await fetch("http://127.0.0.1:8080/api/settings?generator=default-settings");
         data = await data.json();
         currentSettings.set(data);
         console.log($currentSettings);
@@ -33,12 +47,12 @@
             
     <div class="flex-col m-4 p-4 place-content-center">
         <h3 class="text-center text-blue">Categories</h3>
-        {#each $currentSettings.categories as cat}
-            <Category elements={cat} symbol="X" />
-        {/each}
+            {#each categories as cat}
+                <Category elements={cat[1]} symbol={cat[0]} />
+            {/each}
 <!--
 -->
-        <button class="bg-bg2 basis-1/4 m-4 p-4 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type='submit' on:click{addCategory}>Add new category</button>
+<button class="bg-bg2 basis-1/4 m-4 p-4 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type='submit' on:click={addCategory}>Add new category</button>
     </div>
 
     <div class="flex-row m-4 p-4 place-content-center">
@@ -46,8 +60,8 @@
         <input class="bg-bg2 text-center ml-2 no-spinner p-2 text-fg" type='text' />
     </div>
 
-    <button class="bg-bg2 basis-1/4 m-4 p-4 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click{saveSettings}>Save Settings</button>
-    <button class="bg-bg2 basis-1/4 m-4 p-4 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click{loadSettings}>Load Settings</button>
-    <button class="bg-bg2 basis-1/4 m-4 p-4 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click{clearSettings}>Clear Settings</button>
+    <button class="bg-bg2 basis-1/4 m-4 p-4 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={saveSettings}>Save Settings</button>
+    <button class="bg-bg2 basis-1/4 m-4 p-4 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={loadSettings}>Load Settings</button>
+    <button class="bg-bg2 basis-1/4 m-4 p-4 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={clearSettings}>Clear Settings</button>
 </div>
 {/if}
