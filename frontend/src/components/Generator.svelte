@@ -1,17 +1,21 @@
 <script>
-    import { minSyllables, maxSyllables, textLength } from '../store.js';
+    import { minSyllables, maxSyllables, textLength, results } from '../store.js';
 
     async function api(url) {
         return await fetch(url, { credentials: "same-origin" })
     }
 
     async function getRandomWord() {
-        let response = await api("http://127.0.0.1:8080/api/generators")
-        let json = await response.json();
-        console.log(json);
+        let response = await api(`http://127.0.0.1:8080/api/word?generator=default-settings&min=${$minSyllables}&max=${$maxSyllables}&text_length=${$textLength}`)
+        let data = await response.text();
+        results.set(data);
     }
 
-    function getRandomText() { console.log("debug") }
+    async function getRandomText() {
+        let response = await api(`http://127.0.0.1:8080/api/text?generator=default-settings&min=${$minSyllables}&max=${$maxSyllables}&text_length=${$textLength}`)
+        let data = await response.text();
+        results.set(data);
+    }
 </script>
 
 <div class="bg-bg1 col-span-3 flex-1 flex m-4 p-4 place-content-center shadow-xl">

@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
     import "../app.css";
     import Settings from '../components/Settings.svelte';
     import Results from '../components/Results.svelte';

@@ -2,6 +2,12 @@
     import { onMount } from 'svelte';
     import { displaySettings } from '../store.js';
     import Category from './Category.svelte';
+
+    onMount(async () => {
+        let data = await fetch("http://127.0.0.1:8080/api/generators", { credentials: "same-origin" });
+        console.log(await data.json());
+    });
+
 </script>
 
 {#if $displaySettings}
