@@ -1,7 +1,12 @@
 <script>
     import { minSyllables, maxSyllables, textLength } from '../store.js';
 
-    function getRandomWord() { console.log("debug") }
+    async function getRandomWord() {
+        return await fetch("http://127.0.0.1:8080/api/generators", { credentials: "same-origin" })
+            .then((content) => { console.log(content) })
+            .then((data) => { data.json()});
+    }
+
     function getRandomText() { console.log("debug") }
 </script>
 
@@ -25,7 +30,8 @@
 
     <div class="flex-1 flex flex-col flex-nowrap place-content-center">
         <button class="bg-bg2 basis-1/4 bg-bg1 m-4 p-4 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={getRandomText}>Random Text</button>
-        <button class="bg-bg2 basis-1/4 bg-bg1 m-4 p-4 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={getRandomWord}>Random Word</button>
+        <button class="bg-bg2 basis-1/4 bg-bg1 m-4 p-4 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" 
+            type="submit" on:click={async () => { await getRandomWord() }}>Random Word</button>
     </div>
 </div>
 

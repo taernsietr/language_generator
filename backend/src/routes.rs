@@ -57,9 +57,15 @@ pub async fn random_text(request: HttpRequest, query: web::Query<WordParams>, st
 
 pub async fn get_available_generators(request: HttpRequest, state: web::Data<AppState>) -> impl Responder {
     log(request, "Returning available generators".to_string());
-    
+
+    let items = state.generators.lock().unwrap().values().map(|x| format!("\"{}\", ", x.get_name())).collect::<String>();
+    let mut response = format!("{{ \"generators\": [{}] }}", items);
+    let end = response.find(", ]").unwrap();
+    response.replace_range(end..=end+1, "");
+
     HttpResponse::Ok().body(
-        state.generators.lock().unwrap().values().map(|x| x.get_name() + "\n").collect::<String>()
+        // state.generators.lock().unwrap().values().map(|x| x.get_name() + "\n").collect::<String>()
+        response
     )
 }
 
