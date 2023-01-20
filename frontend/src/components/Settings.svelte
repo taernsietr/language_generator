@@ -16,7 +16,6 @@
         currentSettings.set(data);
         console.log($currentSettings);
     });
-
 </script>
 
 {#if $displaySettings}

@@ -1,23 +1,24 @@
 use serde::{Deserialize, Serialize};
 use rand::{Rng, prelude::SliceRandom};
 use std::cmp::Ordering;
+use std::collections::HashMap;
 use std::path::PathBuf;
 use std::env;
 
 #[derive(Deserialize, Serialize)]
 pub struct SimpleGenerator {
     name: String,
-    categories: Vec<Vec<String>>, 
-    symbols: Vec<String>,
+    categories: HashMap<String,Vec<String>>, 
     patterns: Vec<String>,
 }
 
-impl SimpleGenerator {
-    #[allow(dead_code)]
-    pub fn new(name: String, categories: Vec<Vec<String>>, symbols: Vec<String>, patterns: Vec<String>) -> SimpleGenerator {
-        SimpleGenerator {name, categories, symbols, patterns}
-    }
+#[derive(Deserialize, Serialize)]
+pub struct SimpleGeneratorCategory {
+    elements: Vec<Vec<String>>,
+    symbol: String,
+}
 
+impl SimpleGenerator {
     #[allow(dead_code)]
     pub fn load_str(file: &str) -> SimpleGenerator {
         let data = std::fs::read_to_string(format!("{}/settings/{}", env::current_dir().unwrap().display(), file)).expect("Failed to load generator settings file");
@@ -60,8 +61,9 @@ impl SimpleGenerator {
         for _ in 1..=word_length {
             let current = self.patterns.choose(&mut rng);
             for letter in current.unwrap().chars() {
-                let index = self.symbols.iter().cloned().position(|x| x == letter.to_string()).unwrap();
-                let chosen = self.categories[index].choose(&mut rng).unwrap();
+                
+                let chosen = self.categories.get(&letter.to_string()).unwrap().choose(&mut rng).unwrap();
+
                 word.push_str(chosen);
             }
         }
