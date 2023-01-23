@@ -13,7 +13,8 @@
     });
 
     function addCategory() { 
-        console.log("addCategory") 
+        // currentSettings.update();
+        //console.log("addCategory") 
     }
 </script>
 
