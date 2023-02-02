@@ -1,20 +1,18 @@
 <script lang="ts">  
     import { onMount } from 'svelte';
-    import { displaySettings, generators, currentGenerator, currentSettings } from '../store.js';
+    import { displaySettings, generators, currentGenerator, categories, patterns, unsavedChanges } from '../store.js';
+    import { loadJSON } from '../helpers.ts';
     import SettingsSelector from './SettingsSelector.svelte';
     import CategoriesList from './CategoriesList.svelte';
     import PatternsList from './PatternsList.svelte';
 
-    async function loadJSON(url: any) {
-        let data = await fetch(`http://127.0.0.1:8080/api/${url}`);
-        return await data.json();
-    }
-
     onMount(async () => {
         let data = await loadJSON("generators");
         generators.set(data.generators);
+        currentGenerator.set(data.generators[0]);
         data = await loadJSON(`settings?generator=${$currentGenerator}`);
-        currentSettings.set(data);
+        categories.set(data.categories);
+        patterns.set(data.patterns);
     });
 </script>
 

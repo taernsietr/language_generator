@@ -1,27 +1,34 @@
 <script lang="ts">  
-    import { currentSettings } from '../store.js';
+    import { onMount } from 'svelte';
+    import { categories } from '../store.js';
     import Category from './Category.svelte';
 
-    let categories: any;
+    let k: String;
+    let v: Array<String>;
+    let cats = [["", ""]];
 
-    currentSettings.subscribe(settings => {
-        let symbols = Object.keys(settings.categories);
-        let cats = Object.values(settings.categories);
-        categories = symbols.map((sym, i) => {
-            return [sym, cats[i]];
+    function parseCategories() { 
+        k = Object.keys($categories);
+        v = Object.values($categories);
+        cats = k.map((e, i) => {
+            return [e, v[i]];
         });
-    });
-
-    function addCategory() { 
-        // currentSettings.update();
-        //console.log("addCategory") 
     }
+
+    function addCategory() {
+        cats = cats;
+        cats.push(["", [""]]);
+    }
+
+    onMount(async () => {
+        setTimeout(() => { parseCategories(); }, 100);
+    });
 </script>
 
 <div class="flex-col m-4 p-4 place-content-center">
     <h3 class="text-center text-blue">Categories</h3>
-        {#each categories as cat}
-            <Category elements={cat[1]} symbol={cat[0]} />
-        {/each}
+    {#each cats as cat}
+        <Category symbol={cat[0]} elements={cat[1]} id={cats.indexOf(cat)}/>
+    {/each}
 <button class="bg-bg2 basis-1/4 m-4 p-4 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type='submit' on:click={addCategory}>Add new category</button>
 </div>
