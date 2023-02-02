@@ -80,16 +80,26 @@ pub async fn get_generator_settings(request: HttpRequest, query: web::Query<GenP
     )
 }
 
-// TODO: if generator exists, update, otherwise, create new generator file
-pub async fn save_settings(request: HttpRequest, query: web::Query<WordParams>, req_body: String, state: web::Data<AppState>) -> impl Responder {
+pub async fn save_new_generator(request: HttpRequest, query: web::Query<GenParams>, req_body: String, state: web::Data<AppState>) -> impl Responder {
+    log(request, format!("Received settings for new generator [{}]", &query.generator));
+
     let new_generator = serde_json::from_str::<SimpleGenerator>(&req_body).expect("Failed to read JSON data");
+    new_generator.save();
 
     state.generators
         .lock()
         .unwrap()
         .insert(new_generator.get_name(), new_generator);
     
-    log(request, format!("Received settings for generator [{}]", &query.generator));
-    
     HttpResponse::Ok().body("Settings saved!")
+}
+
+// TODO: save to file
+pub async fn update_generator(request: HttpRequest, query: web::Query<GenParams>, req_body: String, state: web::Data<AppState>) -> impl Responder {
+    log(request, format!("Updating settings for generator [{}]", &query.generator));
+
+    let new_generator = serde_json::from_str::<SimpleGenerator>(&req_body).expect("Failed to read JSON data");
+    *state.generators.lock().unwrap().get_mut(&query.generator).unwrap() = new_generator;
+
+    HttpResponse::Ok().body("Generator settings updated!")
 }

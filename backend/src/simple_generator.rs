@@ -30,7 +30,6 @@ impl SimpleGenerator {
         serde_json::from_str::<SimpleGenerator>(&data).expect("Failed to read JSON data")
     }
    
-    #[allow(dead_code)]
     pub fn save(&self) {
         std::fs::write(
             format!("{}/settings/{}.json", env::current_dir().unwrap().display(), &self.name),
@@ -43,7 +42,6 @@ impl SimpleGenerator {
         self.name.clone()
     }
 
-    #[allow(dead_code)]
     pub fn get(&self) -> String {
         serde_json::to_string(&self).unwrap()
     }
