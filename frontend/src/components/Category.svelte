@@ -1,14 +1,11 @@
 <script lang="ts">
-    import { onDestroy } from 'svelte';
-
-	onDestroy(() => console.log("morrel"));
-
-    export let elements: String;
-    export let symbol: String;
-    export let id: Integer;
+    export let elements: string;
+    export let symbol: string;
+    export let id: string;
 
     function destroyCategory() {
-        console.log(document.getElementById(id).remove());
+        let thisObject = document.getElementById(id);
+        thisObject ? thisObject.remove() : console.log("[Error]: Category element not found"); 
     }
 </script>
 

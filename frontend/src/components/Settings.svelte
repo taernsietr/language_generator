@@ -1,7 +1,7 @@
 <script lang="ts">  
     import { onMount } from 'svelte';
-    import { displaySettings, generators, currentGenerator, categories, patterns, unsavedChanges } from '../store.js';
-    import { loadJSON } from '../helpers.ts';
+    import { displaySettings, generators, currentGenerator, categories, patterns } from '../store.js';
+    import { loadJSON } from '../helpers.js';
     import SettingsSelector from './SettingsSelector.svelte';
     import CategoriesList from './CategoriesList.svelte';
     import PatternsList from './PatternsList.svelte';
