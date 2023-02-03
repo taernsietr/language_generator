@@ -1,18 +1,18 @@
 <script>
-    import { minSyllables, maxSyllables, textLength, results } from '../store.js';
+    import { minSyllables, maxSyllables, textLength, results, currentGenerator } from '../store.js';
 
     async function api(url) {
         return await fetch(url, { credentials: "same-origin" })
     }
 
     async function getRandomWord() {
-        let response = await api(`http://127.0.0.1:8080/api/word?generator=default-settings&min=${$minSyllables}&max=${$maxSyllables}&text_length=${$textLength}`)
+        let response = await api(`http://127.0.0.1:8080/api/word?generator=${$currentGenerator}&min=${$minSyllables}&max=${$maxSyllables}&text_length=${$textLength}`)
         let data = await response.text();
         results.set(data);
     }
 
     async function getRandomText() {
-        let response = await api(`http://127.0.0.1:8080/api/text?generator=default-settings&min=${$minSyllables}&max=${$maxSyllables}&text_length=${$textLength}`)
+        let response = await api(`http://127.0.0.1:8080/api/text?generator=${$currentGenerator}&min=${$minSyllables}&max=${$maxSyllables}&text_length=${$textLength}`)
         let data = await response.text();
         results.set(data);
     }

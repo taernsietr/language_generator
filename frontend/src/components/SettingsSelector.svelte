@@ -1,9 +1,39 @@
 <script lang="ts">
-    import { generators, currentGenerator } from '../store.js';
+    import { loadJSON } from '../helpers.js';
+    import { generators, currentGenerator, categories, patterns } from '../store.js';
 
-    function saveSettings() { console.log("saveSettings") }
+    function saveSettings() { 
+        let settings = {
+            generator: $currentGenerator,
+            categories: $categories,
+            patterns: $patterns 
+        };
+
+        fetch("http://127.0.0.1:8080/api/update", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(settings),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log("Success:", data);
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+    }
+
     function clearSettings() { console.log("clearSettings") }
-    function loadSettings() { console.log("loadSettings") }
+
+    async function loadSettings() { 
+        let data = await loadJSON(`settings?generator=${$currentGenerator}`);
+        categories.set(data.categories);
+        patterns.set(data.patterns);
+
+        // console.log("loadSettings");
+    }
 </script>
 
 <div class="flex-col m-4 p-4 place-content-center">

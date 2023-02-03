@@ -99,6 +99,8 @@ pub async fn update_generator(request: HttpRequest, query: web::Query<GenParams>
     log(request, format!("Updating settings for generator [{}]", &query.generator));
 
     let new_generator = serde_json::from_str::<SimpleGenerator>(&req_body).expect("Failed to read JSON data");
+    new_generator.save();
+
     *state.generators.lock().unwrap().get_mut(&query.generator).unwrap() = new_generator;
 
     HttpResponse::Ok().body("Generator settings updated!")
