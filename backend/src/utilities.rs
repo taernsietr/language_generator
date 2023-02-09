@@ -1,8 +1,15 @@
-use regex::RegexSet;
+use serde::{Deserialize, Serialize};
 
-pub fn xsampa_to_ipa(input: String) -> String {
-    let xsampa = ["p"];
-    let ipa = ["p"];
-
-    let regex_set = RegexSet::new(&xsampa).unwrap();
+enum PhonologicalTraits {
+    Plosive,
+    Unvoiced,
+    Bilabial,
 }
+
+struct Phone {
+    id: String,
+    ipa: String,
+    xsampa: String,
+    traits: Vec<PhonologicalTraits>, 
+}
+
