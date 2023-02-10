@@ -75,7 +75,7 @@
 
     <div class="flex-col m-4 p-4 place-content-center">
         <h3 class="text-center text-blue">Available Presets</h3>
-        <select class="bg-bg2 text-center ml-2 no-spinner p-2 text-fg" bind:value={$currentGenerator}>
+        <select class="bg-bg2 text-center ml-2 no-spinner p-2 text-fg" bind:value={$currentGenerator} on:change={loadSettings} >
             {#each $generators as option}
                 <option value={option}>{option}</option>
             {/each}
