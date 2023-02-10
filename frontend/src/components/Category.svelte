@@ -20,7 +20,6 @@
         temp[id][0] = symbol;
         temp[id][1] = elements;
         categories.set(temp);
-        console.log($categories);
     }
 </script>
 
