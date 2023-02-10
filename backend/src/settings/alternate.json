@@ -1,10 +1,1 @@
-{
-    "name": "alternate",
-    "categories": {
-       "C": ["p", "t", "k", "b", "d", "g", "s", "m", "n", "h", "w"],
-       "V": ["i", "a", "u", "e", "o"],
-       "F": ["n", "r", "h"]
-    },
-    "patterns": ["CV", "CVF"]
-}
-
+{"name":"alternate","categories":{"C":["p","t","k"],"V":["a","i","u"]},"patterns":["CV"]}

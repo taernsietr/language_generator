@@ -80,10 +80,9 @@ pub async fn get_generator_settings(request: HttpRequest, query: web::Query<GenP
     )
 }
 
-pub async fn save_new_generator(request: HttpRequest, query: web::Query<GenParams>, req_body: String, state: web::Data<AppState>) -> impl Responder {
-    log(request, format!("Received settings for new generator [{}]", &query.generator));
-
+pub async fn save_new_generator(request: HttpRequest, req_body: String, state: web::Data<AppState>) -> impl Responder {
     let new_generator = serde_json::from_str::<SimpleGenerator>(&req_body).expect("Failed to read JSON data");
+    log(request, format!("Received settings for new generator [{}]", &new_generator.get_name()));
     new_generator.save();
 
     state.generators
@@ -95,13 +94,13 @@ pub async fn save_new_generator(request: HttpRequest, query: web::Query<GenParam
 }
 
 // TODO: save to file
-pub async fn update_generator(request: HttpRequest, query: web::Query<GenParams>, req_body: String, state: web::Data<AppState>) -> impl Responder {
-    log(request, format!("Updating settings for generator [{}]", &query.generator));
-
+pub async fn update_generator(request: HttpRequest, req_body: String, state: web::Data<AppState>) -> impl Responder {
     let new_generator = serde_json::from_str::<SimpleGenerator>(&req_body).expect("Failed to read JSON data");
+    let name = &new_generator.get_name(); // dirty workaround, is there a cleaner solution?
+    log(request, format!("Updating settings for generator [{}]", name));
     new_generator.save();
 
-    *state.generators.lock().unwrap().get_mut(&query.generator).unwrap() = new_generator;
+    *state.generators.lock().unwrap().get_mut(name).unwrap() = new_generator;
 
     HttpResponse::Ok().body("Generator settings updated!")
 }

@@ -12,12 +12,6 @@ pub struct SimpleGenerator {
     patterns: Vec<String>,
 }
 
-#[derive(Deserialize, Serialize)]
-pub struct SimpleGeneratorCategory {
-    elements: Vec<Vec<String>>,
-    symbol: String,
-}
-
 impl SimpleGenerator {
     #[allow(dead_code)]
     pub fn load_str(file: &str) -> SimpleGenerator {
