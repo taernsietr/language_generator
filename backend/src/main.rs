@@ -16,7 +16,8 @@ use crate::routes::*;
 async fn main() -> std::io::Result<()> {
 
     let state = web::Data::new(AppState {
-        generators: Mutex::new(load_generators())
+        generators: Mutex::new(load_generators()),
+        default_generators: dotenv::var("DEFAULT_SETTINGS").unwrap().split(", ").map(|a| a.to_string()).collect(),
     });
 
     println!("[{}] [SERVER]: Server up! Open your preferred browser and access 「http://127.0.0.1:8080」!", Local::now().format(DF));
@@ -34,6 +35,7 @@ async fn main() -> std::io::Result<()> {
                     .route("/settings", web::get().to(get_generator_settings))
                     .route("/new", web::post().to(save_new_generator))
                     .route("/update", web::post().to(update_generator))
+                    .route("/dbg", web::post().to(dbg))
             )
     })
     .bind(("0.0.0.0", 8080))?

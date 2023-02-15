@@ -36,3 +36,4 @@ pub fn load_generators() -> HashMap<String, SimpleGenerator> {
 
     generators
 }
+
