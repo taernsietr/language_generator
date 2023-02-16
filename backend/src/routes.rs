@@ -1,5 +1,4 @@
-use actix_files::NamedFile;
-use actix_web::{web, Responder, Error, HttpRequest, HttpResponse};
+use actix_web::{web, Responder, HttpRequest, HttpResponse};
 use std::sync::Mutex;
 use std::collections::HashMap;
 use serde::Deserialize;

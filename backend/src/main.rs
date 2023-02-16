@@ -25,7 +25,6 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .wrap(Cors::permissive())
             .app_data(state.clone())
-            .route("/", web::get().to(index))
             .service(
                 web::scope("/api")
                     .route("/word", web::get().to(random_word))
