@@ -4,7 +4,6 @@ use chrono::Local;
 use std::sync::Mutex;
 
 // mod language;
-// mod utilities;
 mod simple_generator;
 mod routes;
 mod helpers;

@@ -25,11 +25,6 @@ pub struct GenParams {
     generator: String,
 }
     
-pub async fn index(request: HttpRequest) -> Result<NamedFile, Error> {
-    log(request, "Attempting to serve index.html".to_string());
-    Ok(NamedFile::open("static/index.html")?)
-}
-
 pub async fn random_word(request: HttpRequest, query: web::Query<WordParams>, state: web::Data<AppState>) -> impl Responder {
     log(request, format!("Generating word with generator [{}]", &query.generator));
 
@@ -100,7 +95,6 @@ pub async fn save_new_generator(request: HttpRequest, req_body: String, state: w
     }
 }
 
-// TODO: save to file
 pub async fn update_generator(request: HttpRequest, req_body: String, state: web::Data<AppState>) -> impl Responder {
     let new_generator = serde_json::from_str::<SimpleGenerator>(&req_body).expect("Failed to read JSON data");
     let name = &new_generator.get_name(); // dirty workaround, is there a cleaner solution?
@@ -118,9 +112,7 @@ pub async fn update_generator(request: HttpRequest, req_body: String, state: web
     }
 }
 
-pub async fn dbg(req_body: String) -> impl Responder {
-    let new_generator = serde_json::from_str::<SimpleGenerator>(&req_body).expect("Failed to read JSON data");
-    let name = &new_generator.get_name(); // dirty workaround, is there a cleaner solution?
+pub async fn dbg(query: web::Query<GenParams>) -> impl Responder {
     dbg!("ué");
-    HttpResponse::Ok().body(format!("[{}]", name))
+    HttpResponse::Ok().body(format!("[{}]", query.generator))
 }
