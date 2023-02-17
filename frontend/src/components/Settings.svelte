@@ -66,6 +66,10 @@
             });
     }
 
+    async function newSettings() {
+
+    }
+
     async function clearSettings() { console.log("clearSettings") }
 </script>
 
