@@ -77,6 +77,7 @@
         // generators.set(temp);
         newGeneratorModalIsOpen.update((current) => !current);
     }
+
     let modal = false;
     async function debugModal() {
         modal = !modal;
@@ -90,20 +91,21 @@
 </script>
 
 {#if $displaySettings}
-<div class="bg-bg1 col-span-5 flex-1 flex-col m-4 p-4 shadow-xl">
-    <h2 class="text-center text-green">Settings</h2>
-
-    <div class="flex-col m-4 p-4 place-content-center">
-        <h3 class="text-center text-blue">Available Presets</h3>
-        <select class="bg-bg2 text-center ml-2 no-spinner p-2 text-fg" bind:value={$currentGenerator} on:change={loadSettings} >
-            {#each $generators as option}
-                <option value={option}>{option}</option>
-            {/each}
-        </select>
-        <button class="bg-bg2 basis-1/4 m-4 p-4 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={saveSettings}>Save Settings</button>
-        <button class="bg-bg2 basis-1/4 m-4 p-4 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={debugModal}>New Settings</button>
-        <button class="bg-bg2 basis-1/4 m-4 p-4 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={loadSettings}>Load Settings</button>
-        <button class="bg-bg2 basis-1/4 m-4 p-4 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={clearSettings}>Clear Settings</button>
+<div class="bg-bg1 col-span-5 flex flex-col m-2 p-2 shadow-xl">
+    <h2 class="basis-1 text-center text-green">Settings</h2>
+    <div class="flex flex-row justify-between m-2 p-2">
+        <div class="flex flex-col basis-1/5">
+            <h3 class="text-center text-blue">Generator</h3>
+            <select class="bg-bg2 text-center m-2 p-2 no-spinner text-fg" bind:value={$currentGenerator} on:change={loadSettings} >
+                {#each $generators as option}
+                    <option value={option}>{option}</option>
+                {/each}
+            </select>
+        </div>
+        <button class="bg-bg2 basis-1/5 m-2 p-2 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={debugModal}>New Generator</button>
+        <button class="bg-bg2 basis-1/5 m-2 p-2 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={saveSettings}>Save Settings</button>
+        <button class="bg-bg2 basis-1/5 m-2 p-2 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={clearSettings}>Clear Settings</button>
+        <button class="bg-bg2 basis-1/5 m-2 p-2 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={loadSettings}>Reload Generators</button>
     </div>
 
     <CategoriesList />
