@@ -13,6 +13,10 @@ pub struct SimpleGenerator {
 }
 
 impl SimpleGenerator {
+    pub fn new(name: String, categories: HashMap<String, Vec<String>>, patterns: Vec<String>) -> SimpleGenerator {
+        SimpleGenerator { name, categories, patterns }
+    }
+
     #[allow(dead_code)]
     pub fn load_str(file: &str) -> SimpleGenerator {
         let data = std::fs::read_to_string(format!("{}/settings/{}", env::current_dir().unwrap().display(), file)).expect("Failed to load generator settings file");
@@ -65,7 +69,7 @@ impl SimpleGenerator {
 
         for _ in 1..=text_size {
             text.push_str(&self.random_word(min_syllables, max_syllables));
-            text.push_str(" ");
+            text.push(' ');
         }
         text
     }

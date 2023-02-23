@@ -31,8 +31,7 @@ async fn main() -> std::io::Result<()> {
                     .route("/randtext", web::get().to(random_text))
                     .route("/generators", web::get().to(get_available_generators))
                     .route("/settings", web::get().to(get_generator_settings))
-                    .route("/save", web::post().to(save_new_generator))
-                    .route("/update", web::post().to(update_generator))
+                    .route("/save", web::post().to(save_generator))
             )
     })
     .bind(("0.0.0.0", 8080))?

@@ -6,7 +6,6 @@ export const language = writable("enUS");
 // Component toggles
 export const displaySettings = writable(true);
 export const displayInfo = writable(true);
-export const newGeneratorModalIsOpen = writable(false);
 
 // Generation settings
 export const minSyllables = writable(1);

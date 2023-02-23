@@ -62,24 +62,35 @@ pub async fn get_available_generators(request: HttpRequest, state: web::Data<App
     )
 }
 
+// If the requested generator isn't found, assume the request used a freshly created name on the
+// frontend and return an empty JSON
 pub async fn get_generator_settings(request: HttpRequest, query: web::Query<GenParams>, state: web::Data<AppState>) -> impl Responder {
     log(request, format!("Returning settings for generator [{}]", query.generator));
 
-    HttpResponse::Ok().body(
-        state.generators
-            .lock()
-            .unwrap()
-            .get(&query.generator)
-            .unwrap()
-            .get()
-    )
+    let response = match state.generators.lock().unwrap().get(&query.generator) {
+        None => { HttpResponse::Ok().body(
+                    SimpleGenerator::new(query.generator.clone(), HashMap::new(), vec!("".to_string())).get()
+                )},
+        Some(gen) => { HttpResponse::Ok().body(gen.get()) } 
+    };
+    response
 }
 
-pub async fn save_new_generator(request: HttpRequest, req_body: String, state: web::Data<AppState>) -> impl Responder {
+pub async fn save_generator(request: HttpRequest, req_body: String, state: web::Data<AppState>) -> impl Responder {
     let new_generator = serde_json::from_str::<SimpleGenerator>(&req_body).expect("Failed to read JSON data");
     let name = &new_generator.get_name(); // dirty workaround, is there a cleaner solution?
-                                          //
-    if !state.default_generators.contains(name) {
+ 
+    if state.default_generators.contains(name) {
+        log(request, "Received settings for a new generator, but a reserved name was given.".to_string());
+        HttpResponse::NoContent().body(format!("[{}] is a default generator name and cannot be used. Please, choose a different name!", name))
+    }
+    else if state.generators.lock().unwrap().contains_key(name) {
+        log(request, format!("Updating settings for generator [{}]", name));
+        new_generator.save();
+        *state.generators.lock().unwrap().get_mut(name).unwrap() = new_generator;
+        HttpResponse::Ok().body("Generator settings updated!")
+    }
+    else {
         log(request, format!("Received settings for new generator [{}]", name));
         new_generator.save();
         state.generators
@@ -87,27 +98,6 @@ pub async fn save_new_generator(request: HttpRequest, req_body: String, state: w
             .unwrap()
             .insert(new_generator.get_name(), new_generator);
         HttpResponse::Ok().body("Settings saved!")
-    }
-    else {
-        log(request, "Received settings for a new generator, but a reserved name was given.".to_string());
-        HttpResponse::NoContent().body(format!("[{}] is a default generator name and cannot be used. Please, choose a different name!", name))
-    }
-}
-
-pub async fn update_generator(request: HttpRequest, req_body: String, state: web::Data<AppState>) -> impl Responder {
-    let new_generator = serde_json::from_str::<SimpleGenerator>(&req_body).expect("Failed to read JSON data");
-    let name = &new_generator.get_name(); // dirty workaround, is there a cleaner solution?
-
-    if !state.default_generators.contains(name) {
-        log(request, format!("Updating settings for generator [{}]", name));
-        new_generator.save();
-        *state.generators.lock().unwrap().get_mut(name).unwrap() = new_generator;
-
-        HttpResponse::Ok().body("Generator settings updated!")
-    }
-    else {
-        log(request, "Received settings for updating a generator, but a reserved name was given.".to_string());
-        HttpResponse::NoContent().body(format!("[{}] is a default generator name and cannot be used. Please, choose a different name!", name))
     }
 }
 

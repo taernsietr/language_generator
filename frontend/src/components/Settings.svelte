@@ -1,6 +1,6 @@
 <script lang="ts">  
     import { onMount } from 'svelte';
-    import { displaySettings, newGeneratorModalIsOpen, generators, currentGenerator, categories, patterns, unsavedChanges } from '../store.js';
+    import { displaySettings, generators, currentGenerator, categories, patterns, unsavedChanges } from '../store.js';
     import { loadJSON } from '../helpers.js';
     import CategoriesList from './CategoriesList.svelte';
     import PatternsList from './PatternsList.svelte';
@@ -26,7 +26,6 @@
         // get generators loaded on the backend and set the first active 
         let data = await loadJSON("generators");
         generators.set(data.generators);
-        console.log("DEBUG: ", $generators);
         currentGenerator.set(data.generators[0]);
     }
 
@@ -38,7 +37,6 @@
     }
 
     async function saveSettings() { 
-
         // TODO: remover isso, a.k.a. a pior gambiarra da minha vida
         // for future reference, this will get the destructured categories which are passed around on the frontend
         // and through string manipulation reforms it into the JSON format the backend understands
@@ -55,31 +53,17 @@
             categories: parsedCategories,
             patterns: $patterns.split(" ")
         };
-
-        fetch("http://127.0.0.1:8080/sg/update", {
+        
+        fetch("http://127.0.0.1:8080/sg/save", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(settings),
         })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
+            .catch((error) => { console.error("Error:", error); });
     }
 
-    // TODO
-    async function newSettings() {
-        console.log("creating settings for new generator");
-        // open modal
-        // let temp = $generators;
-        // temp.push("new_generator");
-        // generators.set(temp);
-        newGeneratorModalIsOpen.update((current) => !current);
-    }
-
-    let modal = false;
-    async function debugModal() {
+    let modal: boolean = false;
+    async function newGeneratorModal() {
         modal = !modal;
     }
     
@@ -102,7 +86,7 @@
                 {/each}
             </select>
         </div>
-        <button class="bg-bg2 basis-1/5 m-2 p-2 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={debugModal}>New Generator</button>
+        <button class="bg-bg2 basis-1/5 m-2 p-2 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={newGeneratorModal}>New Generator</button>
         <button class="bg-bg2 basis-1/5 m-2 p-2 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={saveSettings}>Save Settings</button>
         <button class="bg-bg2 basis-1/5 m-2 p-2 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={clearSettings}>Clear Settings</button>
         <button class="bg-bg2 basis-1/5 m-2 p-2 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={loadSettings}>Reload Generators</button>
@@ -111,7 +95,7 @@
     <CategoriesList />
     <PatternsList />
     {#if modal}
-        <NewGeneratorModal />
+        <NewGeneratorModal bind:state={modal}/>
     {/if}
 </div>
 {/if}
