@@ -24,30 +24,18 @@ pub struct GenParams {
     generator: String,
 }
     
-pub async fn random_word(request: HttpRequest, query: web::Query<WordParams>, state: web::Data<AppState>) -> impl Responder {
-    log(request, format!("Generating word with generator [{}]", &query.generator));
-
-    HttpResponse::Ok().body(
-        state.generators
-            .lock()
-            .unwrap()
-            .get(&query.generator)
-            .unwrap()
-            .random_word(query.min, query.max)
-    )
-}
-
 pub async fn random_text(request: HttpRequest, query: web::Query<WordParams>, state: web::Data<AppState>) -> impl Responder {
-    log(request, format!("Generating text with generator [{}], length {}", &query.generator, query.text_length));
-    
-    HttpResponse::Ok().body(
-        state.generators
-            .lock()
-            .unwrap()
-            .get(&query.generator)
-            .unwrap()
-            .random_text(query.min, query.max, query.text_length)
-    )
+    let response = match state.generators.lock().unwrap().get(&query.generator) {
+        None => { 
+            log(request, format!("Text requested for generator [{}], which wasn't found.", &query.generator));
+            HttpResponse::Ok().body(format!("Generator [{}] not found.", query.generator))
+        },
+        Some(gen) => { 
+            log(request, format!("Generating text with generator [{}], length {}", &query.generator, query.text_length));
+            HttpResponse::Ok().body(gen.random_text(query.min, query.max, query.text_length)) 
+        } 
+    };
+    response
 }
 
 pub async fn get_available_generators(request: HttpRequest, state: web::Data<AppState>) -> impl Responder {

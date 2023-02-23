@@ -27,7 +27,6 @@ async fn main() -> std::io::Result<()> {
             .app_data(state.clone())
             .service(
                 web::scope("/sg")
-                    .route("/randword", web::get().to(random_word))
                     .route("/randtext", web::get().to(random_text))
                     .route("/generators", web::get().to(get_available_generators))
                     .route("/settings", web::get().to(get_generator_settings))
