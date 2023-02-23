@@ -8,7 +8,7 @@
 </script>
 
 <div class="bg-bg1 flex m-2 p-2 place-content-center shadow-xl">
-    <h1 class="text-xl text-orange">Language Generator</h1>
+    <h1 class="text-xl text-orange">Random Text Generator</h1>
 </div>
 
 <div class="grid grid-flow-row grid-cols-9">

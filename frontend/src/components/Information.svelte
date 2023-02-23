@@ -26,7 +26,6 @@
                 "</ul></p>"]
             }
         ];
-// {@html text.find((element) => {element.language == $language})?.language.join("\n")}
 </script>
 
 {#if $displayInfo}
