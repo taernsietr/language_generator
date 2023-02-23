@@ -6,13 +6,13 @@
     }
 
     async function getRandomWord() {
-        let response = await api(`http://127.0.0.1:8080/api/word?generator=${$currentGenerator}&min=${$minSyllables}&max=${$maxSyllables}&text_length=${$textLength}`)
+        let response = await api(`http://127.0.0.1:8080/sg/randword?generator=${$currentGenerator}&min=${$minSyllables}&max=${$maxSyllables}&text_length=${$textLength}`)
         let data = await response.text();
         results.set(data);
     }
 
     async function getRandomText() {
-        let response = await api(`http://127.0.0.1:8080/api/text?generator=${$currentGenerator}&min=${$minSyllables}&max=${$maxSyllables}&text_length=${$textLength}`)
+        let response = await api(`http://127.0.0.1:8080/sg/randtext?generator=${$currentGenerator}&min=${$minSyllables}&max=${$maxSyllables}&text_length=${$textLength}`)
         let data = await response.text();
         results.set(data);
     }

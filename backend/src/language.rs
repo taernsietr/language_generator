@@ -79,7 +79,7 @@ struct Phone {
 struct Phoneme {
     id: String,
     canonical_realization: Vec<Phone>,
-    allophonic_realizations: Vec<(Phone, String)>,
+    allophonic_realizations: Option(Vec<(Phone, String)>, None),
 }
 
 #[derive(Deserialize)]
@@ -88,6 +88,13 @@ struct SyllabicPattern {
     form: Vec<Phoneme>,
     environment: Vec<SyllablePosition>,
     weight: u8,
+}
+
+#[derive(Deserialize)]
+pub struct Phonology {
+    name: String,
+    phonemes: Vec<Phoneme>,
+    syllabic_patterns: Vec<SyllabicPattern>,
 }
 
 #[derive(Deserialize)]
@@ -102,12 +109,5 @@ impl Language {
         let language: Language = serde_json::from_str(&data).expect("Failed to read JSON data");
         language
     }
-}
-
-#[derive(Deserialize)]
-pub struct Phonology {
-    name: String,
-    phonemes: Vec<Phoneme>,
-    syllabic_patterns: Vec<SyllabicPattern>,
 }
 

@@ -3,9 +3,10 @@ import { writable } from 'svelte/store';
 // Application display language
 export const language = writable("enUS");
 
-// Card toggles
+// Component toggles
 export const displaySettings = writable(true);
 export const displayInfo = writable(true);
+export const newGeneratorModalIsOpen = writable(false);
 
 // Generation settings
 export const minSyllables = writable(1);

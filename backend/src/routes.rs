@@ -111,7 +111,3 @@ pub async fn update_generator(request: HttpRequest, req_body: String, state: web
     }
 }
 
-pub async fn dbg(query: web::Query<GenParams>) -> impl Responder {
-    dbg!("ué");
-    HttpResponse::Ok().body(format!("[{}]", query.generator))
-}

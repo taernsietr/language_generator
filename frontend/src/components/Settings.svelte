@@ -1,9 +1,10 @@
 <script lang="ts">  
     import { onMount } from 'svelte';
-    import { displaySettings, generators, currentGenerator, categories, patterns, unsavedChanges } from '../store.js';
+    import { displaySettings, newGeneratorModalIsOpen, generators, currentGenerator, categories, patterns, unsavedChanges } from '../store.js';
     import { loadJSON } from '../helpers.js';
     import CategoriesList from './CategoriesList.svelte';
     import PatternsList from './PatternsList.svelte';
+    import NewGeneratorModal from './NewGeneratorModal.svelte';
 
     onMount(async () => {
         await loadGenerators();
@@ -25,6 +26,7 @@
         // get generators loaded on the backend and set the first active 
         let data = await loadJSON("generators");
         generators.set(data.generators);
+        console.log("DEBUG: ", $generators);
         currentGenerator.set(data.generators[0]);
     }
 
@@ -54,7 +56,7 @@
             patterns: $patterns.split(" ")
         };
 
-        fetch("http://127.0.0.1:8080/api/update", {
+        fetch("http://127.0.0.1:8080/sg/update", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -66,11 +68,25 @@
             });
     }
 
+    // TODO
     async function newSettings() {
-
+        console.log("creating settings for new generator");
+        // open modal
+        // let temp = $generators;
+        // temp.push("new_generator");
+        // generators.set(temp);
+        newGeneratorModalIsOpen.update((current) => !current);
+    }
+    let modal = false;
+    async function debugModal() {
+        modal = !modal;
+    }
+    
+    async function clearSettings() { 
+        patterns.set("");
+        categories.set([["", ""]]);
     }
 
-    async function clearSettings() { console.log("clearSettings") }
 </script>
 
 {#if $displaySettings}
@@ -85,12 +101,16 @@
             {/each}
         </select>
         <button class="bg-bg2 basis-1/4 m-4 p-4 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={saveSettings}>Save Settings</button>
+        <button class="bg-bg2 basis-1/4 m-4 p-4 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={debugModal}>New Settings</button>
         <button class="bg-bg2 basis-1/4 m-4 p-4 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={loadSettings}>Load Settings</button>
         <button class="bg-bg2 basis-1/4 m-4 p-4 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={clearSettings}>Clear Settings</button>
     </div>
 
     <CategoriesList />
     <PatternsList />
+    {#if modal}
+        <NewGeneratorModal />
+    {/if}
 </div>
 {/if}
 

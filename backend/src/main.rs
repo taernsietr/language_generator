@@ -26,14 +26,13 @@ async fn main() -> std::io::Result<()> {
             .wrap(Cors::permissive())
             .app_data(state.clone())
             .service(
-                web::scope("/api")
-                    .route("/word", web::get().to(random_word))
-                    .route("/text", web::get().to(random_text))
+                web::scope("/sg")
+                    .route("/randword", web::get().to(random_word))
+                    .route("/randtext", web::get().to(random_text))
                     .route("/generators", web::get().to(get_available_generators))
                     .route("/settings", web::get().to(get_generator_settings))
-                    .route("/new", web::post().to(save_new_generator))
+                    .route("/save", web::post().to(save_new_generator))
                     .route("/update", web::post().to(update_generator))
-                    .route("/dbg", web::post().to(dbg))
             )
     })
     .bind(("0.0.0.0", 8080))?
