@@ -33,7 +33,7 @@ async fn main() -> std::io::Result<()> {
                     .route("/save", web::post().to(save_generator))
             )
     })
-    .bind(("[::]", 8080))?
+    .bind("[::1]:8080")?
     .run()
     .await
 }

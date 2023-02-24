@@ -1,6 +1,5 @@
 use std::fs::read_dir;
 use std::collections::HashMap;
-use std::env;
 use regex::Regex;
 use chrono::Local;
 use actix_web::HttpRequest;
@@ -27,7 +26,7 @@ pub fn load_generators() -> HashMap<String, SimpleGenerator> {
 
     let mut generators = HashMap::new();
 
-    for file in read_dir(format!("{}/settings/", env::current_dir().unwrap().display())).unwrap() {
+    for file in read_dir("./settings/").unwrap() {
         generators.insert(
             extract_file_name(file.as_ref().unwrap().path().into_os_string().into_string().unwrap()),
             SimpleGenerator::load_pathbuf(file.unwrap().path())

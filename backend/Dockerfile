@@ -14,5 +14,5 @@ FROM debian:bullseye-slim
 RUN useradd -ms /bin/bash app
 USER app
 WORKDIR /app
-COPY --from=builder /usr/local/cargo/bin/hello /app/hello
+COPY --from=builder /usr/local/cargo/bin/language_generator /app/language_generator
 
