@@ -14,12 +14,13 @@ use crate::routes::*;
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
 
+    let server_address = dotenv::var("SERVER_ADDR").unwrap_or_else(|_| "[::1]:8080".to_string());
     let state = web::Data::new(AppState {
         generators: Mutex::new(load_generators()),
         default_generators: dotenv::var("DEFAULT_SETTINGS").unwrap().split(", ").map(|a| a.to_string()).collect(),
     });
 
-    println!("[{}] [SERVER]: Server up! Open your preferred browser and access 「http://127.0.0.1:8080」!", Local::now().format(DF));
+    println!("[{}] [SERVER]: Server up! Open your preferred browser and access 「http://{}」!", Local::now().format(DF), server_address);
 
     HttpServer::new(move || {
         App::new()
@@ -33,7 +34,7 @@ async fn main() -> std::io::Result<()> {
                     .route("/save", web::post().to(save_generator))
             )
     })
-    .bind("[::1]:8080")?
+    .bind(server_address)?
     .run()
     .await
 }
