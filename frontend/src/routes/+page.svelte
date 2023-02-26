@@ -1,8 +1,7 @@
-<script>
+<script lang="ts">
     import "../app.css";
     import Settings from '../components/Settings.svelte';
     import Results from '../components/Results.svelte';
-    import Information from '../components/Information.svelte';
     import Menu from '../components/Menu.svelte';
     import Generator from '../components/Generator.svelte';
 </script>
@@ -15,7 +14,6 @@
     <Menu />
     <Generator />
     <Results />
-    <Information />
     <Settings />
 </div>
 
