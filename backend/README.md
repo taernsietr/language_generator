@@ -34,7 +34,7 @@ Requires a valid JSON body with the desired settings, e.g.:
 }
 ```
 
-```/sg/randtext```  
+```GET /sg/randtext```  
 returns randomly generated text based on the specified generator. Requires a
 ```generator```, ```min``` and ```max``` syllable lengths and a ```text_length``` 
 to be passed as query params.  
