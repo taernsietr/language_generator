@@ -1,18 +1,9 @@
 <script lang="ts">
     import { minSyllables, maxSyllables, textLength, results, currentGenerator } from '../store.js';
+    import { api_address } from '$lib/env';
 
-    async function api(url: string) {
-        return await fetch(url, { credentials: "same-origin" })
-    }
-
-    async function getRandomWord() {
-        let response = await api(`http://127.0.0.1:8080/sg/randtext?generator=${$currentGenerator}&min=${$minSyllables}&max=${$maxSyllables}&text_length=1`)
-        let data = await response.text();
-        results.set(data);
-    }
-
-    async function getRandomText() {
-        let response = await api(`http://127.0.0.1:8080/sg/randtext?generator=${$currentGenerator}&min=${$minSyllables}&max=${$maxSyllables}&text_length=${$textLength}`)
+    async function getRandomText(length: number = 1) {
+        let response = await fetch(`${api_address}/randtext?generator=${$currentGenerator}&min=${$minSyllables}&max=${$maxSyllables}&text_length=${length}`, { credentials: "same-origin" })
         let data = await response.text();
         results.set(data);
     }
@@ -39,8 +30,8 @@
         </div>
 
         <div class="bg-bg1 flex-1 flex flex-col flex-nowrap place-content-center">
-            <button class="bg-bg2 basis-1/4 m-2 p-2 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={getRandomText}>Random Text</button>
-            <button class="bg-bg2 basis-1/4 m-2 p-2 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={getRandomWord}>Random Word</button>
+            <button class="bg-bg2 basis-1/4 m-2 p-2 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={() => { getRandomText($textLength) }}>Random Text</button>
+            <button class="bg-bg2 basis-1/4 m-2 p-2 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={() => { getRandomText() }}>Random Word</button>
         </div>
     </div>
 </div>

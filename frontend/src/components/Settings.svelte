@@ -1,10 +1,10 @@
 <script lang="ts">  
     import { onMount } from 'svelte';
     import { displaySettings, generators, currentGenerator, categories, patterns, unsavedChanges } from '../store.js';
-    import { loadJSON } from '../helpers.js';
     import CategoriesList from './CategoriesList.svelte';
     import PatternsList from './PatternsList.svelte';
     import NewGeneratorModal from './NewGeneratorModal.svelte';
+    import { api_address } from '$lib/env.js';
 
     onMount(async () => {
         await loadGenerators();
@@ -24,14 +24,16 @@
 
     async function loadGenerators() {
         // get generators loaded on the backend and set the first active 
-        let data = await loadJSON("generators");
+        let data = await fetch(`${api_address}/generators`, { credentials: "same-origin" });
+        data = await data.json();
         generators.set(data.generators);
         currentGenerator.set(data.generators[0]);
     }
 
     async function loadSettings() {
         // load settings for the active generator
-        let data = await loadJSON(`settings?generator=${$currentGenerator}`);
+        let data = await fetch(`${api_address}/settings?generator=${$currentGenerator}`, { credentials: "same-origin" });
+        data = await data.json();
         categories.set(parseCats(data.categories));
         patterns.set(String(data.patterns).replace(/,/g, " "));
     }
@@ -54,7 +56,7 @@
             patterns: $patterns.split(" ")
         };
         
-        fetch("http://127.0.0.1:8080/sg/save", {
+        fetch(`${api_address}/save`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(settings),
