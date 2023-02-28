@@ -30,7 +30,7 @@ impl SimpleGenerator {
    
     pub fn save(&self) {
         std::fs::write(
-            format!("{}/settings/{}.json", env::current_dir().unwrap().display(), &self.name),
+            format!("{}/src/settings/{}.json", env::current_dir().unwrap().display(), &self.name),
             serde_json::to_string(&self).unwrap(),
         )
         .unwrap();
