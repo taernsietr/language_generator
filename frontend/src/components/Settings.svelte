@@ -24,7 +24,7 @@
 
     async function loadGenerators() {
         // get generators loaded on the backend and set the first active 
-        let data = await fetch(`${api_address}/generators`, { credentials: "same-origin" });
+        let data = await fetch(api_address, { credentials: "same-origin" });
         data = await data.json();
         generators.set(data.generators);
         currentGenerator.set(data.generators[0]);

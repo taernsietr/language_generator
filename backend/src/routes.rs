@@ -3,11 +3,11 @@ use std::sync::Mutex;
 use std::collections::HashMap;
 use serde::Deserialize;
 
-use crate::simple_generator::SimpleGenerator;
+use crate::text_generator::TextGenerator;
 use crate::log;
 
 pub struct AppState {
-    pub generators: Mutex<HashMap<String, SimpleGenerator>>,
+    pub generators: Mutex<HashMap<String, TextGenerator>>,
     pub default_generators: Vec<String>,
 } 
 
@@ -53,19 +53,21 @@ pub async fn get_available_generators(request: HttpRequest, state: web::Data<App
 // If the requested generator isn't found, assume the request used a freshly created name on the
 // frontend and return an empty JSON
 pub async fn get_generator_settings(request: HttpRequest, query: web::Query<GenParams>, state: web::Data<AppState>) -> impl Responder {
-    log(request, format!("Returning settings for generator [{}]", query.generator));
-
     let response = match state.generators.lock().unwrap().get(&query.generator) {
-        None => { HttpResponse::Ok().body(
-                    SimpleGenerator::new(query.generator.clone(), HashMap::new(), vec!("".to_string())).get()
-                )},
-        Some(gen) => { HttpResponse::Ok().body(gen.get()) } 
+        None => { 
+            log(request, format!("Generator [{}] not found, returning empty settings", query.generator));
+            HttpResponse::Ok().body( TextGenerator::new_empty(query.generator.clone()).get()) 
+        },
+        Some(gen) => { 
+            log(request, format!("Returning settings for generator [{}]", query.generator));
+            HttpResponse::Ok().body(gen.get()) 
+        }
     };
     response
 }
 
 pub async fn save_generator(request: HttpRequest, req_body: String, state: web::Data<AppState>) -> impl Responder {
-    let new_generator = serde_json::from_str::<SimpleGenerator>(&req_body).expect("Failed to read JSON data");
+    let new_generator = serde_json::from_str::<TextGenerator>(&req_body).expect("Failed to read JSON data");
     let name = &new_generator.get_name(); // dirty workaround, is there a cleaner solution?
  
     if state.default_generators.contains(name) {

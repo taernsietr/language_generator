@@ -5,27 +5,32 @@ use std::collections::HashMap;
 use std::path::PathBuf;
 use std::env;
 
+use crate::pattern::{Pattern, PatternPosition};
+
 #[derive(Deserialize, Serialize)]
-pub struct SimpleGenerator {
+pub struct TextGenerator {
     name: String,
     categories: HashMap<String,Vec<String>>, 
-    patterns: Vec<String>,
+    patterns: Vec<Pattern>,
 }
 
-impl SimpleGenerator {
-    pub fn new(name: String, categories: HashMap<String, Vec<String>>, patterns: Vec<String>) -> SimpleGenerator {
-        SimpleGenerator { name, categories, patterns }
+impl TextGenerator {
+    #[allow(dead_code)]
+    pub fn new(name: String, categories: HashMap<String, Vec<String>>, patterns: Vec<Pattern>) -> TextGenerator {
+        TextGenerator { name, categories, patterns }
     }
 
-    #[allow(dead_code)]
-    pub fn load_str(file: &str) -> SimpleGenerator {
-        let data = std::fs::read_to_string(format!("{}/settings/{}", env::current_dir().unwrap().display(), file)).expect("Failed to load generator settings file");
-        serde_json::from_str::<SimpleGenerator>(&data).expect("Failed to read JSON data")
+    pub fn new_empty(name: String) -> TextGenerator {
+        TextGenerator {
+            name, 
+            categories: HashMap::new(),
+            patterns: Vec::<Pattern>::new(),
+        }
     }
-   
-    pub fn load_pathbuf(file: PathBuf) -> SimpleGenerator {
+
+    pub fn load_pathbuf(file: PathBuf) -> TextGenerator {
         let data = std::fs::read_to_string(file).expect("Failed to load generator settings file");
-        serde_json::from_str::<SimpleGenerator>(&data).expect("Failed to read JSON data")
+        serde_json::from_str::<TextGenerator>(&data).expect("Failed to read JSON data")
     }
    
     pub fn save(&self) {
@@ -51,12 +56,33 @@ impl SimpleGenerator {
         let word_length: u8 = match min_syllables.cmp(&max_syllables) {
             Ordering::Less => { rng.gen_range(min_syllables..=max_syllables) },
             Ordering::Equal => { min_syllables },
-            Ordering::Greater => { println!("[SimpleGenerator] Error: Minimum syllables has to be equal to or less than maximum syllables"); min_syllables },
+            Ordering::Greater => { println!("[TextGenerator] Warning: Minimum syllables has to be equal to or less than maximum syllables"); min_syllables },
         };
         
-        for _ in 1..=word_length {
-            let current = self.patterns.choose(&mut rng);
-            for letter in current.unwrap().chars() {
+        for index in 1..=word_length {
+            // let current = self.patterns.choose(&mut rng);
+            /* 
+            initial
+            non-final
+            medial
+            non-initial
+            final
+            
+            index  = 1 && len  = 1 -> any, 
+            index  = 1 && len >= 2 -> any, initial, non-final
+            index  = 2 && len  = 2 -> any, non-final, medial, non-
+            index  =  
+            
+            */ 
+            
+            let syllable_pattern = self.patterns
+                .iter()
+                .filter(|x| x.position() != PatternPosition::Medial)
+                .cloned()
+                .collect::<Vec<Pattern>>()
+                .choose(&mut rng);
+
+            for letter in current.unwrap().pattern().chars() {
                 let chosen = self.categories.get(&letter.to_string()).unwrap().choose(&mut rng).unwrap();
                 word.push_str(chosen);
             }

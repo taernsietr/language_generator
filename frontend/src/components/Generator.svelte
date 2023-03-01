@@ -3,7 +3,7 @@
     import { api_address } from '$lib/env';
 
     async function getRandomText(length: number = 1) {
-        let response = await fetch(`${api_address}/randtext?generator=${$currentGenerator}&min=${$minSyllables}&max=${$maxSyllables}&text_length=${length}`, { credentials: "same-origin" })
+        let response = await fetch(`${api_address}/text?generator=${$currentGenerator}&min=${$minSyllables}&max=${$maxSyllables}&text_length=${length}`, { credentials: "same-origin" })
         let data = await response.text();
         results.set(data);
     }

@@ -4,7 +4,8 @@ use chrono::Local;
 use std::sync::Mutex;
 
 // mod language;
-mod simple_generator;
+mod text_generator;
+mod pattern;
 mod routes;
 mod helpers;
 
@@ -27,9 +28,9 @@ async fn main() -> std::io::Result<()> {
             .wrap(Cors::permissive())
             .app_data(state.clone())
             .service(
-                web::scope("/sg")
-                    .route("/randtext", web::get().to(random_text))
-                    .route("/generators", web::get().to(get_available_generators))
+                web::scope("/generators")
+                    .route("/", web::get().to(get_available_generators))
+                    .route("/text", web::get().to(random_text))
                     .route("/settings", web::get().to(get_generator_settings))
                     .route("/save", web::post().to(save_generator))
             )

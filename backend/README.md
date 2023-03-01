@@ -3,7 +3,7 @@ This is the readme for the backend of this project.
 This part of the project is basically an API written in Rust using the
 [Actix](https://github.com/actix/actix-web) framework.  
 
-Currently, the API only supports using SimpleGenerator, which is, as the name
+Currently, the API only supports using TextGenerator, which is, as the name
 implies, a simple structure that allows for shallow word/text generation, based
 on a category / syllable pattern system.  
 
@@ -13,7 +13,7 @@ If running locally, a ```.env``` file specifying a ```SERVER_ADDR``` should be
 used.  
 
 ```GET /sg/generators```  
-Returns the currently loaded SimpleGenerators.  
+Returns the currently loaded TextGenerators.  
 
 ```GET /sg/settings```  
 Returns the settings for the specified generator. Requires a ```generator``` to 
