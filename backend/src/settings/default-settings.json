@@ -1,1 +1,1 @@
-{"name":"default-settings","categories":{"F":["n","r"],"C":["p","t","k","s","m","n","h","w"],"V":["i","a","u"]},"patterns":[["CV", "Any", "Default"],["CVF", "Any", "Default"],["VF", "Any", "Default"]]}
+{"name":"default-settings","categories":{"V":["i","a","u"],"F":["n","r"],"C":["p","t","k","s","m","n","h","w"]},"patterns":[{"pattern":"CV","position":"Any","weight":"Default"},{"pattern":"CVF","position":"Any","weight":"Default"},{"pattern":"VF","position":"Any","weight":"Default"}]}

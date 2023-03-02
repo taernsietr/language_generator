@@ -9,7 +9,7 @@
     }
 </script>
 
-<div class="bg-bg1 col-span-3 flex-1 flex flex-col m-2 p-2 place-content-center shadow-xl">
+<div class="bg-bg1 flex-1 flex flex-col m-2 p-2 place-content-center shadow-xl">
     <h2 class="basis-1 text-center text-green">Generation Settings</h2>
     <div class="flex flex-row">
         <div class="bg-bg1 flex-1 flex flex-col flex-nowrap place-content-center">

@@ -29,7 +29,7 @@ async fn main() -> std::io::Result<()> {
             .app_data(state.clone())
             .service(
                 web::scope("/generators")
-                    .route("/", web::get().to(get_available_generators))
+                    .route("", web::get().to(get_available_generators))
                     .route("/text", web::get().to(random_text))
                     .route("/settings", web::get().to(get_generator_settings))
                     .route("/save", web::post().to(save_generator))

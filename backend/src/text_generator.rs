@@ -50,7 +50,7 @@ impl TextGenerator {
             }
             used_symbols.sort();
             used_symbols.dedup();
-            dbg!(&defined_symbols, &used_symbols);
+            // dbg!(&defined_symbols, &used_symbols);
             used_symbols.len() <= defined_symbols.len()
         }; 
         if result { generator }
@@ -60,7 +60,7 @@ impl TextGenerator {
     // TODO: Either use a database or smarter file addresses; possibly both for development
     pub fn save(&self) {
         std::fs::write(
-            format!("{}/settings/{}.json", env::current_dir().unwrap().display(), &self.name),
+            format!("{}/src/settings/{}.json", env::current_dir().unwrap().display(), &self.name),
             serde_json::to_string(&self).unwrap(),
         )
         .unwrap();
