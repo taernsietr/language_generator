@@ -4,6 +4,7 @@
     import CategoriesList from './CategoriesList.svelte';
     import PatternsList from './PatternsList.svelte';
     import NewGeneratorModal from './NewGeneratorModal.svelte';
+    import Button from './Button.svelte';
     import { api_address } from '$lib/env.js';
     import { parseCatsFromJSONData, parseCatsToJSON } from '../helpers.js';
 
@@ -54,7 +55,6 @@
         patterns.set([["", "Any", "Default"]]);
         categories.set([["", ""]]);
     }
-
 </script>
 
 {#if $displaySettings}
@@ -69,10 +69,10 @@
                 {/each}
             </select>
         </div>
-        <button class="bg-bg2 basis-1/5 m-2 p-2 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={newGeneratorModal}>New Generator</button>
-        <button class="bg-bg2 basis-1/5 m-2 p-2 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={saveSettings}>Save Settings</button>
-        <button class="bg-bg2 basis-1/5 m-2 p-2 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={clearSettings}>Clear Settings</button>
-        <button class="bg-bg2 basis-1/5 m-2 p-2 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={loadSettings}>Reload Generators</button>
+        <Button fn={newGeneratorModal} label={"New Generator"} />
+        <Button fn={saveSettings} label={"Save Settings"} />
+        <Button fn={clearSettings} label={"Clear Settings"} />
+        <Button fn={loadSettings} label={"Reload Generators"} />
     </div>
 
     <CategoriesList />
