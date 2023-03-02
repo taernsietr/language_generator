@@ -43,20 +43,18 @@ impl TextGenerator {
 
             for i in &generator.patterns {
                 for j in i.pattern().chars() {
-                    if !j.is_uppercase() && !j.is_numeric() {
-                        panic!("Pattern symbols have to be either uppercase letters or numbers");  
+                    if j.is_uppercase() || j.is_numeric() {
+                        used_symbols.push(j.to_string());
                     }
-                    used_symbols.push(j.to_string());
                 }
             }
             used_symbols.sort();
             used_symbols.dedup();
-            dbg!(&defined_symbols, &used_symbols, &generator.categories);
+            dbg!(&defined_symbols, &used_symbols);
             used_symbols.len() <= defined_symbols.len()
-        }; if result { generator }
-        else { 
-            panic!("Mismatch between number of defined and used pattern symbols");  
-        }
+        }; 
+        if result { generator }
+        else { panic!("Mismatch between number of defined and used pattern symbols"); }
     }
    
     // TODO: Either use a database or smarter file addresses; possibly both for development
@@ -78,7 +76,7 @@ impl TextGenerator {
 
     fn random_word(&self, min_syllables: u8, max_syllables: u8) -> String {
         let mut rng = rand::thread_rng();
-        let mut word = "".to_string();
+        let mut word = Vec::<String>::new();
 
         let word_length: u8 = match min_syllables.cmp(&max_syllables) {
             Ordering::Less => { rng.gen_range(min_syllables..=max_syllables) },
@@ -130,20 +128,23 @@ impl TextGenerator {
                 .to_owned();
 
             for letter in syllable_pattern.pattern().chars() {
-                let chosen = self.categories.get(&letter.to_string()).unwrap().choose(&mut rng).unwrap();
-                word.push_str(chosen);
+                if letter.is_uppercase() || letter.is_numeric() { 
+                    word.push(self.categories.get(&letter.to_string()).unwrap().choose(&mut rng).unwrap().clone());
+                }
+                else if letter.is_lowercase() { 
+                    word.push(letter.to_string());
+                }
             }
         }
-        word
+        word.concat()
     }
 
     pub fn random_text(&self, min_syllables: u8, max_syllables: u8, text_size: u8) -> String {
-        let mut text = String::new();
+        let mut text = Vec::<String>::new();
 
         for _ in 1..=text_size {
-            text.push_str(&self.random_word(min_syllables, max_syllables));
-            text.push(' ');
+            text.push(self.random_word(min_syllables, max_syllables));
         }
-        text
+        text.join(" ")
     }
 }
