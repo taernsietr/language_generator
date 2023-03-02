@@ -79,8 +79,10 @@ impl TextGenerator {
         let mut word = Vec::<String>::new();
 
         let word_length: u8 = match min_syllables.cmp(&max_syllables) {
-            Ordering::Less => { rng.gen_range(min_syllables..=max_syllables) },
-            Ordering::Equal => { min_syllables },
+            Ordering::Less => { 
+                rng.gen_range({if min_syllables > 0 { min_syllables } else { 1 }}..=max_syllables)
+            },
+            Ordering::Equal => { if min_syllables > 0 { min_syllables } else { 1 } },
             Ordering::Greater => { println!("[TextGenerator] Warning: Minimum syllables has to be equal to or less than maximum syllables"); min_syllables },
         };
         
@@ -127,12 +129,15 @@ impl TextGenerator {
                 .unwrap()
                 .to_owned();
 
-            for letter in syllable_pattern.pattern().chars() {
-                if letter.is_uppercase() || letter.is_numeric() { 
-                    word.push(self.categories.get(&letter.to_string()).unwrap().choose(&mut rng).unwrap().clone());
+            for element in syllable_pattern.pattern().chars() {
+                if element.is_uppercase() || element.is_numeric() { 
+                    word.push(self.categories.get(&element.to_string()).unwrap().choose(&mut rng).unwrap().clone());
                 }
-                else if letter.is_lowercase() { 
-                    word.push(letter.to_string());
+                else if element.is_lowercase() { 
+                    word.push(element.to_string());
+                }
+                else {
+                    panic!("Invalid character in syllable pattern: {}", element);
                 }
             }
         }
