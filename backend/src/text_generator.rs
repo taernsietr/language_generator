@@ -15,11 +15,6 @@ pub struct TextGenerator {
 }
 
 impl TextGenerator {
-    #[allow(dead_code)]
-    pub fn new(name: String, categories: HashMap<String, Vec<String>>, patterns: Vec<Pattern>) -> TextGenerator {
-        TextGenerator { name, categories, patterns }
-    }
-
     pub fn new_empty(name: String) -> TextGenerator {
         TextGenerator {
             name, 
@@ -30,7 +25,24 @@ impl TextGenerator {
 
     pub fn load_pathbuf(file: PathBuf) -> TextGenerator {
         let data = std::fs::read_to_string(file).expect("Failed to load generator settings file");
-        serde_json::from_str::<TextGenerator>(&data).expect("Failed to read JSON data")
+        let generator: TextGenerator = serde_json::from_str::<TextGenerator>(&data).expect("Failed to read JSON data");
+        let result = {
+            // TODO: make this check more than just the length
+            let defined_symbols = generator.categories.keys();
+            let mut used_symbols = Vec::<String>::new();
+            
+            for i in &generator.patterns {
+                for j in i.pattern().chars() {
+                    used_symbols.push(j.to_string());
+                }
+            }
+            used_symbols.sort();
+            used_symbols.dedup();
+            used_symbols.len() == defined_symbols.len()
+        }; if result { generator }
+        else { 
+            panic!("[Error] Mismatch between number of defined and used pattern symbols");  
+        }
     }
    
     pub fn save(&self) {

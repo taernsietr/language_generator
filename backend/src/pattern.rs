@@ -1,7 +1,7 @@
 use std::str::FromStr;
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize, Clone, Copy, PartialEq)]
+#[derive(Deserialize, Serialize, Clone, Copy, PartialEq, Eq)]
 pub enum PatternPosition {
     Any,
     Initial,
@@ -59,24 +59,6 @@ pub struct Pattern {
 }
 
 impl Pattern {
-    #[allow(dead_code)]
-    pub fn new(pattern: String, position: String, weight: String) -> Pattern {
-        Pattern {
-            pattern,
-            position: PatternPosition::from_str(&position).unwrap(),
-            weight: PatternWeight::from_str(&weight).unwrap(),
-        }
-    }
-
-    #[allow(dead_code)]
-    pub fn new_empty() -> Pattern {
-        Pattern {
-            pattern: " ".to_string(),
-            position: PatternPosition::from_str(" ").unwrap(),
-            weight: PatternWeight::from_str(" ").unwrap(),
-        }
-    }
-
     pub fn pattern(&self) -> String {
         self.pattern.clone()
     }
