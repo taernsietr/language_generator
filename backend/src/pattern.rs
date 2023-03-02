@@ -1,8 +1,7 @@
 use std::str::FromStr;
-
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize, Clone, PartialEq)]
+#[derive(Deserialize, Serialize, Clone, Copy, PartialEq)]
 pub enum PatternPosition {
     Any,
     Initial,

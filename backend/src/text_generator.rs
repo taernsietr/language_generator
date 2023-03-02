@@ -49,7 +49,7 @@ impl TextGenerator {
         serde_json::to_string(&self).unwrap()
     }
 
-    pub fn random_word(&self, min_syllables: u8, max_syllables: u8) -> String {
+    fn random_word(&self, min_syllables: u8, max_syllables: u8) -> String {
         let mut rng = rand::thread_rng();
         let mut word = "".to_string();
 
@@ -59,30 +59,50 @@ impl TextGenerator {
             Ordering::Greater => { println!("[TextGenerator] Warning: Minimum syllables has to be equal to or less than maximum syllables"); min_syllables },
         };
         
+        // Each syllable
         for index in 1..=word_length {
-            // let current = self.patterns.choose(&mut rng);
+        /*  index  = 1     && len  =  1 -> any, non-medial
+            index  = 1     && len >=  2 -> any, initial, non-final
+            index  = len   && len  >  1 -> any, non-initial, final
+        1 < index <= len-1 && len  >  2 -> any, non-final, medial, non-initial */
+            let position_filters: Vec<PatternPosition> = match (index, word_length) {
+                (1, 1) => {vec!(PatternPosition::Any, PatternPosition::NonMedial)},
+                (1, 2..) => {vec!(PatternPosition::Any, PatternPosition::Initial, PatternPosition::NonMedial, PatternPosition::NonFinal)},
+                (index, 2..) if index == word_length => {vec!(PatternPosition::Any, PatternPosition::NonInitial, PatternPosition::NonMedial, PatternPosition::Final)},
+                (index, 3..) if 1 < index && index < word_length => {vec!(PatternPosition::Any, PatternPosition::NonFinal, PatternPosition::Medial, PatternPosition::NonInitial)},
+                _ => unreachable!(),
+            };
+            /*
+            // TODO: move this to a more adequate file
+            pub enum WordMoraPattern {
+                Any,
+                Alternating,
+                AlternatingDoubleHeavy,
+                SingleHeavy,
+                DoubleHeavy,
+            }
+            */
+
             /* 
-            initial
-            non-final
-            medial
-            non-initial
-            final
-            
-            index  = 1 && len  = 1 -> any, 
-            index  = 1 && len >= 2 -> any, initial, non-final
-            index  = 2 && len  = 2 -> any, non-final, medial, non-
-            index  =  
-            
-            */ 
+            // TODO: Decide if implementing this is worth it
+            let weight_filters: Vec<PatternWeight> = match (current_weight, word_mora_pattern) {
+                ("L" || "H", WordMoraPattern::Any) => {},
+                ("L", WordMoraPattern::Alternating) => {},
+                ("H", WordMoraPattern::Alternating) => {},
+
+            }
+            */
             
             let syllable_pattern = self.patterns
                 .iter()
-                .filter(|x| x.position() != PatternPosition::Medial)
+                .filter(|x| position_filters.contains(&x.position()))
                 .cloned()
                 .collect::<Vec<Pattern>>()
-                .choose(&mut rng);
+                .choose(&mut rng)
+                .unwrap()
+                .to_owned();
 
-            for letter in current.unwrap().pattern().chars() {
+            for letter in syllable_pattern.pattern().chars() {
                 let chosen = self.categories.get(&letter.to_string()).unwrap().choose(&mut rng).unwrap();
                 word.push_str(chosen);
             }
