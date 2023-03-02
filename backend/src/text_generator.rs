@@ -23,28 +23,43 @@ impl TextGenerator {
         }
     }
 
+    // TODO: Refactor this entire function, this is somewhat disgusting
     pub fn load_pathbuf(file: PathBuf) -> TextGenerator {
         let data = std::fs::read_to_string(file).expect("Failed to load generator settings file");
         let generator: TextGenerator = serde_json::from_str::<TextGenerator>(&data).expect("Failed to read JSON data");
+
+        /* Error checking:
+         * patterns must not have any symbol that isn't assigned to a category;
+         * pattern symbols must be capital letters or numbers;
+         * pattern symbols must be unique within a generator - using a symbol more than once will
+         * overwrite the previous categories upon loading the generator;
+         * ideally, the program should not panic when encountering these errors, but an elegant
+         * solution has to be found first.
+         */
         let result = {
             // TODO: make this check more than just the length
             let defined_symbols = generator.categories.keys();
             let mut used_symbols = Vec::<String>::new();
-            
+
             for i in &generator.patterns {
                 for j in i.pattern().chars() {
+                    if !j.is_uppercase() && !j.is_numeric() {
+                        panic!("Pattern symbols have to be either uppercase letters or numbers");  
+                    }
                     used_symbols.push(j.to_string());
                 }
             }
             used_symbols.sort();
             used_symbols.dedup();
-            used_symbols.len() == defined_symbols.len()
+            dbg!(&defined_symbols, &used_symbols, &generator.categories);
+            used_symbols.len() <= defined_symbols.len()
         }; if result { generator }
         else { 
-            panic!("[Error] Mismatch between number of defined and used pattern symbols");  
+            panic!("Mismatch between number of defined and used pattern symbols");  
         }
     }
    
+    // TODO: Either use a database or smarter file addresses; possibly both for development
     pub fn save(&self) {
         std::fs::write(
             format!("{}/settings/{}.json", env::current_dir().unwrap().display(), &self.name),
