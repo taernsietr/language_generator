@@ -75,6 +75,7 @@ impl Pattern {
         self.position
     }
 
+    #[allow(dead_code)]
     pub fn weight(&self) -> PatternWeight {
         self.weight
     }

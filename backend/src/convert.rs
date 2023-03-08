@@ -4,10 +4,15 @@ trait PhonologicalRepresentation {
 }
 
 impl PhonologicalRepresentation for String {
-    xsampa_to_ipa(&self) {
+   // check current symbol with the following symbols, continue if the added symbols are
+   // valid xsampa. If a symbol that cannot be parsed as part of a xsampa representation or
+   // a suprasegmental, convert the sequence to IPA
+    fn xsampa_to_ipa(&self) -> String {
+        //let mut output: String;
         todo!();
-           // check current symbol with the following symbols, continue if the added symbols are
-           // valid xsampa. If a symbol that cannot be parsed as part of a xsampa representation or
-           // a suprasegmental, convert the sequence to IPA
+    }
+
+    fn ipa_to_xsampa(&self) -> String {
+        todo!();
     }
 }

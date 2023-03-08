@@ -3,11 +3,14 @@ use actix_cors::Cors;
 use chrono::Local;
 use std::sync::Mutex;
 
-// mod language;
+use bimap::BiHashMap;
+
+mod helpers;
+mod routes;
 mod text_generator;
 mod pattern;
-mod routes;
-mod helpers;
+mod convert;
+// mod language;
 
 use crate::helpers::*;
 use crate::routes::*;
@@ -20,6 +23,11 @@ async fn main() -> std::io::Result<()> {
         generators: Mutex::new(load_generators()),
         default_generators: dotenv::var("DEFAULT_SETTINGS").unwrap().split(", ").map(|a| a.to_string()).collect(),
     });
+
+    let address = format!("{}/resources/conversion_table.json", dotenv::var("SETTINGS").unwrap());
+    let contents: String = std::fs::read_to_string(address).unwrap();
+    let conversion_table: BiHashMap<String, String> = serde_json::from_str(&contents).unwrap();
+    dbg!(conversion_table);
 
     println!("[{}] [SERVER]: Server up! Open your preferred browser and access 「http://{}」!", Local::now().format(DF), server_address);
 

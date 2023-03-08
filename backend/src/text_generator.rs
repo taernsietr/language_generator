@@ -1,12 +1,9 @@
-use serde::{Deserialize, Serialize};
-use rand::{Rng, prelude::SliceRandom};
 use std::cmp::Ordering;
 use std::collections::HashMap;
 use std::path::PathBuf;
-use std::env;
-
-use rand::prelude::IteratorRandom;
-
+use serde::{Deserialize, Serialize};
+use rand::Rng;
+use rand::prelude::{IteratorRandom, SliceRandom};
 use crate::pattern::{Pattern, PatternPosition};
 
 const CONSONANTS: [&str; 63] = ["p", "b", "t", "d", "t`", "d`", "c", "J\\", "k", "g", "q", "G\\", "?", "m", "F", "n", "n`", "J", "N", "N\\", "B\\", "r", "R\\", "4", "r`", "p\\", "B", "f", "v", "T", "D", "s", "z", "S", "Z", "s`", "z`", "C", "j\\", "x", "G", "X", "R", "X\\", "?\\", "h\\", "K", "K\\", "v\\", "r\\", "r\\`", "j", "M\\", "l", "l`", "L", "L\\", "W", "w", "H", "s\\", "z\\", "x\\"];
@@ -137,7 +134,8 @@ impl TextGenerator {
     // TODO: Either use a database or smarter file addresses; possibly both for development
     pub fn save(&self) {
         std::fs::write(
-            format!("{}/src/settings/{}.json", env::current_dir().unwrap().display(), &self.name),
+            // format!("{}/src/settings/{}.json", env::current_dir().unwrap().display(), &self.name),
+            format!("{}/settings/{}.json", dotenv::var("SETTINGS").unwrap(), &self.name),
             serde_json::to_string(&self).unwrap(),
         )
         .unwrap();
