@@ -33,6 +33,7 @@ async fn main() -> std::io::Result<()> {
                     .route("/text", web::get().to(random_text))
                     .route("/settings", web::get().to(get_generator_settings))
                     .route("/save", web::post().to(save_generator))
+                    .route("/testing", web::get().to(random))
             )
     })
     .bind(server_address)?

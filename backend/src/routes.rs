@@ -91,3 +91,13 @@ pub async fn save_generator(request: HttpRequest, req_body: String, state: web::
     }
 }
 
+pub async fn random(request: HttpRequest, state: web::Data<AppState>) -> impl Responder {
+    log(request, format!("Returning random generator"));
+
+    let random_generator = TextGenerator::new_fully_random();
+    state.generators
+        .lock()
+        .unwrap()
+        .insert(random_generator.get_name(), random_generator);
+    HttpResponse::Ok().body("New random generator created!")
+}

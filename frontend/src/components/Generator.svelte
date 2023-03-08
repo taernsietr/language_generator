@@ -1,6 +1,7 @@
 <script lang="ts">
     import { minSyllables, maxSyllables, textLength, results, currentGenerator } from '../store.js';
     import { api_address } from '$lib/env';
+    import Button from './Button.svelte';
 
     async function getRandomText(length: number = 1) {
         let response = await fetch(`${api_address}/text?generator=${$currentGenerator}&min=${$minSyllables}&max=${$maxSyllables}&text_length=${length}`, { credentials: "same-origin" })
@@ -30,8 +31,8 @@
         </div>
 
         <div class="bg-bg1 flex-1 flex flex-col flex-nowrap place-content-center">
-            <button class="bg-bg2 basis-1/4 m-2 p-2 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={() => { getRandomText($textLength) }}>Random Text</button>
-            <button class="bg-bg2 basis-1/4 m-2 p-2 text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={() => { getRandomText() }}>Random Word</button>
+            <Button fn={ () => { getRandomText($textLength) } } label={"Random Text"} />
+            <Button fn={ () => { getRandomText() } } label={"Random Word"} />
         </div>
     </div>
 </div>

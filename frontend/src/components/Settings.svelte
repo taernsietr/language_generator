@@ -1,12 +1,12 @@
 <script lang="ts">  
     import { onMount } from 'svelte';
+    import { api_address } from '$lib/env.js';
     import { displaySettings, generators, currentGenerator, categories, patterns } from '../store.js';
+    import { parseCatsFromJSONData, parseCatsToJSON } from '../helpers.js';
     import CategoriesList from './CategoriesList.svelte';
     import PatternsList from './PatternsList.svelte';
     import NewGeneratorModal from './NewGeneratorModal.svelte';
     import Button from './Button.svelte';
-    import { api_address } from '$lib/env.js';
-    import { parseCatsFromJSONData, parseCatsToJSON } from '../helpers.js';
 
     onMount(async () => {
         await loadGenerators();
@@ -25,8 +25,8 @@
         // load settings for the active generator
         let data = await fetch(`${api_address}/settings?generator=${$currentGenerator}`, { credentials: "same-origin" });
         data = await data.json();
-        console.log(data);
         categories.set(parseCatsFromJSONData(data.categories));
+        // categories.set(data.categories);
         patterns.set(data.patterns);
     }
 
@@ -34,6 +34,7 @@
         let parsedCategories = parseCatsToJSON($categories);
         let settings = {
             name: $currentGenerator,
+        //    categories: $categories,
             categories: parsedCategories,
             patterns: $patterns
         };
@@ -46,6 +47,14 @@
             .catch((error) => { console.error("Error:", error); });
     }
 
+    // TODO: properly implement this
+    async function newRandomGenerator() {
+        fetch(`${api_address}/testing`); 
+        loadGenerators();
+        currentGenerator.set("alpha");
+        loadSettings();
+    }
+
     let modal: boolean = false;
     async function newGeneratorModal() {
         modal = !modal;
@@ -54,6 +63,8 @@
     async function clearSettings() { 
         patterns.set([["", "Any", "Default"]]);
         categories.set([["", ""]]);
+        // categories.set([[{symbol: "", elements: [""]}]]);
+        
     }
 </script>
 
@@ -73,6 +84,7 @@
         <Button fn={saveSettings} label={"Save Settings"} />
         <Button fn={clearSettings} label={"Clear Settings"} />
         <Button fn={loadSettings} label={"Reload Generators"} />
+        <Button fn={newRandomGenerator} label={"New Random Generator"} />
     </div>
 
     <CategoriesList />

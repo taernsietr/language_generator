@@ -1,5 +1,6 @@
 <script lang="ts">
     import { patterns } from '../store.js';
+    import Button from './Button.svelte';
 
     export let pattern: string;
     export let position: string;
@@ -23,7 +24,7 @@
 
 <div class="flex flex-row justify-between p-2" id={id}>
     <input class="bg-bg2 mr-2 p-2 text-center text-yellow" type="text" bind:value={pattern} on:input={updatePatterns} />
-    <button class="bg-bg2 p-2 ml-2 text-red hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={destroyPattern} >X</button>
+    <Button fn={destroyPattern} textColor={"text-red"} label={"X"} />
     <select class="bg-bg2 text-center m-2 p-2 no-spinner text-yellow" bind:value={position} on:change={updatePatterns} >
         <option value="Any">Any</option>
         <option value="Initial">Initial</option>
