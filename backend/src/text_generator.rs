@@ -55,8 +55,9 @@ impl TextGenerator {
                 i.to_string(),
                 consonants
                     .choose_multiple(&mut rng, category_size)
-                    .map(|x| x.to_string())
+                    .map(|x| conversion_table.get(x))
                     .collect::<Vec<String>>()
+                    //.map(|x| x.to_string())
             );
         }
         
