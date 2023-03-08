@@ -12,14 +12,14 @@ on a category / syllable pattern system.
 If running locally, a `.env` file specifying a `SERVER_ADDR` should be
 used.  
 
-```GET /sg/generators```  
+```GET /generators```  
 Returns the currently loaded TextGenerators.  
 
-```GET /sg/settings```  
+```GET /generators/settings```  
 Returns the settings for the specified generator. Requires a `generator` to 
 be passed in as a query param.  
 
-```POST /sg/save```  
+```POST /generators/save```  
 Updates the settings for an existing (loaded) generator or creates a new one.
 Requires a valid JSON body with the desired settings, e.g.:  
 ```json
@@ -37,7 +37,10 @@ Requires a valid JSON body with the desired settings, e.g.:
 }
 ```
 
-```GET /sg/randtext```  
+```GET /generators/text```  
 returns randomly generated text based on the specified generator. Requires a
 `generator`, `min` and `max` syllable lengths and a `text_length` 
 to be passed as query params.  
+
+## Running the project as-is 
+If you want to test the project, the backend server can be run with `cargo run`
