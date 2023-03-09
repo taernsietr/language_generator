@@ -14,7 +14,7 @@ later date.
 
 ## Running the project as-is 
 If you want to test the project, the frontend server can be run with one of the
-following commands:  
+following commands (assuming you have [Node](https://nodejs.org) installed):  
 
 ```bash
 npm run dev 

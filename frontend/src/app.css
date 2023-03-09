@@ -5,6 +5,7 @@
 @layer components {
     .no-spinner {
         -moz-appearance: textfield;
+        appearance: textfield;
     }
 
     .no-spinner::-webkit-outer-spin-button,

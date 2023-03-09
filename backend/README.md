@@ -44,3 +44,4 @@ to be passed as query params.
 
 ## Running the project as-is 
 If you want to test the project, the backend server can be run with `cargo run`
+(assuming you have [Rust](https://www.rust-lang.org) installed).

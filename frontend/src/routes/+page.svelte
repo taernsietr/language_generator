@@ -6,14 +6,16 @@
     import Generator from '../components/Generator.svelte';
 </script>
 
-<div class="bg-bg1 flex m-2 p-2 place-content-center shadow-xl">
-    <h1 class="text-xl text-orange">Random Text Generator</h1>
-</div>
+<div class="flex flex-col p-auto max-w-[1600px]">
+    <div class="bg-bg1 flex m-2 p-2 place-content-center shadow-xl">
+        <h1 class="text-xl text-orange">Random Text Generator</h1>
+    </div>
 
-<div class="flex flex-row flex-wrap">
-    <Menu />
-    <Generator />
-    <Results />
-    <Settings />
+    <div class="flex md:flex-row sm:flex-col flex-wrap">
+        <Menu />
+        <Results />
+        <Generator />
+        <Settings />
+    </div>
 </div>
 
