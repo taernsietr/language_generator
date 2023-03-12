@@ -21,6 +21,8 @@ html, body, div {
 }
 
 h1, h2, h3 {
+    padding: 2px;
+    margin: 2px;
     font-size: inherit;
     font-weight: inherit;
 }

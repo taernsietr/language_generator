@@ -23,7 +23,7 @@
 </script>
 
 <div class="flex flex-row justify-between p-2" id={id}>
-    <input class="bg-bg2 mr-2 p-2 text-center text-yellow max-w-[100px]" type="text" bind:value={pattern} on:input={updatePatterns} />
+    <input class="bg-bg2 m-2 p-2 text-center text-yellow max-w-[100px]" type="text" bind:value={pattern} on:input={updatePatterns} />
     <select class="bg-bg2 text-center m-2 p-2 no-spinner text-yellow" bind:value={position} on:change={updatePatterns} >
         <option value="Any">Any</option>
         <option value="Initial">Initial</option>

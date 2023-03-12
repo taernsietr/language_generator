@@ -13,8 +13,8 @@
 
     <div class="flex md:flex-row sm:flex-col flex-wrap">
         <Menu />
-        <Results />
         <Generator />
+        <Results />
         <Settings />
     </div>
 </div>

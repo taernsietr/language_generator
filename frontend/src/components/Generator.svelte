@@ -15,18 +15,18 @@
     <div class="flex flex-row">
         <div class="bg-bg1 flex-1 flex flex-col flex-nowrap place-content-center">
             <div class="flex flex-nowrap m-2 p-2 place-content-center">
-                <label class="place-content-center m-auto text-fg" for="minSyllables">Min syllables:</label>
-                <input class="bg-bg2 text-yellow text-center no-spinner p-2" type="number" bind:value={$minSyllables} min="1" max="255" id="minSyllables" name="minSyllables">
+                <label class="place-content-center m-2 p-2 text-fg" for="minSyllables">Min syllables:</label>
+                <input class="bg-bg2 text-yellow m-2 p-2 text-center no-spinner" type="number" bind:value={$minSyllables} min="1" max="255" id="minSyllables" name="minSyllables">
             </div>
 
             <div class="flex flex-nowrap m-2 p-2 place-content-center">
-                <label class="place-content-center m-auto text-fg" for="maxSyllables">Max syllables:</label>
-                <input class="bg-bg2 text-yellow text-center no-spinner p-2" type="number" bind:value={$maxSyllables} min="1" max="255" id="maxSyllables" name="maxSyllables">
+                <label class="place-content-center m-2 p-2 text-fg" for="maxSyllables">Max syllables:</label>
+                <input class="bg-bg2 text-yellow m-2 p-2 text-center no-spinner" type="number" bind:value={$maxSyllables} min="1" max="255" id="maxSyllables" name="maxSyllables">
             </div>
 
             <div class="flex flex-nowrap m-2 p-2 place-content-center">
-                <label class="place-content-center m-auto text-fg" for="textLength">Text length:</label>
-                <input class="bg-bg2 text-yellow text-center no-spinner p-2" type="number" bind:value={$textLength} min="1" max="128" id="textLength" name="textLength">
+                <label class="place-content-center m-2 p-2 text-fg" for="textLength">Text length:</label>
+                <input class="bg-bg2 text-yellow m-2 p-2 text-center no-spinner" type="number" bind:value={$textLength} min="1" max="128" id="textLength" name="textLength">
             </div>
         </div>
 
