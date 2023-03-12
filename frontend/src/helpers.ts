@@ -1,3 +1,5 @@
+import { currentlyDisplaying } from "./store";
+
 export function parseCatsFromJSONData(data: any) { 
     let k = Object.keys(data);
     let v = Object.values(data);

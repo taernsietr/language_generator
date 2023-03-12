@@ -17,6 +17,7 @@
 
 html, body, div {
     background-color: #282828;
+    line-height: 1;
 }
 
 h1, h2, h3 {

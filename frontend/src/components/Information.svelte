@@ -1,14 +1,6 @@
 <script lang="ts">
-    import { fade } from 'svelte/transition';
-    import { language } from '../store.js';
-    import CloseButton from './CloseButton.svelte';
+    import { currentlyDisplaying, language } from '../store.js';
     import Modal from './Modal.svelte';
-
-    let state: boolean = false;
-
-    async function closeModal() {
-        state = !state;
-    }
 
     let text = 
         [
@@ -35,21 +27,10 @@
                 "</ul></p>"]
             }
         ];
-/*
-<div class="fixed top-0 left-0 flex justify-center items-center bg-black w-screen h-screen opacity-90" transition:fade>
-    <div class="bg-bg1 p-2 m-2 flex flex-col relative justify-center max-w-xl shadow-xl text-fg">
-        <CloseButton fn={closeModal} />
-        <h2 class="text-center text-green p-2 m-2">Information</h2>
-        <p class="p-2 m-2">
-            {@html text.find(element => element.language == $language)?.content.join("\n") }
-        </p>
-    </div>
-</div>
-*/
 </script>
 
-{#if state}
-    <Modal state label={"Information"}>
+{#if ($currentlyDisplaying == "Information")}
+    <Modal label={"Information"}>
         <p class="p-2 m-2">
             {@html text.find(element => element.language == $language)?.content.join("\n") }
         </p>

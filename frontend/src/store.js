@@ -5,6 +5,7 @@ export const language = writable("enUS");
 
 // Component toggles
 export const displaySettings = writable(true);
+export const currentlyDisplaying = writable("App");
 
 // Generation settings
 export const minSyllables = writable(1);

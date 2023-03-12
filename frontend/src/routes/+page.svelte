@@ -6,7 +6,7 @@
     import Generator from '../components/Generator.svelte';
 </script>
 
-<div class="flex flex-col p-auto max-w-[1600px]">
+<div class="flex flex-col p-auto">
     <div class="bg-bg1 flex m-2 p-2 place-content-center shadow-xl">
         <h1 class="text-xl text-orange">Random Text Generator</h1>
     </div>

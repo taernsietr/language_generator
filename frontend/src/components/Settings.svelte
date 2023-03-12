@@ -1,7 +1,7 @@
 <script lang="ts">  
     import { onMount } from 'svelte';
     import { api_address } from '$lib/env.js';
-    import { displaySettings, generators, currentGenerator, categories, patterns } from '../store.js';
+    import { currentlyDisplaying, displaySettings, generators, currentGenerator, categories, patterns } from '../store.js';
     import { parseCatsFromJSONData, parseCatsToJSON } from '../helpers.js';
     import CategoriesList from './CategoriesList.svelte';
     import PatternsList from './PatternsList.svelte';
@@ -54,11 +54,6 @@
         currentGenerator.set("alpha");
         loadSettings();
     }
-
-    let modal: boolean = false;
-    async function newGeneratorModal() {
-        modal = !modal;
-    }
     
     async function clearSettings() { 
         patterns.set([["", "Any", "Default"]]);
@@ -68,6 +63,7 @@
     }
 </script>
 
+<NewGeneratorModal />
 {#if $displaySettings}
 <div class="bg-bg1 flex flex-col m-2 p-2 shadow-xl">
     <h2 class="basis-1 text-center text-green">Settings</h2>
@@ -80,7 +76,7 @@
                 {/each}
             </select>
         </div>
-        <Button fn={newGeneratorModal} label={"New Generator"} />
+        <Button fn={() => { currentlyDisplaying.set("NewGeneratorModal")} } label={"New Generator"} />
         <Button fn={saveSettings} label={"Save Settings"} />
         <Button fn={clearSettings} label={"Clear Settings"} />
         <Button fn={loadSettings} label={"Reload Generators"} />
@@ -89,9 +85,7 @@
 
     <CategoriesList />
     <PatternsList />
-    {#if modal}
-        <NewGeneratorModal bind:state={modal}/>
-    {/if}
+    <NewGeneratorModal />
 </div>
 {/if}
 
