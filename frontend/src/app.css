@@ -5,6 +5,7 @@
 @layer components {
     .no-spinner {
         -moz-appearance: textfield;
+        appearance: textfield;
     }
 
     .no-spinner::-webkit-outer-spin-button,
@@ -16,9 +17,12 @@
 
 html, body, div {
     background-color: #282828;
+    line-height: 1;
 }
 
 h1, h2, h3 {
+    padding: 2px;
+    margin: 2px;
     font-size: inherit;
     font-weight: inherit;
 }

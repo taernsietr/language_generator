@@ -3,23 +3,23 @@ This is the readme for the backend of this project.
 This part of the project is basically an API written in Rust using the
 [Actix](https://github.com/actix/actix-web) framework.  
 
-Currently, the API only supports using SimpleGenerator, which is, as the name
+Currently, the API only supports using `TextGenerator`, which is, as the name
 implies, a simple structure that allows for shallow word/text generation, based
 on a category / syllable pattern system.  
 
 ## API endpoints
 
-If running locally, a ```.env``` file specifying a ```SERVER_ADDR``` should be
+If running locally, a `.env` file specifying a `SERVER_ADDR` should be
 used.  
 
-```GET /sg/generators```  
-Returns the currently loaded SimpleGenerators.  
+```GET /generators```  
+Returns the currently loaded TextGenerators.  
 
-```GET /sg/settings```  
-Returns the settings for the specified generator. Requires a ```generator``` to 
+```GET /generators/settings```  
+Returns the settings for the specified generator. Requires a `generator` to 
 be passed in as a query param.  
 
-```POST /sg/save```  
+```POST /generators/save```  
 Updates the settings for an existing (loaded) generator or creates a new one.
 Requires a valid JSON body with the desired settings, e.g.:  
 ```json
@@ -30,11 +30,18 @@ Requires a valid JSON body with the desired settings, e.g.:
         "C":["p","t","k","s","m","n","h","w"],
         "V":["i","a","u"]
     },
-    "patterns": ["CV","CVF"]
+    "patterns": [
+        ["CV", "Any", "Default"],
+        ["CVF", "Any", "Default"]
+    ]
 }
 ```
 
-```GET /sg/randtext```  
+```GET /generators/text```  
 returns randomly generated text based on the specified generator. Requires a
-```generator```, ```min``` and ```max``` syllable lengths and a ```text_length``` 
+`generator`, `min` and `max` syllable lengths and a `text_length` 
 to be passed as query params.  
+
+## Running the project as-is 
+If you want to test the project, the backend server can be run with `cargo run`
+(assuming you have [Rust](https://www.rust-lang.org) installed).

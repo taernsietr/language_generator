@@ -33,11 +33,11 @@ inventories, phonologies and pseudotext. Some specific use cases are listed
 below, but they can be changed, removed or more might be added to the list.  
 
 ### Core Stuff
-- Include IPA symbol picker 
+- Include IPA symbol picker  
 - Parse X-SAMPA to IPA  
-- Parse IPA to X-SAMPA   
-- Save to JSON (_SimpleGenerators_)  
-- Load from JSON (_SimpleGenerators_)  
+- Parse IPA to X-SAMPA  
+- Save to JSON  
+- Load from JSON  
 
 ### Simpler text stuff
 - All anagrams

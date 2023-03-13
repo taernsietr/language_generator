@@ -1,11 +1,6 @@
 <script lang="ts">
-    import { language } from '../store.js';
-
-    export let state: boolean;
-
-    async function closeModal() {
-        state = !state;
-    }
+    import { currentlyDisplaying, language } from '../store.js';
+    import Modal from './Modal.svelte';
 
     let text = 
         [
@@ -34,15 +29,10 @@
         ];
 </script>
 
-
-<div class="fixed top-0 left-0 flex justify-center items-center opacity-90 bg-black w-screen h-screen">
-    <div class="bg-bg1 p-2 m-2 flex flex-col relative justify-center max-w-xl shadow-xl text-fg">
-        <button class="absolute top-0 right-0 bg-bg2 p-2 text-red hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={closeModal} >X</button>
-        <h2 class="text-center text-green p-2 m-2">Information</h2>
+{#if ($currentlyDisplaying == "Information")}
+    <Modal label={"Information"}>
         <p class="p-2 m-2">
             {@html text.find(element => element.language == $language)?.content.join("\n") }
         </p>
-    </div>
-</div>
-
-
+    </Modal>
+{/if}

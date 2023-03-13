@@ -1,6 +1,7 @@
 <script lang="ts">
+    import { currentlyDisplaying, displaySettings, language } from '../store.js';
     import Information from './Information.svelte';
-    import { displaySettings, language } from '../store.js';
+    import Button from './Button.svelte';
 
     function toggleSettings() {
         displaySettings.update((current) => !current); 
@@ -9,19 +10,12 @@
     function toggleLanguage() {
         language.update((current) => current == "enUS" ? "ptBR" : "enUS"); 
     }
-
-    let modal: boolean = false;
-    async function informationModal() {
-        modal = !modal;
-    }
 </script>
 
-<div class="bg-bg1 flex flex-1 flex-col justify-around m-2 p-2 place-content-center shadow-xl text-fg">
+<Information />
+<div class="bg-bg1 basis-full flex flex-col justify-around m-2 p-2 place-content-center shadow-xl text-fg">
     <h2 class="basis-1 text-center text-green">Menu</h2>
-    <button class="bg-bg2 flex m-2 p-2 place-content-center text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={informationModal}>Information</button>
-    <button class="bg-bg2 flex m-2 p-2 place-content-center text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={toggleSettings}>Toggle Settings</button>
-    <button class="bg-bg2 flex m-2 p-2 place-content-center text-fg hover:bg-bg3 hover:fg-fg0 transition duration-400" type="submit" on:click={toggleLanguage}>{$language == "enUS"? "English" : "Português"}</button>
+    <Button fn={() => { currentlyDisplaying.set("Information")} } label={"Information"} />
+    <Button fn={toggleSettings} label={"Toggle Settings"} />
+    <Button fn={toggleLanguage} label={$language == "enUS"? "English" : "Português"} />
 </div>
-{#if modal}
-    <Information bind:state={modal}/>
-{/if}
