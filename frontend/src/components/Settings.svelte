@@ -65,10 +65,10 @@
 
 <NewGeneratorModal />
 {#if $displaySettings}
-<div class="bg-bg1 flex flex-col m-2 p-2 shadow-xl">
-    <h2 class="basis-1 text-center text-green">Settings</h2>
+<div class="bg-bg1 basis-full flex flex-col m-2 p-2 shadow-xl">
+    <h2 class="text-center text-green">Settings</h2>
     <div class="flex flex-row justify-between m-2 p-2">
-        <div class="flex flex-col basis-1/5">
+        <div class="flex flex-col">
             <h3 class="text-center text-blue">Generator</h3>
             <select class="bg-bg2 text-center m-2 p-2 no-spinner text-yellow" bind:value={$currentGenerator} on:change={loadSettings} >
                 {#each $generators as option}

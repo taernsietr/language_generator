@@ -4,6 +4,7 @@
     import Category from './Category.svelte';
     import Button from './Button.svelte';
 
+/*  THIS SHOULD WORK WITH THE LABELED OBJECTS
     function addCategory() {
         let temp = $categories;
         temp.push(
@@ -16,6 +17,13 @@
         );
         categories.set(temp);
     }
+*/
+    function addCategory() {
+        let temp = $categories;
+        temp.push(["", [""]]);
+        categories.set(temp);
+        console.log($categories);
+    }
     
     let loaded = false;
 
@@ -23,7 +31,7 @@
         setTimeout(() => {loaded = true}, 300);
     });
 
-/*
+/*  THIS SHOULD WORK WITH THE LABELED OBJECTS
         {#each $categories as cat}
             <Category symbol={cat.symbol} elements={String(cat.elements).replace(/,/g, " ")} id={$categories.indexOf(cat)} />
         {/each}

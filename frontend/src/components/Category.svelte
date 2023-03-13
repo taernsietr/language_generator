@@ -13,19 +13,23 @@
     }
 
     async function updateCategories() {
-        elements = String(elements).replace(/,/g, " ").split(" ").join().trim();
+        setTimeout(() => {
+            elements = String(elements).replace(/,/g, " ").split(" ").join().trim();
 
-        let temp = $categories;
-        temp.symbol = symbol;
-        temp.elements = elements;
-        // temp[id][0] = symbol;
-        // temp[id][1] = elements;
-        categories.set(temp);
+            let temp = $categories;
+            // temp.symbol = symbol;
+            // temp.elements = elements;
+            temp[id][0] = symbol;
+            temp[id][1] = elements;
+            categories.set(temp);
+            console.log($categories);
+        }, 2000);
     }
+
 </script>
 
 <div class="flex flex-row justify-between p-2" id={id}>
-    <input class="bg-bg2 m-2 p-2 text-center text-yellow max-w-[50px]" type="text" maxlength="1" bind:value={symbol} on:input={updateCategories} />
+    <input class="bg-bg2 m-2 p-2 text-center text-yellow" type="text" maxlength="1" bind:value={symbol} on:input={updateCategories} />
     <input class="basis-9/12 m-2 p-2 bg-bg2 text-center text-yellow" type="text" bind:value={elements} on:input={updateCategories} />
     <DynamicCloseButton fn={destroyCategory} />
 </div>
