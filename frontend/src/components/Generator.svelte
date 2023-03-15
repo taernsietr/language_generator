@@ -8,6 +8,19 @@
         let data = await response.text();
         results.set(data);
     }
+        
+    /// TODO
+    async function convertXSAMPAToIPA() {
+        let data = await fetch(`${api_address}/xsampa-ipa`); 
+        let response = await data.text();
+        results.set(response);
+    }
+
+    async function convertIPAToXSAMPA() {
+        let data = await fetch(`${api_address}/ipa-xsampa`); 
+        let response = await data.text();
+        results.set(response);
+    }
 </script>
 
 <div class="bg-bg1 basis-full flex flex-col m-2 p-2 place-content-center shadow-xl">
@@ -33,6 +46,8 @@
         <div class="bg-bg1 flex-1 flex flex-col flex-nowrap place-content-center">
             <Button fn={ () => { getRandomText($textLength) } } label={"Random Text"} />
             <Button fn={ () => { getRandomText() } } label={"Random Word"} />
+            <Button fn={convertXSAMPAToIPA} label={"Convert X-SAMPA to IPA"} />
+            <Button fn={convertIPAToXSAMPA} label={"Convert IPA to X-SAMPA"} />
         </div>
     </div>
 </div>

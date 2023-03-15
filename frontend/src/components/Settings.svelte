@@ -1,8 +1,8 @@
 <script lang="ts">  
     import { onMount } from 'svelte';
     import { api_address } from '$lib/env.js';
-    import { currentlyDisplaying, displaySettings, generators, currentGenerator, categories, patterns } from '../store.js';
-    import { parseCatsFromJSONData, parseCatsToJSON } from '../helpers.js';
+    import { currentlyDisplaying, displaySettings, currentGenerator, generators, categories, patterns } from '../store.js';
+    import { loadGenerators, loadSettings, saveSettings } from '../helpers.js';
     import CategoriesList from './CategoriesList.svelte';
     import PatternsList from './PatternsList.svelte';
     import NewGeneratorModal from './NewGeneratorModal.svelte';
@@ -10,56 +10,21 @@
 
     onMount(async () => {
         await loadGenerators();
-        await loadSettings();
+        await loadSettings($currentGenerator);
     });
-
-    async function loadGenerators() {
-        // get generators loaded on the backend and set the first active 
-        let data = await fetch(api_address, { credentials: "same-origin" });
-        data = await data.json();
-        generators.set(data.generators);
-        currentGenerator.set(data.generators[0]);
-    }
-
-    async function loadSettings() {
-        // load settings for the active generator
-        let data = await fetch(`${api_address}/settings?generator=${$currentGenerator}`, { credentials: "same-origin" });
-        data = await data.json();
-        categories.set(parseCatsFromJSONData(data.categories));
-        // categories.set(data.categories);
-        patterns.set(data.patterns);
-    }
-
-    async function saveSettings() { 
-        let parsedCategories = parseCatsToJSON($categories);
-        let settings = {
-            name: $currentGenerator,
-        //    categories: $categories,
-            categories: parsedCategories,
-            patterns: $patterns
-        };
-        
-        fetch(`${api_address}/save`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(settings),
-        })
-            .catch((error) => { console.error("Error:", error); });
-    }
 
     // TODO: properly implement this
     async function newRandomGenerator() {
-        fetch(`${api_address}/testing`); 
+        fetch(`${api_address}/random_generator`); 
         loadGenerators();
         currentGenerator.set("alpha");
-        loadSettings();
+        loadSettings($currentGenerator);
     }
     
     async function clearSettings() { 
         patterns.set([["", "Any", "Default"]]);
         categories.set([["", ""]]);
         // categories.set([[{symbol: "", elements: [""]}]]);
-        
     }
 </script>
 
@@ -70,17 +35,17 @@
     <div class="flex flex-row justify-between m-2 p-2">
         <div class="flex flex-col">
             <h3 class="text-center text-blue">Generator</h3>
-            <select class="bg-bg2 text-center m-2 p-2 no-spinner text-yellow" bind:value={$currentGenerator} on:change={loadSettings} >
+            <select class="bg-bg2 text-center m-2 p-2 no-spinner text-yellow" bind:value={$currentGenerator} on:change={() => { loadSettings($currentGenerator) } } >
                 {#each $generators as option}
                     <option value={option}>{option}</option>
                 {/each}
             </select>
         </div>
-        <Button fn={() => { currentlyDisplaying.set("NewGeneratorModal")} } label={"New Generator"} />
-        <Button fn={saveSettings} label={"Save Settings"} />
+        <Button fn={ () => { currentlyDisplaying.set("NewGeneratorModal") }} label={"New Generator"} />
+        <Button fn={ () => { loadSettings($currentGenerator) }} label={"Reload Generators"} />
+        <Button fn={ () => { saveSettings($currentGenerator, $categories, $patterns) }} label={"Save Settings"} />
         <Button fn={clearSettings} label={"Clear Settings"} />
-        <Button fn={loadSettings} label={"Reload Generators"} />
-        <Button fn={newRandomGenerator} label={"New Random Generator"} />
+        <Button fn={newRandomGenerator} label={"Random Generator"} />
     </div>
 
     <CategoriesList />

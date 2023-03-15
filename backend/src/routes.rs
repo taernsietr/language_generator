@@ -91,7 +91,7 @@ pub async fn save_generator(request: HttpRequest, req_body: String, state: web::
     }
 }
 
-pub async fn random(request: HttpRequest, state: web::Data<AppState>) -> impl Responder {
+pub async fn random_generator(request: HttpRequest, state: web::Data<AppState>) -> impl Responder {
     log(request, "Returning random generator".to_string());
 
     let random_generator = TextGenerator::new_fully_random();
@@ -100,4 +100,12 @@ pub async fn random(request: HttpRequest, state: web::Data<AppState>) -> impl Re
         .unwrap()
         .insert(random_generator.get_name(), random_generator);
     HttpResponse::Ok().body("New random generator created!")
+}
+
+pub async fn convert_xsampa_to_ipa() -> impl Responder {
+    HttpResponse::Ok().body(format!("{}", crate::convert::xsampa_to_ipa("fUdeU".to_string())))
+}
+
+pub async fn convert_ipa_to_xsampa() -> impl Responder {
+    HttpResponse::Ok().body(format!("{}", crate::convert::ipa_to_xsampa("fʊdeʊ".to_string())))
 }
