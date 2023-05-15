@@ -8,7 +8,7 @@ mod helpers;
 mod routes;
 mod text_generator;
 mod pattern;
-mod convert;
+// mod convert;
 // mod language;
 
 use crate::helpers::*;
@@ -37,8 +37,8 @@ async fn main() -> std::io::Result<()> {
                     .route("/settings", web::get().to(get_generator_settings))
                     .route("/save", web::post().to(save_generator))
                     .route("/random_generator", web::get().to(random_generator))
-                    .route("/xsampa-ipa", web::get().to(convert_xsampa_to_ipa))
-                    .route("/ipa-xsampa", web::get().to(convert_ipa_to_xsampa))
+//                    .route("/xsampa-ipa", web::get().to(convert_xsampa_to_ipa))
+//                    .route("/ipa-xsampa", web::get().to(convert_ipa_to_xsampa))
             )
     })
     .bind(server_address)?
