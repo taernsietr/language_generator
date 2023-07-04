@@ -16,16 +16,16 @@
     async function updatePatterns() {
         setTimeout(() => {
             let temp = $patterns;
-            temp[id][0] = pattern;
-            temp[id][1] = position;
-            temp[id][2] = weight;
+            temp[id]["pattern"] = pattern;
+            temp[id]["position"] = position;
+            temp[id]["weight"] = weight;
             patterns.set(temp);
         }, 2000);
     }
 </script>
 
 <div class="flex flex-row justify-between p-2" id={id}>
-    <input class="bg-bg2 m-2 p-2 text-center text-yellow" type="text" bind:value={pattern} on:input={updatePatterns} />
+    <input class="bg-bg2 m-2 p-2 text-center text-yellow" type="text" bind:value={pattern} on:change={updatePatterns} />
     <select class="bg-bg2 text-center m-2 p-2 no-spinner text-yellow" bind:value={position} on:change={updatePatterns} >
         <option value="Any">Any</option>
         <option value="Initial">Initial</option>
