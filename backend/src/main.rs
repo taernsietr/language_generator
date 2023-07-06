@@ -37,7 +37,7 @@ async fn main() -> std::io::Result<()> {
                     .route("/save", web::post().to(save_generator))
                     .route("/random_generator", web::get().to(random_generator))
                     .route("/xsampa-ipa", web::get().to(convert_xsampa_to_ipa))
-//                    .route("/ipa-xsampa", web::get().to(convert_ipa_to_xsampa))
+                    .route("/ipa-xsampa", web::get().to(convert_ipa_to_xsampa))
             )
     })
     .bind(server_address)?

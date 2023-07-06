@@ -108,8 +108,6 @@ pub async fn convert_xsampa_to_ipa(state: web::Data<AppState>) -> impl Responder
     HttpResponse::Ok().body(crate::convert::xsampa_to_ipa(&state.conversion_table))
 }
 
-/*
-pub async fn convert_ipa_to_xsampa() -> impl Responder {
-    HttpResponse::Ok().body(format!("{}", crate::convert::ipa_to_xsampa("ɦai".to_string())))
+pub async fn convert_ipa_to_xsampa(state: web::Data<AppState>) -> impl Responder {
+    HttpResponse::Ok().body(crate::convert::ipa_to_xsampa(&state.conversion_table))
 }
-*/
