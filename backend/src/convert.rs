@@ -1,5 +1,5 @@
 use bimap::BiMap;
-use regex::{RegexSet, escape};
+use regex::{Regex, RegexSet, escape};
 
 /*
 fn escape_regex(regex: String) {
@@ -11,14 +11,14 @@ fn escape_regex(regex: String) {
 // check current symbol with the following symbols, continue if the added symbols are
 // valid xsampa. If a symbol that cannot be parsed as part of a xsampa representation or
 // a suprasegmental, convert the sequence to IPA
-pub fn xsampa_to_ipa(table: BiMap<String, String>) -> Vec<String> {
-    let conversion_table: BiMap<String, String> = serde_json::from_str(&std::fs::read_to_string(format!("{}/resources/conversion_table.json", dotenv::var("SETTINGS").unwrap())).unwrap()).unwrap();
-    let regexes = RegexSet::new(conversion_table.left_values().map(|x| escape(x)));
-    // for (i, p) in regexes.unwrap().patterns().iter().enumerate() {
-    //     println!("{}: {}", i, p);
-    // }
-    let result: Vec<String> = regexes.unwrap().matches("J\\_<abaT").into_iter().map(|x| x.to_string()).collect();
-    result
+pub fn xsampa_to_ipa(table: &BiMap<String, String>) -> &str {
+    let test_string = "J\\_<abaT";
+
+    let re = &table
+        .left_values()
+        .map(|x| println!("{}", x));
+
+    "testing"
 }
 
 /*
