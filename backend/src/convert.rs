@@ -11,10 +11,16 @@ fn escape_regex(regex: String) {
 // check current symbol with the following symbols, continue if the added symbols are
 // valid xsampa. If a symbol that cannot be parsed as part of a xsampa representation or
 // a suprasegmental, convert the sequence to IPA
-pub fn xsampa_to_ipa(table: &BiMap<String, String>) -> String {
-    table.get_by_left("S").unwrap().to_string()
+pub fn xsampa_to_ipa(input: String, table: &BiMap<String, String>) -> String {
+    table.get_by_left(&input).unwrap().to_string()
 }
 
-pub fn ipa_to_xsampa(table: &BiMap<String, String>) -> String {
-    table.get_by_right("ʃ").unwrap().to_string()
+pub fn ipa_to_xsampa(input: String, table: &BiMap<String, String>) -> String {
+    let mut result = String::new();
+    let placeholder = "?".to_string();
+
+    for each in input.chars() {
+        result.push_str(table.get_by_right(&each.to_string()).unwrap_or_else(|| &placeholder))
+    }
+    result
 }
