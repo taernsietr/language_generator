@@ -1,5 +1,4 @@
 use actix_web::{web, Responder, HttpRequest, HttpResponse};
-use bimap::BiMap;
 use std::sync::Mutex;
 use std::collections::HashMap;
 use serde::Deserialize;
@@ -10,7 +9,7 @@ use crate::log;
 pub struct AppState {
     pub generators: Mutex<HashMap<String, TextGenerator>>,
     pub default_generators: Vec<String>,
-    pub conversion_table: BiMap<String, String>,
+    pub conversion_table: Vec<(String, String)>,
 } 
 
 #[derive(Deserialize)]
@@ -104,10 +103,8 @@ pub async fn random_generator(request: HttpRequest, state: web::Data<AppState>) 
     HttpResponse::Ok().body("New random generator created!")
 }
 
-pub async fn convert_xsampa_to_ipa(state: web::Data<AppState>) -> impl Responder {
-    HttpResponse::Ok().body(crate::convert::xsampa_to_ipa("SaJ\\_<bbaH\\".to_string(), &state.conversion_table))
+pub async fn convert_xsampa_to_ipa(req_body: String, state: web::Data<AppState>) -> impl Responder {
+    //HttpResponse::Ok().body(crate::convert::xsampa_to_ipa("SaJ\\_<bbaH\\".to_string(), &state.conversion_table))
+    HttpResponse::Ok().body(crate::convert::xsampa_to_ipa(req_body.to_string(), &state.conversion_table))
 }
 
-pub async fn convert_ipa_to_xsampa(state: web::Data<AppState>) -> impl Responder {
-    HttpResponse::Ok().body(crate::convert::ipa_to_xsampa("θøːɬɯɾ".to_string(), &state.conversion_table))
-}

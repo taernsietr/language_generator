@@ -10,16 +10,25 @@
     }
         
     /// TODO
-    async function convertXSAMPAToIPA() {
-        let data = await fetch(`${api_address}/xsampa-ipa`); 
-        let response = await data.text();
-        results.set(response);
+    async function convertXSAMPAToIPA(xsampa: string) {
+        let data = await fetch(`${api_address}/xsampa-ipa`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(xsampa),
+        })
+            .catch((error) => { console.error("Error:", error);
+        });
+
+        if (data) {
+            let response = await data.json();
+            results.set(response);
+        }
     }
 
     async function convertIPAToXSAMPA() {
         let data = await fetch(`${api_address}/ipa-xsampa`); 
         let response = await data.text();
-        results.set(response);
+        results.set(response)
     }
 </script>
 
@@ -46,7 +55,7 @@
         <div class="bg-bg1 flex-1 flex flex-col flex-nowrap place-content-center">
             <Button fn={ () => { getRandomText($textLength) } } label={"Random Text"} />
             <Button fn={ () => { getRandomText() } } label={"Random Word"} />
-            <Button fn={convertXSAMPAToIPA} label={"Convert X-SAMPA to IPA"} />
+            <Button fn={ () => { convertXSAMPAToIPA("Sabad`H") } } label={"Convert X-SAMPA to IPA"} />
             <Button fn={convertIPAToXSAMPA} label={"Convert IPA to X-SAMPA"} />
         </div>
     </div>
