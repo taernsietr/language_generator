@@ -104,7 +104,12 @@ pub async fn random_generator(request: HttpRequest, state: web::Data<AppState>) 
 }
 
 pub async fn convert_xsampa_to_ipa(req_body: String, state: web::Data<AppState>) -> impl Responder {
-    //HttpResponse::Ok().body(crate::convert::xsampa_to_ipa("SaJ\\_<bbaH\\".to_string(), &state.conversion_table))
     HttpResponse::Ok().body(crate::convert::xsampa_to_ipa(req_body.to_string(), &state.conversion_table))
+}
+
+pub async fn convert_ipa_to_xsampa(req_body: String, state: web::Data<AppState>) -> impl Responder {
+    // the indexing is meant to remove the quotes added by the JSON; there's probably a simpler
+    // solution, but I didn't figure it out yet
+    HttpResponse::Ok().body(crate::convert::ipa_to_xsampa(req_body.to_string(), &state.conversion_table))
 }
 

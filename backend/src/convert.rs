@@ -24,3 +24,14 @@ pub fn xsampa_to_ipa(input: String, table: &Vec<(String, String)>) -> String {
     result
 }
 
+pub fn ipa_to_xsampa(input: String, table: &Vec<(String, String)>) -> String {
+    let mut result = String::new();
+    
+    for ipa in input.chars() {
+        for (left, right) in table.iter() {
+            if &ipa.to_string() == right { result.push_str(left) }
+        }
+    }
+
+    result
+}
