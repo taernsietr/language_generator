@@ -6,20 +6,20 @@ fn escape_regex(regex: &mut str) -> String {
     re.replace_all(regex, r"\$1").to_string()
 }
 
+// Still compiles regex on every call
+// .iter() returns elements in arbitrary order
 pub fn xsampa_to_ipa(input: String, table: &BiMap<String, String>) -> String {
     let mut result = input.clone();
-    let mut regexes = Vec::<Regex>::new();
+    let mut regexes = Vec::<(Regex, String)>::new();
     
-    for each in table.left_values() {
-        // println!("Escaping regex: {}", &each);
-        let mut esc = each.clone();
+    for (left, right) in table.iter() {
+        let mut esc = left.clone();
         esc = escape_regex(esc.as_mut_str());
-        // println!("Escaped regex: {}", &esc);
-        regexes.push(Regex::new(&esc).unwrap());
+        regexes.push((Regex::new(&esc).unwrap(), right.clone()));
     }
 
     for each in regexes {
-        result = each.replace_all(&result, "000").to_string();
+        result = each.0.replace_all(&result, each.1).to_string();
     }
 
     result
