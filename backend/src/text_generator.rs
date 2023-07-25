@@ -6,8 +6,9 @@ use rand::Rng;
 use rand::prelude::{IteratorRandom, SliceRandom};
 use crate::pattern::{Pattern, PatternPosition};
 
-const CONSONANTS: [&str; 63] = ["p", "b", "t", "d", "t`", "d`", "c", "J\\", "k", "g", "q", "G\\", "?", "m", "F", "n", "n`", "J", "N", "N\\", "B\\", "r", "R\\", "4", "r`", "p\\", "B", "f", "v", "T", "D", "s", "z", "S", "Z", "s`", "z`", "C", "j\\", "x", "G", "X", "R", "X\\", "?\\", "h\\", "K", "K\\", "v\\", "r\\", "r\\`", "j", "M\\", "l", "l`", "L", "L\\", "W", "w", "H", "s\\", "z\\", "x\\"];
-const VOWELS: [&str; 34] = ["i", "y", "1", "}", "M", "u", "I", "Y", "I\\", "U\\", "U", "e", "2", "@\\", "8", "7", "o", "e_o", "2_o", "@", "o_o", "E", "9", "3", "3\\", "V", "O", "{", "6", "a", "&", "a_", "A", "Q"];
+// TODO: Make this pull from the conversion table, somehow?
+const CONSONANTS: [&str; 63] = ["p", "b", "t", "d", "t`", "d`", "c", "J\\\\", "k", "g", "q", "G\\\\", "?", "m", "F", "n", "n`", "J", "N", "N\\\\", "B\\\\", "r", "R\\\\", "4", "r`", "p\\\\", "B", "f", "v", "T", "D", "s", "z", "S", "Z", "s`", "z`", "C", "j\\\\", "x", "G", "X", "R", "X\\\\", "?\\\\", "h\\\\", "K", "K\\\\", "v\\\\", "r\\\\", "r\\\\`", "j", "M\\\\", "l", "l`", "L", "L\\\\", "W", "w", "H", "s\\\\", "z\\\\", "x\\\\"];
+const VOWELS: [&str; 34] = ["i", "y", "1", "}", "M", "u", "I", "Y", "I\\\\", "U\\\\", "U", "e", "2", "@\\\\", "8", "7", "o", "e_o", "2_o", "@", "o_o", "E", "9", "3", "3\\\\", "V", "O", "{", "6", "a", "&", "a_", "A", "Q"];
 
 #[derive(Deserialize, Serialize)]
 pub struct TextGenerator {

@@ -64,8 +64,8 @@
         <div class="bg-bg1 flex-1 flex flex-col flex-nowrap place-content-center">
             <Button fn={ () => { getRandomText($textLength) } } label={"Random Text"} />
             <Button fn={ () => { getRandomText() } } label={"Random Word"} />
-            <Button fn={ () => { convertXSAMPAToIPA("Sabad`H") } } label={"Convert X-SAMPA to IPA"} />
-            <Button fn={ () => { convertIPAToXSAMPA("ʃabaɖɥ") } } label={"Convert IPA to X-SAMPA"} />
+            <Button fn={ () => { convertXSAMPAToIPA($results) } } label={"Convert X-SAMPA to IPA"} />
+            <Button fn={ () => { convertIPAToXSAMPA($results) } } label={"Convert IPA to X-SAMPA"} />
         </div>
     </div>
 </div>
