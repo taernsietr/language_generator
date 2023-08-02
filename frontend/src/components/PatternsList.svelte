@@ -12,7 +12,6 @@
             "weight": "Default"
         });
         patterns.set(temp);
-        console.log($patterns);
     }
     
     let loaded = false;
