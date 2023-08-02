@@ -30,7 +30,7 @@ pub fn ipa_to_xsampa(input: String, table: &BiMap<String, String>) -> String {
     let placeholder = "?".to_string();
 
     for each in input.chars() {
-        result.push_str(table.get_by_right(&each.to_string()).unwrap_or_else(|| &placeholder))
+        result.push_str(table.get_by_right(&each.to_string()).unwrap_or(&placeholder))
     }
     result
 }

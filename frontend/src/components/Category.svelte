@@ -17,13 +17,10 @@
             elements = String(elements).replace(/,/g, " ").split(" ").join().trim();
 
             let temp = $categories;
-            // temp.symbol = symbol;
-            // temp.elements = elements;
             temp[id][0] = symbol;
             temp[id][1] = elements;
             categories.set(temp);
-            console.log($categories);
-        }, 2000);
+        }, 300);
     }
 
 </script>

@@ -33,17 +33,16 @@ function parseCatsFromJSONData(data: any) {
     return cats;
 }
 
+// TODO: review
 function parseCatsToJSON(data: any) {
-    // TODO: remover isso, a.k.a. a pior gambiarra da minha vida
-    // for future reference, this will get the destructured categories which are passed around on the frontend
-    // and through string manipulation reforms it into the JSON format the backend understands
-    // ... just to turn it into an object again so we can rebuild the actual JSON body that's expected
-    let cats = JSON.stringify(data);
-    cats = cats.replace(/^./, "{");
-    cats = cats.replace(/.$/, "}");
-    cats = cats.replace(/\["([A-Z0-9])",/g, "\"$1\":");
-    cats = cats.replace(/\]\]/g, "]");
-    return JSON.parse(cats);
+    return data.reduce((cat, [symbol, elements]) => {
+        let temp = elements;
+        if(typeof(elements) == "string") {
+            temp = elements.split(",");
+        }
+        cat[symbol] = temp;
+        return cat;
+    }, {});
 }
 
 async function loadGenerators() {

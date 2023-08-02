@@ -20,7 +20,7 @@
             temp[id]["position"] = position;
             temp[id]["weight"] = weight;
             patterns.set(temp);
-        }, 2000);
+        }, 300);
     }
 </script>
 
