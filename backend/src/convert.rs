@@ -1,4 +1,3 @@
-use bimap::BiMap;
 use regex::Regex;
 
 fn escape_regex(regex: &mut str) -> String {
@@ -8,7 +7,7 @@ fn escape_regex(regex: &mut str) -> String {
 
 // Still compiles regex on every call
 // .iter() returns elements in arbitrary order
-pub fn xsampa_to_ipa(input: String, table: &BiMap<String, String>) -> String {
+pub fn xsampa_to_ipa(input: String, table: &Vec<(String, String)>) -> String {
     let mut result = input.clone();
     let mut regexes = Vec::<(Regex, String)>::new();
     
@@ -25,12 +24,14 @@ pub fn xsampa_to_ipa(input: String, table: &BiMap<String, String>) -> String {
     result
 }
 
-pub fn ipa_to_xsampa(input: String, table: &BiMap<String, String>) -> String {
+pub fn ipa_to_xsampa(input: String, table: &Vec<(String, String)>) -> String {
     let mut result = String::new();
-    let placeholder = "?".to_string();
 
-    for each in input.chars() {
-        result.push_str(table.get_by_right(&each.to_string()).unwrap_or(&placeholder))
+    for ipa in input.chars() {
+        for (left, right) in table.iter() {
+            if &ipa.to_string() == right { result.push_str(left) }
+        }
     }
+
     result
 }

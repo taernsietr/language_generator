@@ -24,7 +24,6 @@
     async function clearSettings() { 
         patterns.set([["", "Any", "Default"]]);
         categories.set([["", ""]]);
-        // categories.set([[{symbol: "", elements: [""]}]]);
     }
 </script>
 

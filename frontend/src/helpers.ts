@@ -66,7 +66,6 @@ async function saveSettings(name: string, categories: Category[], patterns: Patt
     let parsedCategories = parseCatsToJSON(categories);
     let settings = {
         name,
-    //    categories: $categories,
         categories: parsedCategories,
         patterns
     };
