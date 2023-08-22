@@ -7,7 +7,7 @@ fn escape_regex(regex: &mut str) -> String {
 
 // Still compiles regex on every call
 // .iter() returns elements in arbitrary order
-pub fn xsampa_to_ipa(input: String, table: &Vec<(String, String)>) -> String {
+pub fn xsampa_to_ipa(input: String, table: &[(String, String)]) -> String {
     let mut result = input.clone();
     let mut regexes = Vec::<(Regex, String)>::new();
     
@@ -24,7 +24,7 @@ pub fn xsampa_to_ipa(input: String, table: &Vec<(String, String)>) -> String {
     result
 }
 
-pub fn ipa_to_xsampa(input: String, table: &Vec<(String, String)>) -> String {
+pub fn ipa_to_xsampa(input: String, table: &[(String, String)]) -> String {
     let mut result = String::new();
 
     for ipa in input.chars() {
