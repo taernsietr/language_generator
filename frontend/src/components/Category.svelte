@@ -14,12 +14,13 @@
     }
 
     async function updateCategory() {
-        unsavedChanges.set(true);
-        let temp = $queuedCategories;
-        temp[id][0] = symbol;
-        temp[id][1] = elements;
-        queuedCategories.set(temp);
-        console.log("Updating category", symbol);
+        setTimeout(() => {
+            unsavedChanges.set(true);
+            let temp = $queuedCategories;
+            temp[id][0] = symbol;
+            temp[id][1] = elements;
+            queuedCategories.set(temp);
+        }, 100);
     }
 
 </script>

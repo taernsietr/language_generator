@@ -1,0 +1,11 @@
+{
+    "name": "default-settings",
+    "categories": [
+        { "symbol": "C", "elements": ["p","t","k","s","m","n","h","w"] },
+        { "symbol": "F", "elements": ["n"] },
+        { "symbol": "V", "elements": ["i","a","u"] }
+    ],
+    "patterns": [
+        { "pattern": "CV", "position": "Any", "weight": "Default" }
+    ]
+}

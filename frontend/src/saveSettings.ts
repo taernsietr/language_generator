@@ -1,7 +1,7 @@
 import type { PatternType, GeneratorSettings } from './types';
 import { parseCatsToJSON } from './parser';
 import { api_address } from '$lib/env';
-import { categories, queuedCategories, patterns, queuedPatterns, unsavedChanges } from './store';
+import { categories, patterns, unsavedChanges } from './store';
 
 async function saveSettings(unsaved: boolean, currentGenerator: string, pats: PatternType[], cats: string[][]) {
     

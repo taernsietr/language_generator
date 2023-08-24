@@ -1,7 +1,7 @@
 import type { CategoryType } from "./types";
 
 function parseCatsFromJSON(data: any) { 
-    console.log("FROM JSON - INPUT\n", data);
+    // console.log("FROM JSON - INPUT\n", data);
 
     let symbols = Object.keys(data);
     let elements = Object.values(data);
@@ -9,12 +9,12 @@ function parseCatsFromJSON(data: any) {
         return [symbol, String(elements[index]).replace(/,/g, " ")];
     });
 
-    console.log("FROM JSON - OUTPUT\n", cats);
+    // console.log("FROM JSON - OUTPUT\n", cats);
     return cats;
 }
 
-function parseCatsToJSON(data: string[][]) {
-    console.log("TO JSON - INPUT\n", data);
+function parseCatsToJSON(data: string[][]): CategoryType[] {
+    // console.log("TO JSON - INPUT\n", data);
 
     // Error handling, refactor to a better form
     data.forEach((e) => {
@@ -24,13 +24,13 @@ function parseCatsToJSON(data: string[][]) {
         }
     });
 
-    let cat = data.reduce((cat, [symbol, elements]) => {
+    let cat: Record<string, string[]> = data.reduce((cat: Record<string, string[]>, [symbol, elements]) => {
         cat[symbol] = String(elements).split(" ");
 
         return cat;
     }, {});
 
-    console.log("TO JSON - OUTPUT\n", cat);
+    // console.log("TO JSON - OUTPUT\n", cat);
     return cat;
 }
 

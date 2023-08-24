@@ -1,6 +1,6 @@
 interface CategoryType {
     symbol: string;
-    elements: string;
+    elements: string[];
 }
 
 interface PatternType {

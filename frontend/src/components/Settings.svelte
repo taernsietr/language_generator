@@ -36,9 +36,14 @@
                 bind:value={$currentGenerator} 
                 on:change={ () => {
                     if($unsavedChanges) {
-                        saveSettings($unsavedChanges, $currentGenerator, $patterns, $categories);
-                    }
+                        saveSettings($unsavedChanges, $currentGenerator, $queuedPatterns, $queuedCategories);
+                    } 
                     loadSettings($currentGenerator);
+                    setTimeout(() => { 
+                        queuedCategories.set($categories);
+                        queuedPatterns.set($patterns);
+                    }, 300);
+                   
                 }} 
             >
                 {#each $generators as option}
