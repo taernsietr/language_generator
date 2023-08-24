@@ -1,5 +1,6 @@
 <script lang="ts">
     import { generators, currentlyDisplaying, currentGenerator } from "../store";
+    import loadSettings from "../loadSettings";
     import Modal from "./Modal.svelte";
     import Button from "./Button.svelte";
 
@@ -15,6 +16,7 @@
             temp.push(generatorNameInput);
             generators.set(temp);
             currentGenerator.set(generatorNameInput);
+            loadSettings(generatorNameInput);
             currentlyDisplaying.set("App");
         };
     }
