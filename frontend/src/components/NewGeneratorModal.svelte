@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { generators, unsavedChanges, currentlyDisplaying } from "../store";
+    import { generators, currentlyDisplaying, currentGenerator } from "../store";
     import Modal from "./Modal.svelte";
     import Button from "./Button.svelte";
 
@@ -14,7 +14,7 @@
         } else {
             temp.push(generatorNameInput);
             generators.set(temp);
-            unsavedChanges.set(true);
+            currentGenerator.set(generatorNameInput);
             currentlyDisplaying.set("App");
         };
     }

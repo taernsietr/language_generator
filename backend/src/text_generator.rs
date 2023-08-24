@@ -35,8 +35,8 @@ impl TextGenerator {
 
     // TODO: Refactor this entire function, this is somewhat disgusting
     pub fn load_pathbuf(file: PathBuf) -> TextGenerator {
-        let data = std::fs::read_to_string(file).expect("Failed to load generator settings file");
-        let generator: TextGenerator = serde_json::from_str::<TextGenerator>(&data).expect("Failed to read JSON data");
+        let data = std::fs::read_to_string(&file).expect("Failed to load generator settings file");
+        let generator: TextGenerator = serde_json::from_str::<TextGenerator>(&data).expect(&format!("Failed to read JSON data in {}", &file.display()));
 
         /* Error checking:
          * patterns must not have any symbol that isn't assigned to a category;
