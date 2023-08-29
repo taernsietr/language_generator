@@ -10,7 +10,6 @@ use crate::pattern::{Pattern, PatternPosition};
 #[derive(Deserialize, Serialize)]
 pub struct TextGenerator {
     name: String,
-    // #[serde(deserialize_with = "Self::deserialize")]
     categories: HashMap<String,Vec<String>>, 
     patterns: Vec<Pattern>,
 }
@@ -36,7 +35,7 @@ impl TextGenerator {
     // TODO: Refactor this entire function, this is somewhat disgusting
     pub fn load_pathbuf(file: PathBuf) -> TextGenerator {
         let data = std::fs::read_to_string(&file).expect("Failed to load generator settings file");
-        let generator: TextGenerator = serde_json::from_str::<TextGenerator>(&data).expect(&format!("Failed to read JSON data in {}", &file.display()));
+        let generator: TextGenerator = serde_json::from_str::<TextGenerator>(&data).unwrap_or_else(|_| panic!("Failed to read JSON data in {}", &file.display()));
 
         /* Error checking:
          * patterns must not have any symbol that isn't assigned to a category;
@@ -60,7 +59,6 @@ impl TextGenerator {
             }
             used_symbols.sort();
             used_symbols.dedup();
-            // dbg!(&defined_symbols, &used_symbols);
             used_symbols.len() <= defined_symbols.len()
         }; 
         if result { generator }
@@ -70,7 +68,6 @@ impl TextGenerator {
     // TODO: Either use a database or smarter file addresses; possibly both for development
     pub fn save(&self) {
         std::fs::write(
-            // format!("{}/src/settings/{}.json", env::current_dir().unwrap().display(), &self.name),
             format!("{}/settings/{}.json", dotenv::var("SETTINGS").unwrap(), &self.name),
             serde_json::to_string(&self).unwrap(),
         )

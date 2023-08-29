@@ -1,7 +1,5 @@
 use std::fs::read_dir;
 use std::collections::HashMap;
-// use std::fmt::{Formatter, Result};
-// use serde::{Deserializer, self, de::Visitor};
 use regex::Regex;
 use chrono::Local;
 use actix_web::HttpRequest;
@@ -26,7 +24,6 @@ fn extract_file_name(path: String) -> String {
 }
 
 pub fn load_generators() -> HashMap<String, TextGenerator> {
-
     let mut generators = HashMap::new();
 
     for file in read_dir(format!("{}/settings/", dotenv::var("SETTINGS").unwrap())).unwrap() {
@@ -39,32 +36,3 @@ pub fn load_generators() -> HashMap<String, TextGenerator> {
     generators
 }
 
-// TextGenerator deserialization
-
-/*
-struct CategoryVisitor;
-
-impl<'de> Visitor<'de> for CategoryVisitor {
-    type Value = String;
-
-    fn expecting(&self, formatter: &mut Formatter) -> Result {
-        formatter.write_str("JSON of the general form { categories: [ { symbol: string, elements: [ string ] } ] }") 
-    }
-
-    fn visit_string<E>(self, value: String) -> Result<Self::Value, E>
-    where
-        E: serde::de::Error,
-    {
-        Ok(String::from(value))
-    }
-}
-
-impl<'de> Deserialize<'de> for String {
-    fn deserialize<D>(deserializer: D)
-        where
-            D: Deserializer<'de>,
-        {
-            deserializer.deserialize_string(CategoryVisitor)
-        }
-}
-*/

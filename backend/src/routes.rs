@@ -103,11 +103,11 @@ pub async fn random_generator(request: HttpRequest, state: web::Data<AppState>) 
     HttpResponse::Ok().body("New random generator created!")
 }
 
-pub async fn convert_xsampa_to_ipa(req_body: String, state: web::Data<AppState>) -> impl Responder {
-    HttpResponse::Ok().body(crate::convert::xsampa_to_ipa(req_body.to_string(), &state.conversion_table))
+pub async fn convert_xsampa_to_ipa(req_body: String) -> impl Responder {
+    HttpResponse::Ok().body(crate::convert::xsampa_to_ipa(req_body.to_string()))
 }
 
-pub async fn convert_ipa_to_xsampa(req_body: String, state: web::Data<AppState>) -> impl Responder {
-    HttpResponse::Ok().body(crate::convert::ipa_to_xsampa(req_body.to_string(), &state.conversion_table))
+pub async fn convert_ipa_to_xsampa(req_body: String) -> impl Responder {
+    HttpResponse::Ok().body(crate::convert::ipa_to_xsampa(req_body.to_string()))
 }
 
