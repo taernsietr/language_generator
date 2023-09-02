@@ -82,7 +82,7 @@ impl TextGenerator {
         serde_json::to_string(&self).unwrap()
     }
 
-    fn random_word(&self, min_syllables: u8, max_syllables: u8) -> String {
+    pub fn random_word(&self, min_syllables: u8, max_syllables: u8) -> String {
         let mut rng = rand::thread_rng();
         let mut word = Vec::<String>::new();
 

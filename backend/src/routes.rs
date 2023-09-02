@@ -96,11 +96,12 @@ pub async fn random_generator(request: HttpRequest, state: web::Data<AppState>) 
     log(request, "Returning random generator".to_string());
 
     let random_generator = TextGenerator::new_random_generator();
+    let name = random_generator.get_name();
     state.generators
         .lock()
         .unwrap()
         .insert(random_generator.get_name(), random_generator);
-    HttpResponse::Ok().body("New random generator created!")
+    HttpResponse::Ok().body(serde_json::to_string(&name).expect("Unable to parse generator name."))
 }
 
 pub async fn convert_xsampa_to_ipa(req_body: String) -> impl Responder {

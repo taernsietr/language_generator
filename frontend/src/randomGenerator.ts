@@ -1,14 +1,16 @@
-import loadSettings from "./loadSettings";
 import loadGenerators from "./loadGenerators";
 import { api_address } from "$lib/env";
 import { currentGenerator } from './store';
 
 // TODO: properly implement this
 async function newRandomGenerator() {
-    fetch(`${api_address}/random_generator`); 
+    let data = await fetch(`${api_address}/random_generator`, { credentials: "same-origin" }); 
+    let randomGeneratorName: string = await data.json();
+
+    console.log("DEBUG:", randomGeneratorName);
+
     await loadGenerators();
-    currentGenerator.set("alpha");
-    await loadSettings("alpha");
+    currentGenerator.set(randomGeneratorName);
 }
 
 export default newRandomGenerator;

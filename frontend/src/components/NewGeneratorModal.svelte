@@ -4,7 +4,7 @@
     import Modal from "./Modal.svelte";
     import Button from "./Button.svelte";
 
-    let generatorNameInput: string;
+    let generatorNameInput: string = "";
 
     async function createAndClose() {
         let temp = $generators;
@@ -12,7 +12,11 @@
         // TODO: validate input
         if(temp.find(element => element == generatorNameInput)) {
             alert("Invalid generator name. A generator with that name already exists.");
-        } else {
+        }
+        else if(!generatorNameInput.trim().length) {
+            alert("Invalid generator name. Field cannot be empty.");
+        }
+        else {
             temp.push(generatorNameInput);
             generators.set(temp);
             currentGenerator.set(generatorNameInput);
