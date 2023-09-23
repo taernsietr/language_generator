@@ -5,11 +5,6 @@ use std::sync::Mutex;
 
 mod helpers;
 mod routes;
-mod text_generator;
-mod random_generators;
-mod pattern;
-mod convert;
-// mod language;
 
 use crate::helpers::*;
 use crate::routes::*;
