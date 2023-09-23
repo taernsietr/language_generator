@@ -139,7 +139,14 @@ impl TextGenerator {
 
             for element in syllable_pattern.pattern().chars() {
                 if element.is_uppercase() || element.is_numeric() { 
-                    word.push(self.categories.get(&element.to_string()).unwrap().choose(&mut rng).unwrap().clone());
+                    word.push(
+                        self.categories
+                            .get(&element.to_string())
+                            .unwrap()
+                            .choose(&mut rng)
+                            .unwrap()
+                            .clone()
+                    );
                 }
                 else if element.is_lowercase() { 
                     word.push(element.to_string());
