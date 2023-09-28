@@ -1,38 +1,41 @@
 use std::fs::read_dir;
+use std::path::PathBuf;
 use std::collections::HashMap;
-use regex::Regex;
 use chrono::Local;
 use actix_web::HttpRequest;
+ 
+use angelspeech::generator::text_generator::TextGenerator;
 
-use crate::text_generator::TextGenerator;
+pub const DATE_FORMAT: &str = "%H:%M:%S";
 
-pub const DF: &str = "%H:%M:%S";
-
-pub fn log(req: HttpRequest, text: String) {
+pub fn log(req: &HttpRequest, text: String) {
     println!("[{}] [SERVER: {:?}]: {}",
-        Local::now().format(DF),
+        Local::now().format(DATE_FORMAT),
         req.peer_addr().unwrap(),
         text
     );
 }
 
-fn extract_file_name(path: String) -> String {
-    let re = Regex::new(r"([\w-]+)\.json").unwrap();
-    // This is panicking if there is anything other than a json in the folder?
-    let result = re.captures(&path).unwrap();
-    result.get(1).unwrap().as_str().to_string()
-}
-
-pub fn load_generators() -> HashMap<String, TextGenerator> {
+pub fn load_generators(settings: PathBuf) -> HashMap<String, TextGenerator> {
     let mut generators = HashMap::new();
 
-    for file in read_dir(format!("{}/settings/", dotenv::var("SETTINGS").unwrap())).unwrap() {
-        generators.insert(
-            extract_file_name(file.as_ref().unwrap().path().into_os_string().into_string().unwrap()),
-            TextGenerator::load_pathbuf(file.unwrap().path())
+    let setting_files = read_dir(settings.as_os_str()).unwrap();
+
+    for file in setting_files {
+        let file_name = file
+            .as_ref()
+            .unwrap()
+            .file_name()
+            .into_string()
+            .unwrap();
+        let generator = TextGenerator::load_local(
+            file.unwrap().path()
         );
+
+        generators.insert(file_name, generator);
     };
 
     generators
 }
+
 
