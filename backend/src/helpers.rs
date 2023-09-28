@@ -25,9 +25,12 @@ pub fn load_generators(settings: PathBuf) -> HashMap<String, TextGenerator> {
         let file_name = file
             .as_ref()
             .unwrap()
-            .file_name()
-            .into_string()
-            .unwrap();
+            .path()
+            .file_stem()
+            .unwrap()
+            .to_str()
+            .unwrap()
+            .to_string();
         let generator = TextGenerator::load_local(
             file.unwrap().path()
         );

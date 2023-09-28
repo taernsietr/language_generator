@@ -49,6 +49,8 @@ pub async fn random_text(request: HttpRequest, query: web::Query<WordParams>, st
 pub async fn get_available_generators(request: HttpRequest, state: web::Data<AppState>) -> impl Responder {
     log(&request, "Requested available generator names".to_string());
 
+    dbg!(&state.generators.lock().unwrap());
+
     // TODO: refactor this
     let mut response = format!("{{ \"generators\": [{}] }}", state.generators.lock().unwrap().values().map(|x| format!("\"{}\", ", x.get_name())).collect::<String>());
     let end = response.find(", ]").unwrap();
@@ -63,6 +65,7 @@ pub async fn get_available_generators(request: HttpRequest, state: web::Data<App
 // If the requested generator isn't found, assume the request used a freshly created name on the
 // frontend and return an empty JSON
 pub async fn get_generator_settings(request: HttpRequest, query: web::Query<GenParams>, state: web::Data<AppState>) -> impl Responder {
+
     match state.generators.lock().unwrap().get(&query.generator) {
         None => { 
             log(&request, format!("[{}] not found", &query.generator));
