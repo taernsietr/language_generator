@@ -21,6 +21,7 @@ pub fn load_generators(settings: PathBuf) -> HashMap<String, TextGenerator> {
 
     let setting_files = read_dir(settings.as_os_str()).unwrap();
 
+    // TODO: simplify
     for file in setting_files {
         let file_name = file
             .as_ref()
@@ -40,5 +41,4 @@ pub fn load_generators(settings: PathBuf) -> HashMap<String, TextGenerator> {
 
     generators
 }
-
 

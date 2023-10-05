@@ -3,6 +3,7 @@
     import loadSettings from "../loadSettings";
     import Modal from "./Modal.svelte";
     import Button from "./Button.svelte";
+    import saveSettings from "../saveSettings";
 
     let generatorNameInput: string = "";
 
@@ -19,6 +20,12 @@
         else {
             temp.push(generatorNameInput);
             generators.set(temp);
+            saveSettings(
+                true,
+                generatorNameInput,
+                [{ pattern: "CV", position: "Any", weight: "Default" }],
+                [["C", "p"], ["V", "a"]]
+            );
             currentGenerator.set(generatorNameInput);
             loadSettings(generatorNameInput);
             currentlyDisplaying.set("App");

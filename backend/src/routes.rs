@@ -1,9 +1,9 @@
 use actix_web::{web, Responder, HttpRequest, HttpResponse};
 use serde::Deserialize;
 use std::{
-    sync::Mutex,
+    sync::{Arc, Mutex},
     collections::HashMap,
-    path::PathBuf
+    path::PathBuf,
 };
 
 use angelspeech::{
@@ -15,10 +15,10 @@ use crate::log;
 
 pub struct AppState {
     pub settings: PathBuf,
-    pub generators: Mutex<HashMap<String, TextGenerator>>,
-    pub default_generators: Vec<String>,
+    pub generators: Arc<Mutex<HashMap<String, TextGenerator>>>,
+    pub default_generators: Vec<String>, // change do Arc
     pub conversion_table: Vec<(String, String)>,
-} 
+}
 
 #[derive(Deserialize)]
 pub struct WordParams {
@@ -49,8 +49,6 @@ pub async fn random_text(request: HttpRequest, query: web::Query<WordParams>, st
 pub async fn get_available_generators(request: HttpRequest, state: web::Data<AppState>) -> impl Responder {
     log(&request, "Requested available generator names".to_string());
 
-    dbg!(&state.generators.lock().unwrap());
-
     // TODO: refactor this
     let mut response = format!("{{ \"generators\": [{}] }}", state.generators.lock().unwrap().values().map(|x| format!("\"{}\", ", x.get_name())).collect::<String>());
     let end = response.find(", ]").unwrap();
@@ -65,7 +63,6 @@ pub async fn get_available_generators(request: HttpRequest, state: web::Data<App
 // If the requested generator isn't found, assume the request used a freshly created name on the
 // frontend and return an empty JSON
 pub async fn get_generator_settings(request: HttpRequest, query: web::Query<GenParams>, state: web::Data<AppState>) -> impl Responder {
-
     match state.generators.lock().unwrap().get(&query.generator) {
         None => { 
             log(&request, format!("[{}] not found", &query.generator));
@@ -79,7 +76,7 @@ pub async fn get_generator_settings(request: HttpRequest, query: web::Query<GenP
 }
 
 pub async fn save_generator(request: HttpRequest, req_body: String, state: web::Data<AppState>) -> impl Responder {
-    let new_generator = serde_json::from_str::<TextGenerator>(&req_body).expect("Failed to read JSON data");
+    let new_generator: TextGenerator = serde_json::from_str::<TextGenerator>(&req_body).expect("Failed to read JSON data");
     let name = &new_generator.get_name(); // dirty workaround, is there a cleaner solution?
  
     if state.default_generators.contains(name) {
