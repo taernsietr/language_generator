@@ -15,8 +15,4 @@ interface GeneratorSettings {
     patterns: PatternType[];
 }
 
-interface GeneratorNames {
-    generators: string[];
-}
-
-export type { CategoryType, PatternType, GeneratorSettings, GeneratorNames }
+export type { CategoryType, PatternType, GeneratorSettings }

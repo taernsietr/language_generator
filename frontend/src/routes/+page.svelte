@@ -29,8 +29,10 @@
 
         <div class="flex md:flex-row sm:flex-col flex-wrap">
             <Menu />
-            <Generator />
-            <Results />
+            <div class="grid grid-cols-2">
+                <Generator />
+                <Results />
+            </div>
             <Settings />
         </div>
     </div>

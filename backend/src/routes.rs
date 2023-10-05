@@ -14,10 +14,10 @@ use angelspeech::{
 use crate::log;
 
 pub struct AppState {
-    pub settings: PathBuf,
+    pub settings: Arc<PathBuf>,
     pub generators: Arc<Mutex<HashMap<String, TextGenerator>>>,
-    pub default_generators: Vec<String>, // change do Arc
-    pub conversion_table: Vec<(String, String)>,
+    pub default_generators: Arc<String>,
+    pub conversion_table: Arc<Vec<(String, String)>>,
 }
 
 #[derive(Deserialize)]
@@ -50,13 +50,14 @@ pub async fn get_available_generators(request: HttpRequest, state: web::Data<App
     log(&request, "Requested available generator names".to_string());
 
     // TODO: refactor this
-    let mut response = format!("{{ \"generators\": [{}] }}", state.generators.lock().unwrap().values().map(|x| format!("\"{}\", ", x.get_name())).collect::<String>());
-    let end = response.find(", ]").unwrap();
-    response.replace_range(end..=end+1, "");
+    // let mut response = format!("{{ \"generators\": [{}] }}", state.generators.lock().unwrap().values().map(|x| format!("\"{}\", ", x.get_name())).collect::<String>());
+    // let end = response.find(", ]").unwrap();
+    // response.replace_range(end..=end+1, "");
+    
+    let response = serde_json::to_string(&state.generators.lock().unwrap().keys().cloned().collect::<Vec<String>>()).expect("Unable to parse default generator names");
+    dbg!(&response);
 
-    HttpResponse::Ok().body(
-        response
-    )
+    HttpResponse::Ok().body(response)
 }
 
 // TODO: refactor
@@ -79,19 +80,20 @@ pub async fn save_generator(request: HttpRequest, req_body: String, state: web::
     let new_generator: TextGenerator = serde_json::from_str::<TextGenerator>(&req_body).expect("Failed to read JSON data");
     let name = &new_generator.get_name(); // dirty workaround, is there a cleaner solution?
  
+    // TODO: handle this on the frontend
     if state.default_generators.contains(name) {
         log(&request, "Received settings for a new generator, but a reserved name was given.".to_string());
         HttpResponse::NoContent().body(format!("[{}] is a default generator name and cannot be used. Please, choose a different name!", &name))
     }
     else if state.generators.lock().unwrap().contains_key(name) {
         log(&request, format!("Updating settings for [{}]", &name));
-        new_generator.save_local(state.settings.clone());
+        new_generator.save_local(state.settings.to_path_buf());
         *state.generators.lock().unwrap().get_mut(name).unwrap() = new_generator;
         HttpResponse::Ok().body("Generator settings updated!")
     }
     else {
         log(&request, format!("Received settings for new generator: [{}]", &name));
-        new_generator.save_local(state.settings.clone());
+        new_generator.save_local(state.settings.to_path_buf());
         state.generators
             .lock()
             .unwrap()
