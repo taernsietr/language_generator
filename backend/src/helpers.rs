@@ -9,7 +9,8 @@ use angelspeech::generator::text_generator::TextGenerator;
 pub const DATE_FORMAT: &str = "%H:%M:%S";
 
 pub fn log(req: &HttpRequest, text: String) {
-    println!("[{}] [SERVER: {:?}]: {}",
+    println!(
+        "[{}] [SERVER: {:?}]: {}",
         Local::now().format(DATE_FORMAT),
         req.peer_addr().unwrap(),
         text

@@ -7,27 +7,34 @@
 
     let generatorNameInput: string = "";
 
+    function sanitizeName(name: string) {
+        let result = name.trim().replace(/(_-)/g, "\$1");
+        result = result.replace(/ /g, "-");
+        return result;
+    }
+
     async function createAndClose() {
         let temp = $generators;
+        let name = sanitizeName(generatorNameInput);
 
         // TODO: validate input
-        if(temp.find(element => element == generatorNameInput)) {
+        if(temp.find(element => element == name)) {
             alert("Invalid generator name. A generator with that name already exists.");
         }
-        else if(!generatorNameInput.trim().length) {
+        else if(!name.length) {
             alert("Invalid generator name. Field cannot be empty.");
         }
         else {
-            temp.push(generatorNameInput);
+            temp.push(name);
             generators.set(temp);
             saveSettings(
                 true,
-                generatorNameInput,
+                name,
                 [{ pattern: "CV", position: "Any", weight: "Default" }],
                 [["C", "p"], ["V", "a"]]
             );
-            currentGenerator.set(generatorNameInput);
-            loadSettings(generatorNameInput);
+            currentGenerator.set(name);
+            loadSettings(name);
             currentlyDisplaying.set("App");
         };
     }

@@ -10,6 +10,7 @@
     import Results from '../components/Results.svelte';
     import Menu from '../components/Menu.svelte';
     import Generator from '../components/Generator.svelte';
+    import IPAPanel from '../components/IPAPanel.svelte';
     
     let loaded = false;
     
@@ -18,7 +19,6 @@
         await loadSettings($currentGenerator);
         loaded = true;
     });
-
 </script>
 
 {#if loaded}
@@ -29,10 +29,9 @@
 
         <div class="flex md:flex-row sm:flex-col flex-wrap">
             <Menu />
-            <div class="grid grid-cols-2">
-                <Generator />
-                <Results />
-            </div>
+            <Generator />
+            <Results />
+            <IPAPanel />
             <Settings />
         </div>
     </div>

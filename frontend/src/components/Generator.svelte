@@ -4,7 +4,13 @@
     import Button from './Button.svelte';
 
     async function getRandomText(length: number = 1) {
-        let response = await fetch(`${api_address}/text?generator=${$currentGenerator}&min=${$minSyllables}&max=${$maxSyllables}&text_length=${length}`, { credentials: "same-origin" })
+        let response = await fetch(`${api_address}/words?generator=${$currentGenerator}&min=${$minSyllables}&max=${$maxSyllables}&text_length=${length}`, { credentials: "same-origin" })
+        let data = await response.text();
+        results.set(data);
+    }
+
+    async function getPseudotext(length: number = 10) {
+        let response = await fetch(`${api_address}/pseudotext?generator=${$currentGenerator}&min=${$minSyllables}&max=${$maxSyllables}&text_length=${length}`, { credentials: "same-origin" })
         let data = await response.text();
         results.set(data);
     }
@@ -62,7 +68,8 @@
         </div>
 
         <div class="bg-bg1 flex-1 flex flex-col flex-nowrap place-content-center">
-            <Button fn={ () => { getRandomText($textLength) } } label={"Random Text"} />
+            <Button fn={ () => { getPseudotext($textLength) } } label={"Pseudotext"} />
+            <Button fn={ () => { getRandomText($textLength) } } label={"Random Words"} />
             <Button fn={ () => { getRandomText() } } label={"Random Word"} />
             <Button fn={ () => { convertXSAMPAToIPA($results) } } label={"Convert X-SAMPA to IPA"} />
             <Button fn={ () => { convertIPAToXSAMPA($results) } } label={"Convert IPA to X-SAMPA"} />
