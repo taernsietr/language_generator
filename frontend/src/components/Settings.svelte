@@ -51,11 +51,11 @@
                 {/each}
             </select>
         </div>
-        <Button fn={ () => { currentlyDisplaying.set("NewGeneratorModal") }} label={"New Generator"} />
-        <Button fn={ () => { saveSettings($unsavedChanges, $currentGenerator, $queuedPatterns, $queuedCategories) }} label={"Save Settings"} />
-        <Button fn={ () => { loadSettings($currentGenerator) }} label={"Reload Generators"} />
-        <Button fn={clearSettings} label={"Clear Settings"} />
-        <Button fn={newRandomGenerator} label={"Random Generator"} />
+        <Button label={"New Generator"} fn={ () => { currentlyDisplaying.set("NewGeneratorModal") }}/>
+        <Button label={"Save Settings"} fn={ () => { saveSettings($unsavedChanges, $currentGenerator, $queuedPatterns, $queuedCategories) }} />
+        <Button label={"Reload Generators"} fn={ () => { loadSettings($currentGenerator) }} />
+        <Button label={"Clear Settings"} fn={clearSettings} />
+        <Button label={"Random Generator"} fn={newRandomGenerator} />
     </div>
     <CategoriesList />
     <PatternsList />

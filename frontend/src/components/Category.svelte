@@ -17,6 +17,7 @@
         setTimeout(() => {
             unsavedChanges.set(true);
             let temp = $queuedCategories;
+            symbol = symbol.toUpperCase();
             temp[id][0] = symbol;
             temp[id][1] = elements;
             queuedCategories.set(temp);
