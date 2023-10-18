@@ -1,4 +1,5 @@
 <script lang="ts">  
+    import "../app.css";
     import { onMount } from 'svelte';
     import { currentlyDisplaying, displaySettings, currentGenerator, generators, categories, patterns, queuedCategories, queuedPatterns, unsavedChanges } from '../store';
 
@@ -26,7 +27,7 @@
 </script>
 
 <NewGeneratorModal />
-<div class={`bg-bg1 basis-full ${$displaySettings ? "flex" : "hidden"} flex-col m-2 p-2 shadow-xl`}>
+<div class={`section-container bg-bg1 basis-full ${$displaySettings ? "flex" : "hidden"} flex-col m-2 p-2 shadow-xl`}>
     <h2 class="text-center text-green">Settings</h2>
     <div class="flex flex-row justify-between m-2 p-2">
         <div class="flex flex-col">

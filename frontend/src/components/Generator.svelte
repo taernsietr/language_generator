@@ -1,4 +1,5 @@
 <script lang="ts">
+    import "../app.css";
     import { minSyllables, maxSyllables, textLength, results, currentGenerator } from '../store.js';
     import { api_address } from '$lib/env';
     import Button from './Button.svelte';
@@ -47,7 +48,7 @@
     }
 </script>
 
-<div class="bg-bg1 basis-full flex flex-col m-2 p-2 place-content-center shadow-xl">
+<div class="bg-bg1 flex flex-1 flex-col m-2 p-2 place-content-center shadow-xl">
     <h2 class="basis-1 text-center text-green">Generation Settings</h2>
     <div class="flex flex-row">
         <div class="bg-bg1 flex-1 flex flex-col flex-nowrap place-content-center">

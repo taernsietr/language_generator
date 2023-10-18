@@ -32,3 +32,12 @@ li {
     list-style-position: inside;
 }
 
+.page-container {
+    width: 100vw;
+    min-width: 100vw;   
+}
+
+.section-container {
+    width: 100%;
+    min-width: 100%;
+}

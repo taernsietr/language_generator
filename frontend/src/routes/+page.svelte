@@ -18,20 +18,22 @@
         await loadGenerators();
         await loadSettings($currentGenerator);
         loaded = true;
-    });
+});
 </script>
 
 {#if loaded}
-    <div class="flex flex-col p-auto">
+    <div class="flex flex-col p-auto page-container">
         <div class="bg-bg1 flex m-2 p-2 place-content-center shadow-xl">
             <h1 class="text-xl text-orange">Random Text Generator</h1>
         </div>
 
-        <div class="flex md:flex-row sm:flex-col flex-wrap">
+        <div class="section-container flex flex-col">
             <Menu />
-            <Generator />
-            <Results />
-            <IPAPanel />
+            <div class="section-container flex flex-row flex-wrap">
+                <Generator />
+                <Results />
+            </div>
+            <!-- <IPAPanel /> -->
             <Settings />
         </div>
     </div>
