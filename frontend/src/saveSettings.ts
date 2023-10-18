@@ -3,16 +3,18 @@ import { parseCatsToJSON } from './parser';
 import { api_address } from '$lib/env';
 import { categories, patterns, unsavedChanges } from './store';
 
-async function saveSettings(unsaved: boolean, currentGenerator: string, pats: PatternType[], cats: string[][]) {
-    
+async function saveSettings(
+    unsaved: boolean,
+    currentGenerator: string,
+    pats: PatternType[],
+    cats: string[][]
+) {
     console.log("unsaved:", unsaved);
 
     if(unsaved) {
         categories.set(cats);
         patterns.set(pats);
         unsavedChanges.set(false);
-        
-        console.log("PATS", pats);
         
         let settings: GeneratorSettings = {
             name: currentGenerator,

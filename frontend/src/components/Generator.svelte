@@ -1,22 +1,34 @@
 <script lang="ts">
     import "../app.css";
-    import { minSyllables, maxSyllables, textLength, results, currentGenerator } from '../store.js';
+    import { minSyllables, maxSyllables, textLength, results, currentGenerator, unsavedChanges, queuedPatterns, queuedCategories } from '../store.js';
     import { api_address } from '$lib/env';
     import Button from './Button.svelte';
+    import saveSettings from "../saveSettings";
 
-    async function getRandomText(length: number = 1) {
-        let response = await fetch(`${api_address}/words?generator=${$currentGenerator}&min=${$minSyllables}&max=${$maxSyllables}&text_length=${length}`, { credentials: "same-origin" })
-        let data = await response.text();
-        results.set(data);
+    enum TextGenerationMethod {
+        Pseudotext,
+        RandomText
     }
 
-    async function getPseudotext(length: number = 10) {
-        let response = await fetch(`${api_address}/pseudotext?generator=${$currentGenerator}&min=${$minSyllables}&max=${$maxSyllables}&text_length=${length}`, { credentials: "same-origin" })
+    async function getText(method: TextGenerationMethod, length: number = 1) {
+        let url_method = "";
+        switch(method) {
+            case TextGenerationMethod.Pseudotext:
+                url_method = "pseudotext";
+                break;
+            case TextGenerationMethod.RandomText:
+                url_method = "words";
+                break;
+            default:
+                break;
+        }
+        if($unsavedChanges) { saveSettings($unsavedChanges, $currentGenerator, $queuedPatterns, $queuedCategories); }
+        let response = await fetch(`${api_address}/${url_method}?generator=${$currentGenerator}&min=${$minSyllables}&max=${$maxSyllables}&text_length=${length}`, { credentials: "same-origin" })
         let data = await response.text();
         results.set(data);
     }
         
-    /// TODO
+    // TODO
     async function convertXSAMPAToIPA(xsampa: string) {
         let data = await fetch(`${api_address}/xsampa-ipa`, {
             method: "POST",
@@ -69,9 +81,9 @@
         </div>
 
         <div class="bg-bg1 flex-1 flex flex-col flex-nowrap place-content-center">
-            <Button fn={ () => { getPseudotext($textLength) } } label={"Pseudotext"} />
-            <Button fn={ () => { getRandomText($textLength) } } label={"Random Words"} />
-            <Button fn={ () => { getRandomText() } } label={"Random Word"} />
+            <Button fn={ () => { getText(TextGenerationMethod.Pseudotext, $textLength) } } label={"Pseudotext"} />
+            <Button fn={ () => { getText(TextGenerationMethod.RandomText, $textLength) } } label={"Random Words"} />
+            <Button fn={ () => { getText(TextGenerationMethod.RandomText) } } label={"Random Word"} />
             <Button fn={ () => { convertXSAMPAToIPA($results) } } label={"Convert X-SAMPA to IPA"} />
             <Button fn={ () => { convertIPAToXSAMPA($results) } } label={"Convert IPA to X-SAMPA"} />
         </div>

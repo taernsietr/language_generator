@@ -44,7 +44,6 @@
                         queuedCategories.set($categories);
                         queuedPatterns.set($patterns);
                     }, 300);
-                   
                 }} 
             >
                 {#each $generators as option}
