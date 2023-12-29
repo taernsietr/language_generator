@@ -25,6 +25,7 @@ pub struct WordParams {
     generator: String,
     min: u8,
     max: u8,
+    bias: f32,
     text_length: u8,
 }
 
@@ -45,7 +46,7 @@ pub async fn random_words(
         },
         Some(gen) => { 
             log(&request, format!("Generating words with [{}], length {}, with words of {} to {} syllables", &query.generator, &query.text_length, &query.min, &query.max));
-            HttpResponse::Ok().body(gen.random_text(query.min, query.max, query.text_length)) 
+            HttpResponse::Ok().body(gen.random_text(query.min, query.max, query.bias, query.text_length)) 
         } 
     }
 }
@@ -62,7 +63,7 @@ pub async fn pseudotext(
         },
         Some(gen) => { 
             log(&request, format!("Generating pseudotext with [{}], length {}, with words of {} to {} syllables", &query.generator, &query.text_length, &query.min, &query.max));
-            HttpResponse::Ok().body(gen.pseudotext(query.min, query.max, query.text_length.into())) 
+            HttpResponse::Ok().body(gen.pseudotext(query.min, query.max, query.bias, query.text_length.into())) 
         } 
     }
 }

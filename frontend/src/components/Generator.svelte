@@ -1,6 +1,6 @@
 <script lang="ts">
     import "../app.css";
-    import { minSyllables, maxSyllables, textLength, results, currentGenerator, unsavedChanges, queuedPatterns, queuedCategories } from '../store.js';
+    import { minSyllables, maxSyllables, syllableBias, textLength, results, currentGenerator, unsavedChanges, queuedPatterns, queuedCategories } from '../store.js';
     import { api_address } from '$lib/env';
     import Button from './Button.svelte';
     import saveSettings from "../saveSettings";
@@ -23,7 +23,7 @@
                 break;
         }
         if($unsavedChanges) { saveSettings($unsavedChanges, $currentGenerator, $queuedPatterns, $queuedCategories); }
-        let response = await fetch(`${api_address}/${url_method}?generator=${$currentGenerator}&min=${$minSyllables}&max=${$maxSyllables}&text_length=${length}`, { credentials: "same-origin" })
+        let response = await fetch(`${api_address}/${url_method}?generator=${$currentGenerator}&min=${$minSyllables}&max=${$maxSyllables}&bias=${$syllableBias}&text_length=${length}`, { credentials: "same-origin" })
         let data = await response.text();
         results.set(data);
     }
@@ -72,6 +72,11 @@
             <div class="flex flex-nowrap m-2 p-2 place-content-center">
                 <label class="place-content-center m-2 p-2 text-fg" for="maxSyllables">Max syllables:</label>
                 <input class="bg-bg2 text-yellow m-2 p-2 text-center no-spinner" type="number" bind:value={$maxSyllables} min="1" max="255" id="maxSyllables" name="maxSyllables">
+            </div>
+
+            <div class="flex flex-nowrap m-2 p-2 place-content-center">
+                <label class="place-content-center m-2 p-2 text-fg" for="syllableBias">Bias:</label>
+                <input class="bg-bg2 text-yellow m-2 p-2 text-center no-spinner" type="range" bind:value={$syllableBias} min="-1.0" max="1.0" step="0.1" id="syllableBias" name="syllableBias">
             </div>
 
             <div class="flex flex-nowrap m-2 p-2 place-content-center">

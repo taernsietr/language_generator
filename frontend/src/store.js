@@ -10,6 +10,7 @@ export const currentlyDisplaying = writable("App");
 // Generation settings
 export const minSyllables = writable(1);
 export const maxSyllables = writable(3);
+export const syllableBias = writable(0.0);
 export const textLength = writable(20);
 
 // Generators and generator data
