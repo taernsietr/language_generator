@@ -76,7 +76,7 @@
 
             <div class="flex flex-nowrap m-2 p-2 place-content-center">
                 <label class="place-content-center m-2 p-2 text-fg" for="syllableBias">Bias:</label>
-                <input class="bg-bg2 text-yellow m-2 p-2 text-center no-spinner" type="range" bind:value={$syllableBias} min="-1.0" max="1.0" step="0.1" id="syllableBias" name="syllableBias">
+                <input class="bg-bg2 text-yellow m-2 p-2 text-center" type="range" bind:value={$syllableBias} min="-1.0" max="1.0" step="0.1" id="syllableBias" name="syllableBias">
             </div>
 
             <div class="flex flex-nowrap m-2 p-2 place-content-center">

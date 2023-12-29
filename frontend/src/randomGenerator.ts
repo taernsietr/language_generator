@@ -1,6 +1,7 @@
 import loadGenerators from "./loadGenerators";
 import { api_address } from "$lib/env";
 import { currentGenerator } from './store';
+import loadSettings from "./loadSettings";
 
 // TODO: properly implement this
 async function newRandomGenerator() {
@@ -11,6 +12,7 @@ async function newRandomGenerator() {
 
     await loadGenerators();
     currentGenerator.set(randomGeneratorName);
+    loadSettings(randomGeneratorName);
 }
 
 export default newRandomGenerator;
