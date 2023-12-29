@@ -8,7 +8,10 @@ use std::{
 
 use angelspeech::{
     generator::text_generator::TextGenerator,
-    utils::convert::{xsampa_to_ipa, ipa_to_xsampa}
+    utils::{
+        convert::{xsampa_to_ipa, ipa_to_xsampa},
+        ipa_query
+    },
 };
 
 use crate::log;
@@ -63,7 +66,7 @@ pub async fn pseudotext(
         },
         Some(gen) => { 
             log(&request, format!("Generating pseudotext with [{}], length {}, with words of {} to {} syllables", &query.generator, &query.text_length, &query.min, &query.max));
-            HttpResponse::Ok().body(gen.pseudotext(query.min, query.max, query.bias, query.text_length.into())) 
+            HttpResponse::Ok().body(gen.pseudotext(query.min, query.max, query.bias, query.text_length)) 
         } 
     }
 }
@@ -75,12 +78,12 @@ pub async fn get_available_generators(
     log(&request, "Requested available generator names".to_string());
 
         let response = serde_json::to_string(
-        &state.generators
-            .lock()
-            .unwrap()
-            .keys()
-            .cloned()
-            .collect::<Vec<String>>()
+            &state.generators
+                .lock()
+                .unwrap()
+                .keys()
+                .cloned()
+                .collect::<Vec<String>>()
         ).expect("Unable to parse default generator names");
 
     HttpResponse::Ok().body(response)
@@ -156,3 +159,8 @@ pub async fn convert_ipa_to_xsampa(req_body: String) -> impl Responder {
     HttpResponse::Ok().body(ipa_to_xsampa(req_body.to_string()))
 }
 
+pub async fn ipa_resources() -> impl Responder {
+    HttpResponse::Ok().body(
+        serde_json::to_string(&ipa_query::get_ipa()).expect("Failed to parse IPA symbols")
+    )
+}

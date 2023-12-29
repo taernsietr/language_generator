@@ -4,7 +4,7 @@ import { parseCatsFromJSON } from './parser';
 import { categories, patterns } from './store';
 
 async function loadSettings(currentGenerator: string) {
-    let data = await fetch(`${api_address}/settings?generator=${currentGenerator}`, { credentials: "same-origin" });
+    let data = await fetch(`${api_address}/generators/settings?generator=${currentGenerator}`, { credentials: "same-origin" });
     let json: GeneratorSettings = await data.json();
     
     categories.set(parseCatsFromJSON(json.categories));

@@ -23,14 +23,14 @@
                 break;
         }
         if($unsavedChanges) { saveSettings($unsavedChanges, $currentGenerator, $queuedPatterns, $queuedCategories); }
-        let response = await fetch(`${api_address}/${url_method}?generator=${$currentGenerator}&min=${$minSyllables}&max=${$maxSyllables}&bias=${$syllableBias}&text_length=${length}`, { credentials: "same-origin" })
+        let response = await fetch(`${api_address}/generators/${url_method}?generator=${$currentGenerator}&min=${$minSyllables}&max=${$maxSyllables}&bias=${$syllableBias}&text_length=${length}`, { credentials: "same-origin" })
         let data = await response.text();
         results.set(data);
     }
         
     // TODO
     async function convertXSAMPAToIPA(xsampa: string) {
-        let data = await fetch(`${api_address}/xsampa-ipa`, {
+        let data = await fetch(`${api_address}/generators/xsampa-ipa`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(xsampa),
@@ -45,7 +45,7 @@
     }
 
     async function convertIPAToXSAMPA(ipa: string) {
-        let data = await fetch(`${api_address}/ipa-xsampa`, {
+        let data = await fetch(`${api_address}/generators/ipa-xsampa`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(ipa),
@@ -58,6 +58,17 @@
             results.set(response);
         }
     }
+
+    async function ipa_testing() {
+        let response = await fetch(`${api_address}/ipa`);
+        IPA_CONTENTS = await response.json();
+        console.log(IPA_CONTENTS);
+        IPA_TEST = true;
+    }
+
+    let IPA_TEST = false;
+    let IPA_CONTENTS: string[];
+
 </script>
 
 <div class="bg-bg1 flex flex-1 flex-col m-2 p-2 place-content-center shadow-xl">
@@ -91,7 +102,13 @@
             <Button fn={ () => { getText(TextGenerationMethod.RandomText) } } label={"Random Word"} />
             <Button fn={ () => { convertXSAMPAToIPA($results) } } label={"Convert X-SAMPA to IPA"} />
             <Button fn={ () => { convertIPAToXSAMPA($results) } } label={"Convert IPA to X-SAMPA"} />
+            <Button fn={ ipa_testing } label={"IPA TESTING"} />
         </div>
     </div>
+    {#if IPA_TEST}
+        {#each IPA_CONTENTS as IPA_ITEM}
+            <Button fn={ () => {alert(IPA_ITEM)} } label={IPA_ITEM} />
+        {/each}
+    {/if}
 </div>
 

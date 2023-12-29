@@ -44,6 +44,10 @@ async fn main() -> std::io::Result<()> {
                     .route("/xsampa-ipa", web::post().to(convert_xsampa_to_ipa))
                     .route("/ipa-xsampa", web::post().to(convert_ipa_to_xsampa))
             )
+            .service(
+                web::scope("/ipa")
+                    .route("", web::get().to(ipa_resources))
+            )
     })
     .bind(server_address)?
     .run()
