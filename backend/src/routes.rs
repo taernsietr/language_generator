@@ -48,7 +48,12 @@ pub async fn random_words(
             HttpResponse::NotFound().body(format!("Generator [{}] not found.", &query.generator))
         },
         Some(gen) => { 
-            log(&request, format!("Generating words with [{}], length {}, with words of {} to {} syllables", &query.generator, &query.text_length, &query.min, &query.max));
+            log(&request, format!("Generating words with [{}], length {}, with words of {} to {} syllables",
+                &query.generator,
+                &query.text_length,
+                &query.min,
+                &query.max)
+            );
             let text = {
                 let mut text = gen.random_text(query.min, query.max, query.bias, query.text_length);
                 for rule in gen.ruleset.iter() {
@@ -72,7 +77,12 @@ pub async fn pseudotext(
             HttpResponse::NotFound().body(format!("Generator [{}] not found.", &query.generator))
         },
         Some(gen) => { 
-            log(&request, format!("Generating pseudotext with [{}], length {}, with words of {} to {} syllables", &query.generator, &query.text_length, &query.min, &query.max));
+            log(&request, format!("Generating pseudotext with [{}], length {}, with words of {} to {} syllables",
+                &query.generator,
+                &query.text_length,
+                &query.min,
+                &query.max)
+            );
             HttpResponse::Ok().body(gen.pseudotext(query.min, query.max, query.bias, query.text_length)) 
         } 
     }
