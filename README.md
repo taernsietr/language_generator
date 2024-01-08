@@ -21,9 +21,6 @@ be usable, but it remains as it began - a study project. However, should
 someone wish to use this as-is, I _will_ at some point make releases - after
 all, that is also something I need to learn how to do properly.  
 
-*Currently, all this is is a barebones Rust API written with Actix and a simple
-(and fragile) frontend in Svelte.*
-
 ## Features  
 
 There's no well-defined set of features and capabilities I want to add to this
@@ -32,23 +29,21 @@ inventories, phonologies and pseudotext. Some specific use cases are listed
 below, but they can be changed, removed or more might be added to the list.  
 
 ### Core Stuff
-- [ ] Include IPA symbol picker  
-- [x] Parse X-SAMPA to IPA  
-- [x] Parse IPA to X-SAMPA  
-- [x] Save to JSON  
-- [x] Load from JSON  
+- [ ] IPA symbol picker  
+- [ ] Parse X-SAMPA to IPA  
+- [ ] Parse IPA to X-SAMPA  
 
 ### Simpler text stuff
-- All anagrams
-- Filtered anagrams
-- Words: Random set  
-- Words: All possible  
-- Words: Weighted  
-- Words: Filtered  
-- Words: Static affixes (_e.g. baCV_)  
-- Words: Analyze a given word
-- Text: Word size weighting
-- Text: Pseudotext (_text that is not just a bunch of fully random words
+- [ ] All anagrams
+- [ ] Filtered anagrams
+- [x] Words: Random set  
+- [ ] Words: All possible  
+- [ ] Words: Weighted  
+- [ ] Words: Filtered  
+- [x] Words: Static affixes (_e.g. baCV_)  
+- [ ] Words: Analyze a given word
+- [x] Text: Word size weighting
+- [x] Text: Pseudotext (_text that is not just a bunch of fully random words
   without punctuation, but could be mistaken for actual text_)  
 
 ### Harder text stuff
@@ -56,14 +51,12 @@ below, but they can be changed, removed or more might be added to the list.
 - Word-level rules
 - Sandhi rules
 
-#### Phonology
+### Late-game stuff: Phonology, Morphosyntax, etc
 - Fully random generation  
 - Filtered random generation
 - Sample-based generation  
 - Phonetic layer  
 - Phonemic layer  
-
-#### Morphosyntax
 - Noun declension  
 - Verb declension  
 
