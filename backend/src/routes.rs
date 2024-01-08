@@ -128,6 +128,7 @@ pub async fn save_generator(
     req_body: String,
     state: web::Data<Arc<AppState>>
 ) -> impl Responder {
+    println!("DEBUG: {}", req_body);
     let new_generator: TextGenerator = serde_json::from_str::<TextGenerator>(&req_body).expect("Failed to read JSON data");
     let name = &new_generator.get_name();
  

@@ -31,11 +31,14 @@
                 true,
                 name,
                 [{ pattern: "CV", position: "Any", weight: "Default" }],
-                [["C", "p"], ["V", "a"]]
+                [["C", "m"], ["V", "a"]],
+                []
             );
             currentGenerator.set(name);
-            loadSettings(name);
-            currentlyDisplaying.set("App");
+            setTimeout(() => {
+                loadSettings(name);
+                currentlyDisplaying.set("App");
+            }, 300);
         };
     }
 </script>

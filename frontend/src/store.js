@@ -18,6 +18,7 @@ export const generators = writable(["loading generators..."]);
 export const currentGenerator = writable();
 export const categories = writable();
 export const patterns = writable();
+export const ruleset = writable();
 export const queuedCategories = writable();
 export const queuedPatterns = writable();
 

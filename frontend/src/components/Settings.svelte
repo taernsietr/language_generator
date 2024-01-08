@@ -1,7 +1,17 @@
 <script lang="ts">  
     import "../app.css";
     import { onMount } from 'svelte';
-    import { currentlyDisplaying, displaySettings, currentGenerator, generators, categories, patterns, queuedCategories, queuedPatterns, unsavedChanges } from '../store';
+    import { 
+        currentlyDisplaying,
+		displaySettings,
+		currentGenerator,
+		generators,
+		categories,
+		patterns,
+		queuedCategories,
+		queuedPatterns,
+        unsavedChanges
+    } from '../store';
 
     import loadSettings from '../loadSettings'; 
     import saveSettings from '../saveSettings';
@@ -37,7 +47,12 @@
                 bind:value={$currentGenerator} 
                 on:change={ () => {
                     if($unsavedChanges) {
-                        saveSettings($unsavedChanges, $currentGenerator, $queuedPatterns, $queuedCategories);
+                        saveSettings(
+                            $unsavedChanges,
+                            $currentGenerator,
+                            $queuedPatterns,
+                            $queuedCategories
+                        );
                     } 
                     loadSettings($currentGenerator);
                     setTimeout(() => { 

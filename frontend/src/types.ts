@@ -9,10 +9,16 @@ interface PatternType {
     weight: string;
 }
 
+interface RuleType {
+    context: string;
+    result: string;
+}
+
 interface GeneratorSettings {
     name: string;
     categories: CategoryType[];
     patterns: PatternType[];
+    ruleset: RuleType[];
 }
 
-export type { CategoryType, PatternType, GeneratorSettings }
+export type { CategoryType, PatternType, RuleType, GeneratorSettings }

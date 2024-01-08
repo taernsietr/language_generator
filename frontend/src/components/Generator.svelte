@@ -1,6 +1,16 @@
 <script lang="ts">
     import "../app.css";
-    import { minSyllables, maxSyllables, syllableBias, textLength, results, currentGenerator, unsavedChanges, queuedPatterns, queuedCategories } from '../store.js';
+    import {
+        minSyllables,
+		maxSyllables,
+		syllableBias,
+		textLength,
+		results,
+		currentGenerator,
+		unsavedChanges,
+		queuedPatterns,
+        queuedCategories
+    } from '../store.js';
     import { api_address } from '$lib/env';
     import Button from './Button.svelte';
     import saveSettings from "../saveSettings";
@@ -22,8 +32,13 @@
             default:
                 break;
         }
-        if($unsavedChanges) { saveSettings($unsavedChanges, $currentGenerator, $queuedPatterns, $queuedCategories); }
-        let response = await fetch(`${api_address}/generators/${url_method}?generator=${$currentGenerator}&min=${$minSyllables}&max=${$maxSyllables}&bias=${$syllableBias}&text_length=${length}`, { credentials: "same-origin" })
+        if($unsavedChanges) {
+            saveSettings($unsavedChanges, $currentGenerator, $queuedPatterns, $queuedCategories);
+        }
+        let response = await fetch(
+            `${api_address}/generators/${url_method}?generator=${$currentGenerator}&min=${$minSyllables}&max=${$maxSyllables}&bias=${$syllableBias}&text_length=${length}`,
+            { credentials: "same-origin" }
+        );
         let data = await response.text();
         results.set(data);
     }
