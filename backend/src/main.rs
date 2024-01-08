@@ -15,12 +15,12 @@ async fn main() -> std::io::Result<()> {
     let server_address = dotenv::var("SERVER_ADDR").unwrap_or_else(|_| "[::1]:8080".to_string());
 
     let arc_data = web::Data::new(
-        AppState {
-            settings: Arc::new(PathBuf::from(dotenv::var("SETTINGS").unwrap())),
-            generators: Arc::new(Mutex::new(load_generators(PathBuf::from(dotenv::var("SETTINGS").unwrap())))),
-            default_generators: Arc::new(dotenv::var("DEFAULT_GENERATORS").unwrap().split(", ").map(|a| a.to_string()).collect()),
-            conversion_table: Arc::new(serde_json::from_str(&std::fs::read_to_string(PathBuf::from(dotenv::var("RESOURCES").unwrap()).join("conversion_table.json")).unwrap()).unwrap())
-        }
+        Arc::new(AppState {
+            settings: PathBuf::from(dotenv::var("SETTINGS").unwrap()),
+            generators: Mutex::new(load_generators(PathBuf::from(dotenv::var("SETTINGS").unwrap()))),
+            default_generators: dotenv::var("DEFAULT_GENERATORS").unwrap().split(", ").map(|a| a.to_string()).collect(),
+            conversion_table: serde_json::from_str(&std::fs::read_to_string(PathBuf::from(dotenv::var("RESOURCES").unwrap()).join("conversion_table.json")).unwrap()).unwrap()
+        })
     );
 
     println!(

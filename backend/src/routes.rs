@@ -17,10 +17,10 @@ use angelspeech::{
 use crate::log;
 
 pub struct AppState {
-    pub settings: Arc<PathBuf>,
-    pub generators: Arc<Mutex<HashMap<String, TextGenerator>>>,
-    pub default_generators: Arc<String>,
-    pub conversion_table: Arc<Vec<(String, String)>>,
+    pub settings: PathBuf,
+    pub generators: Mutex<HashMap<String, TextGenerator>>,
+    pub default_generators: String,
+    pub conversion_table: Vec<(String, String)>,
 }
 
 #[derive(Deserialize)]
@@ -40,7 +40,7 @@ pub struct GenParams {
 pub async fn random_words(
     request: HttpRequest,
     query: web::Query<WordParams>,
-    state: web::Data<AppState>
+    state: web::Data<Arc<AppState>>
 ) -> impl Responder {
     match state.generators.lock().unwrap().get(&query.generator) {
         None => { 
@@ -57,7 +57,7 @@ pub async fn random_words(
 pub async fn pseudotext(
     request: HttpRequest,
     query: web::Query<WordParams>,
-    state: web::Data<AppState>
+    state: web::Data<Arc<AppState>>
 ) -> impl Responder {
     match state.generators.lock().unwrap().get(&query.generator) {
         None => { 
@@ -73,7 +73,7 @@ pub async fn pseudotext(
 
 pub async fn get_available_generators(
     request: HttpRequest,
-    state: web::Data<AppState>
+    state: web::Data<Arc<AppState>>
 ) -> impl Responder {
     log(&request, "Requested available generator names".to_string());
 
@@ -92,7 +92,7 @@ pub async fn get_available_generators(
 pub async fn get_generator_settings(
     request: HttpRequest,
     query: web::Query<GenParams>,
-    state: web::Data<AppState>
+    state: web::Data<Arc<AppState>>
 ) -> impl Responder {
     match state.generators.lock().unwrap().get(&query.generator) {
         None => { 
@@ -109,7 +109,7 @@ pub async fn get_generator_settings(
 pub async fn save_generator(
     request: HttpRequest,
     req_body: String,
-    state: web::Data<AppState>
+    state: web::Data<Arc<AppState>>
 ) -> impl Responder {
     let new_generator: TextGenerator = serde_json::from_str::<TextGenerator>(&req_body).expect("Failed to read JSON data");
     let name = &new_generator.get_name();
@@ -138,7 +138,7 @@ pub async fn save_generator(
 
 pub async fn random_generator(
     request: HttpRequest,
-    state: web::Data<AppState>
+    state: web::Data<Arc<AppState>>
 ) -> impl Responder {
     log(&request, "Returning random generator".to_string());
 

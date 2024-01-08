@@ -22,7 +22,7 @@ async function saveSettings(
             patterns: pats
         };
 
-        fetch(`${api_address}/save`, {
+            fetch(`${api_address}/generators/save`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(settings),

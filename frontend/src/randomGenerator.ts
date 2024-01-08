@@ -5,7 +5,7 @@ import loadSettings from "./loadSettings";
 
 // TODO: properly implement this
 async function newRandomGenerator() {
-    let data = await fetch(`${api_address}/random_generator`, { credentials: "same-origin" }); 
+    let data = await fetch(`${api_address}/generators/random_generator`, { credentials: "same-origin" }); 
     let randomGeneratorName: string = await data.json();
 
     console.log("DEBUG:", randomGeneratorName);
