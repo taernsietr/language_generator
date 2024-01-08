@@ -49,7 +49,14 @@ pub async fn random_words(
         },
         Some(gen) => { 
             log(&request, format!("Generating words with [{}], length {}, with words of {} to {} syllables", &query.generator, &query.text_length, &query.min, &query.max));
-            HttpResponse::Ok().body(gen.random_text(query.min, query.max, query.bias, query.text_length)) 
+            let text = {
+                let mut text = gen.random_text(query.min, query.max, query.bias, query.text_length);
+                for rule in gen.ruleset.iter() {
+                    text = rule.apply(&text);
+                };
+                text
+            };
+            HttpResponse::Ok().body(text) 
         } 
     }
 }
