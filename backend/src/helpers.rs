@@ -4,7 +4,7 @@ use std::collections::HashMap;
 use chrono::Local;
 use actix_web::HttpRequest;
  
-use angelspeech::generator::text_generator::TextGenerator;
+use angelspeech::prelude::TextGenerator;
 
 pub const DATE_FORMAT: &str = "%H:%M:%S";
 
