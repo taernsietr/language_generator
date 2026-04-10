@@ -1,45 +1,28 @@
-use std::fs::read_dir;
-use std::path::PathBuf;
-use std::collections::HashMap;
-use chrono::Local;
-use actix_web::HttpRequest;
- 
+use std::sync::{Arc, Mutex};
+use actix_web::web;
+use sqlx::PgPool;
 use angelspeech::prelude::TextGenerator;
 
-pub const DATE_FORMAT: &str = "%H:%M:%S";
+use crate::types::*;
 
-pub fn log(req: &HttpRequest, text: String) {
-    println!(
-        "[{}] [SERVER: {:?}]: {}",
-        Local::now().format(DATE_FORMAT),
-        req.peer_addr().unwrap(),
-        text
-    );
-}
+pub async fn initialize_shared_data() -> web::Data<AppState> {
+    let database_address = dotenvy::var("POSTGRES_HOST")
+        .expect("Couldn't find the environment variable for the Postgres database.");
 
-pub fn load_generators(settings: PathBuf) -> HashMap<String, TextGenerator> {
-    let mut generators = HashMap::new();
+    let database = PgPool::connect(&database_address)
+        .await
+        .expect("Couldn't connect to database.");
 
-    let setting_files = read_dir(settings.as_os_str()).unwrap();
+    let data: Vec<TextGenerator> = sqlx::query_as("SELECT * FROM generators")
+        .fetch_all(&database)
+        .await
+        .expect("Failed to retrieve generator data.");
 
-    // TODO: simplify
-    for file in setting_files {
-        let file_name = file
-            .as_ref()
-            .unwrap()
-            .path()
-            .file_stem()
-            .unwrap()
-            .to_str()
-            .unwrap()
-            .to_string();
-        let generator = TextGenerator::load_local(
-            file.unwrap().path()
-        );
-
-        generators.insert(file_name, generator);
-    };
-
-    generators
+    web::Data::from(
+        Arc::new(AppState {
+            generators: Mutex::new(data),
+            database
+        })
+    )
 }
 

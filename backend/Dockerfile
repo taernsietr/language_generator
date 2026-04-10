@@ -1,18 +1,14 @@
-FROM rust:latest as builder
-RUN USER=root cargo new app
-WORKDIR /usr/src/app
+FROM rust:latest AS builder
+WORKDIR /usr/src/language_generator
 COPY Cargo.toml Cargo.lock ./
-RUN mkdir src && echo "fn main(){}" > src/main.rs
+COPY src ./src
 RUN --mount=type=cache,target=/usr/local/cargo/registry \
     --mount=type=cache,target=/usr/src/app/target \
     cargo build --release
-COPY . .
-RUN --mount=type=cache,target=/usr/local/cargo/registry \
-    --mount=type=cache,target=/usr/src/app/target \
-    cargo install --path .
-FROM debian:bullseye-slim
-RUN useradd -ms /bin/bash app
-USER app
-WORKDIR /app
-COPY --from=builder /usr/local/cargo/bin/language_generator /app/language_generator
 
+FROM rust:alpine
+RUN addgroup -S angelspeech
+RUN adduser -S angelspeech -G angelspeech
+USER angelspeech 
+WORKDIR /angelspeech
+COPY --from=builder /usr/src/app/target/release/language_generator /angelspeech

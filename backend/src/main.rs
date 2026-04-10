@@ -1,62 +1,29 @@
 pub(crate) mod helpers;
 pub(crate) mod routes;
+pub(crate) mod scopes;
 pub(crate) mod types;
+pub(crate) mod log;
 
-use actix_web::{web, App, HttpServer};
+use actix_web::{App, HttpServer};
 use actix_cors::Cors;
-use chrono::Local;
-use std::sync::{Arc, Mutex};
-use std::path::PathBuf;
 
-use crate::types::*;
 use crate::helpers::*;
-use crate::routes::{
-    get_generator_settings::get_generator_settings,
-    get_available_generators::get_available_generators,
-    save_generator::save_generator,
-    pseudotext::pseudotext,
-    random_words::random_words,
-    random_generator::random_generator
-};
+use crate::log::*;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    let server_address = dotenv::var("SERVER_ADDR").unwrap_or_else(|_| "[::1]:8080".to_string());
 
-    let arc_data = web::Data::new(
-        Arc::new(AppState {
-            settings: PathBuf::from(dotenv::var("SETTINGS").unwrap()),
-            generators: Mutex::new(load_generators(PathBuf::from(dotenv::var("SETTINGS").unwrap()))),
-            default_generators: dotenv::var("DEFAULT_GENERATORS").unwrap().split(", ").map(|a| a.to_string()).collect(),
-            // conversion_table: serde_json::from_str(&std::fs::read_to_string(PathBuf::from(dotenv::var("RESOURCES").unwrap()).join("conversion_table.json")).unwrap()).unwrap()
-        })
-    );
-
-    println!(
-        "[{}] [SERVER]: Server up! Open your preferred browser and access 「http://{}」!",
-        Local::now().format(DATE_FORMAT),
-        &server_address
-    );
-
+    let server_address = dotenvy::var("SERVER_ADDRESS")
+        .expect("Couldn't find the environment variable for the server address.");
+    let data = initialize_shared_data().await;
+    
+    server_start_msg(&server_address);
+    
     HttpServer::new(move || {
         App::new()
             .wrap(Cors::permissive())
-            .app_data(arc_data.clone())
-            .service(
-                web::scope("/generators")
-                    .route("", web::get().to(get_available_generators))
-                    .route("/words", web::get().to(random_words))
-                    .route("/pseudotext", web::get().to(pseudotext))
-                    .route("/settings", web::get().to(get_generator_settings))
-                    .route("/save", web::post().to(save_generator))
-                    .route("/random_generator", web::get().to(random_generator))
-//                    .route("/xsampa-ipa", web::post().to(convert_xsampa_to_ipa))
-//                    .route("/ipa-xsampa", web::post().to(convert_ipa_to_xsampa))
-            )
-//            .service(
-//                web::scope("/ipa")
-//                    .route("", web::get().to(ipa_resources))
-//            )
+            .app_data(data.clone())
+            .service(scopes::generators())
     })
     .bind(server_address)?
     .run()

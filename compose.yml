@@ -1,0 +1,37 @@
+name: angelspeech
+networks:
+  angelspeech:
+    name: angelspeech
+    driver: bridge
+    enable_ipv6: true
+services:
+  database:
+    container_name: angelspeech-database
+    hostname: angelspeech-database
+    image: postgres:18-alpine
+    shm_size: 256mb
+    networks:
+      - angelspeech
+    ports:
+      - "30010:5432"
+    environment:
+      - POSTGRES_USER=angelspeech
+      - POSTGRES_PASSWORD=scatman
+      - POSTGRES_DB=generator
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U angelspeech -d generator"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  api:
+    build: ./backend
+    container_name: angelspeech-api
+    hostname: angelspeech-api
+    networks:
+      - angelspeech
+    ports:
+      - "30011:8080"
+    depends_on:
+      database:
+        condition: service_healthy
+
