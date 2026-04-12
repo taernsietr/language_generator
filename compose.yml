@@ -17,9 +17,9 @@ services:
     environment:
       - POSTGRES_USER=angelspeech
       - POSTGRES_PASSWORD=scatman
-      - POSTGRES_DB=generator
+      - POSTGRES_DB=angelspeech
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U angelspeech -d generator"]
+      test: ["CMD-SHELL", "pg_isready -U angelspeech -d angelspeech"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -27,6 +27,8 @@ services:
     build: ./backend
     container_name: angelspeech-api
     hostname: angelspeech-api
+    env_file:
+        - ./backend/.env 
     networks:
       - angelspeech
     ports:
@@ -34,4 +36,3 @@ services:
     depends_on:
       database:
         condition: service_healthy
-
