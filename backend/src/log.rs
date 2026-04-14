@@ -12,6 +12,14 @@ pub fn log(req: &HttpRequest, text: String) {
     );
 }
 
+pub fn log_query(query: &str) {
+    println!(
+        "[{}] [SERVER]: Executing query {}...",
+        Local::now().format(DATE_FORMAT),
+        query
+    );
+}
+
 pub fn server_start_msg<T: Into<String>>(server_address: T) {
     println!(
         "[{}] [SERVER]: Server up! Open your preferred browser and access 「http://{}」!",

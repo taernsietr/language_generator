@@ -1,13 +1,14 @@
-use std::sync::Arc;
+use std::sync::Mutex;
 use actix_web::{web, Responder, HttpRequest, HttpResponse};
-use crate::{log, types::{AppState, GeneratorNameParams}};
+use angelspeech::prelude::TextGenerator;
+use crate::{log, types::GeneratorNameParams};
 
 pub async fn get_generator(
     request: HttpRequest,
     query: web::Query<GeneratorNameParams>,
-    state: web::Data<Arc<AppState>>
+    generators: web::Data<Mutex<Vec<TextGenerator>>>
 ) -> impl Responder {
-    match &state.generators.lock() {
+    match &generators.lock() {
         Ok(guard) => {
             if let Some(result) = guard.iter()
                 .find(|generator| generator.get_name() == query.generator) {
@@ -18,12 +19,12 @@ pub async fn get_generator(
                 }
             else {
                 log(&request, format!("[{}] not found", &query.generator));
-                HttpResponse::NotFound().body("Generator not found.")
+                HttpResponse::NotFound().finish()
             }
         },
         Err(_poisoned) => {
             eprintln!("Mutex acquisition failed.");
-            HttpResponse::InternalServerError().body("Unable to return generator settings.")
+            HttpResponse::InternalServerError().finish()
         }
     }
 }

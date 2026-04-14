@@ -14,6 +14,6 @@ pub fn generators() -> Scope {
         .route("/settings", web::get().to(get_generator))
         .route("/text", web::get().to(get_text))
         .route("/random", web::get().to(get_random_generator))
-        .route("/save", web::post().to(post_new_generator))
+        .route("/", web::post().to(post_new_generator))
 }
 

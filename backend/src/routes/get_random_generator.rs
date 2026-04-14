@@ -1,18 +1,18 @@
-use std::sync::Arc;
+use std::sync::Mutex;
 use actix_web::{web, Responder, HttpRequest, HttpResponse};
 use angelspeech::prelude::TextGenerator;
-use crate::{log, types::AppState};
+use crate::log;
 
 pub async fn get_random_generator(
     request: HttpRequest,
-    state: web::Data<Arc<AppState>>
+    generators: web::Data<Mutex<Vec<TextGenerator>>>
 ) -> impl Responder {
     log(&request, "Returning random generator".to_string());
 
     let random_generator = TextGenerator::random();
     let name = random_generator.get_name();
 
-    match state.generators.lock() {
+    match generators.lock() {
         Ok(mut guard) => {
             guard.push(random_generator);
             HttpResponse::Ok().body(

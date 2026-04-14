@@ -3,37 +3,30 @@ use actix_web::web::Data;
 use sqlx::PgPool;
 use angelspeech::prelude::TextGenerator;
 
-use crate::types::*;
-
-pub async fn initialize_shared_data() -> Data<AppState> {
+pub async fn initialize_pool() -> Data<PgPool> {
     let environment = dotenvy::var("ENVIRONMENT")
-        .unwrap_or("DEVELOPMENT".into());
+        .unwrap_or(String::from("DEVELOPMENT"));
 
     let database_address = match environment.deref() {
         "TESTING" => dotenvy::var("DATABASE_URL")
             .expect("Couldn't find the environment variable for the Postgres database."),
-        "DEVELOPMENT" | _ => "postgresql://angelspeech:scatman@[::1]:30010/angelspeech".into()
+        _ => String::from("postgresql://angelspeech:scatman@[::1]:30010/angelspeech")
     };
 
-    let database = PgPool::connect(&database_address)
-        .await
-        .expect("Couldn't connect to database.");
+    Data::new(
+        PgPool::connect(&database_address)
+            .await
+            .expect("Couldn't connect to database.")
+    )
+}
 
-    _ = sqlx::query("CREATE TABLE IF NOT EXISTS gen ID uuid DEFAULT gen_random_uuid() PRIMARY KEY;")
-        .execute(&database);
-
-    let data: Vec<TextGenerator> = sqlx::query_as("SELECT * FROM gen;")
-        .fetch_all(&database)
+// TODO: convert this to load all relevant data from the DB
+pub async fn initialize_generators(pool: &PgPool) -> Data<Mutex<Vec<TextGenerator>>> {
+    let data: Vec<TextGenerator> = sqlx::query_as("SELECT * FROM angelspeech.generators;")
+        .fetch_all(pool)
         .await
         .expect("Failed to retrieve generator data.");
 
-    Data::from(
-        std::sync::Arc::new(
-            AppState {
-                generators: Mutex::new(data),
-                database
-            }
-        )
-    )
+    Data::from(std::sync::Arc::new(Mutex::new(data)))
 }
 

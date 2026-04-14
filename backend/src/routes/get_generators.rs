@@ -1,21 +1,27 @@
-use std::sync::Arc;
+use std::sync::Mutex;
 use actix_web::{web, Responder, HttpRequest, HttpResponse};
-use crate::{log, types::AppState};
+use angelspeech::prelude::TextGenerator;
+use crate::log;
 
 pub async fn get_generators(
     request: HttpRequest,
-    state: web::Data<Arc<AppState>>
+    generators: web::Data<Mutex<Vec<TextGenerator>>>
 ) -> impl Responder {
     log(&request, "Requested available generator names".to_string());
 
-    match &state.generators.lock() {
+    match &generators.lock() {
         Ok(guard) => {
-            let data = serde_json::to_string(
-                &guard.iter()
-                    .map(|generator| { generator.get_name() })
-                    .collect::<Vec<String>>()
-            ).expect("Unable to parse generator names");
-            HttpResponse::Ok().body(data)
+            let generators = &guard.iter()
+                .map(|generator| { generator.get_name() })
+                .collect::<Vec<String>>();
+            if generators.is_empty() {
+                HttpResponse::NoContent().finish()
+            }
+            else {
+                let data = serde_json::to_string(generators)
+                    .expect("Unable to parse generator names");
+                HttpResponse::Ok().body(data)
+            }
         },
         Err(_poisoned) => {
             eprintln!("Mutex acquisition failed.");

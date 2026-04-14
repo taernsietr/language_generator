@@ -1,23 +1,22 @@
-use std::sync::Arc;
+use std::sync::Mutex;
 use actix_web::{web, Responder, HttpRequest, HttpResponse};
 use angelspeech::prelude::TextGenerator;
-use crate::{log, types::AppState};
+use crate::log;
 
 pub async fn post_new_generator(
     request: HttpRequest,
     req_body: String,
-    state: web::Data<Arc<AppState>>
+    generators: web::Data<Mutex<Vec<TextGenerator>>>
 ) -> impl Responder {
     match serde_json::from_str::<TextGenerator>(&req_body) {
         Ok(new) => {
-            match &state.generators.lock() {
+            match &generators.lock() {
                 Ok(guard) => {
-                    if let None = guard.iter()
-                        .find(|generator| generator.get_name() == new.get_name()) {
+                    if !guard
+                        .iter()
+                        .any(|generator| generator.get_name() == new.get_name()) {
                             log(&request, format!("Generator [{}] created.", new.get_name()));
-
-                            // TODO: rewrite
-                            let _ = &state.generators.lock().as_mut().unwrap().push(new);
+                            generators.lock().as_mut().unwrap().push(new);
                             HttpResponse::Ok().body("Generator created!")
                     }
                     else {
@@ -32,7 +31,7 @@ pub async fn post_new_generator(
             }
         },
         Err(_) => {
-            log(&request, format!("Failed to parse generator data."));
+            log(&request, String::from("Failed to parse generator data."));
             HttpResponse::BadRequest().body("Couldn't parse generator.")
         }
     }

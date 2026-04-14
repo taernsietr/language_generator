@@ -1,12 +1,5 @@
-use std::sync::Mutex;
 use serde::Deserialize;
-use sqlx::PgPool;
 use angelspeech::prelude::*;
-
-pub struct AppState {
-    pub generators: Mutex<Vec<TextGenerator>>,
-    pub database: PgPool
-}
 
 #[derive(Deserialize)]
 pub struct GeneratorNameParams {
@@ -23,14 +16,14 @@ pub struct WordParams {
     pub text_type: TextType
 }
 
-impl Into<TextParams> for WordParams {
-    fn into(self) -> TextParams {
+impl From<WordParams> for TextParams {
+    fn from(params: WordParams) -> Self {
         TextParams::new(
-            self.min,
-            self.max,
-            self.bias,
-            self.text_length,
-            self.text_type
+            params.min,
+            params.max,
+            params.bias,
+            params.text_length,
+            params.text_type
         )
     }
 }
