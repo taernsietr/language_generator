@@ -18,8 +18,8 @@ use crate::log::*;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    std::env::set_var("RUST_LOG", "debug");
-    env_logger::init();
+    //std::env::set_var("RUST_LOG", "debug");
+    //env_logger::init();
 
     let server_address = dotenvy::var("SERVER_URL")
         .expect("Couldn't find the environment variable for the server address.");
@@ -34,7 +34,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .wrap(Cors::permissive())
             .wrap(Logger::default())
-            .wrap(NormalizePath::default())
+            .wrap(NormalizePath::new(actix_web::middleware::TrailingSlash::Trim))
             .app_data(pool.clone())
             .app_data(generators.clone())
             .service(scopes::generators())
