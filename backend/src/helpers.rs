@@ -4,11 +4,11 @@ use sqlx::PgPool;
 use angelspeech::prelude::TextGenerator;
 
 pub async fn initialize_pool() -> Data<PgPool> {
-    let environment = dotenvy::var("ENVIRONMENT")
+    let environment = std::env::var("ENVIRONMENT")
         .unwrap_or(String::from("DEVELOPMENT"));
 
     let database_address = match environment.deref() {
-        "TESTING" => dotenvy::var("DATABASE_URL")
+        "TESTING" => std::env::var("DATABASE_URL")
             .expect("Couldn't find the environment variable for the Postgres database."),
         _ => String::from("postgresql://angelspeech:scatman@[::1]:30010/angelspeech")
     };

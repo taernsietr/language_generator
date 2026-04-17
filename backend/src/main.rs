@@ -18,11 +18,8 @@ use crate::log::*;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    //std::env::set_var("RUST_LOG", "debug");
-    //env_logger::init();
-
-    let server_address = dotenvy::var("SERVER_URL")
-        .expect("Couldn't find the environment variable for the server address.");
+    let server_address = std::env::var("SERVER_URL")
+        .unwrap_or(String::from("[::1]:8080"));
 
     let pool = initialize_pool().await;
     prime_db(&pool).await;
