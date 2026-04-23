@@ -2,7 +2,6 @@ pub(crate) mod types;
 pub(crate) mod db;
 pub(crate) mod routes;
 pub(crate) mod scopes;
-pub(crate) mod helpers;
 pub(crate) mod log;
 
 use actix_web::{
@@ -13,7 +12,6 @@ use actix_web::{
 use actix_cors::Cors;
 
 use crate::db::*;
-use crate::helpers::*;
 use crate::log::*;
 
 #[actix_web::main]
@@ -22,7 +20,6 @@ async fn main() -> std::io::Result<()> {
         .unwrap_or(String::from("[::1]:8080"));
 
     let pool = initialize_pool().await;
-    prime_db(&pool).await;
     let generators = initialize_generators(&pool).await;
     
     server_start_msg(&server_address);

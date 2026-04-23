@@ -14,15 +14,15 @@ pub async fn get_text(
                 .find(|generator| generator.get_name() == query.generator) {
                     let query = query.into_inner();
                     let params: TextParams = query.clone().into();
-                    let text = match query.text_type {
+                    let text = match params.text_type {
                         TextType::GenericWord => result.text(&params),
                         TextType::GenericPseudotext => result.pseudotext(&params)
                     };
                     log(&request, format!("Generating text with [{}]: length {}, words between {} to {} syllables",
                         &query.generator,
-                        &query.text_length,
-                        &query.min,
-                        &query.max)
+                        &params.text_size,
+                        &params.min_syllables,
+                        &params.max_syllables)
                     );
                     HttpResponse::Ok().body(text) 
                 }
