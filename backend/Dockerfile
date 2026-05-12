@@ -18,5 +18,5 @@ RUN adduser \
     angelspeech 
 USER angelspeech 
 WORKDIR /angelspeech
-COPY --from=builder /usr/src/app/target/x86_64-unknown-linux-musl/release/language_generator /angelspeech
-CMD ["./language_generator"]
+COPY --from=builder /usr/src/app/target/x86_64-unknown-linux-musl/release/angelspeech-web .
+CMD ["./angelspeech-web"]

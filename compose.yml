@@ -32,7 +32,7 @@ services:
     networks:
       - angelspeech
     ports:
-      - "30011:8080"
+      - "30011:30011"
     depends_on:
       database:
         condition: service_healthy

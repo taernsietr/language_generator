@@ -16,8 +16,10 @@ use crate::log::*;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    env_logger::init();
+
     let server_address = std::env::var("SERVER_URL")
-        .unwrap_or(String::from("[::1]:8080"));
+        .unwrap_or(String::from("0.0.0.0:30011"));
 
     let pool = initialize_pool().await;
     let generators = initialize_generators(&pool).await;
@@ -33,6 +35,7 @@ async fn main() -> std::io::Result<()> {
             .app_data(generators.clone())
             .service(scopes::generators())
     })
+    .keep_alive(actix_web::http::KeepAlive::Timeout(core::time::Duration::new(60,0)))
     .bind(server_address)?
     .run()
     .await
